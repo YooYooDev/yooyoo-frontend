@@ -1,0 +1,13 @@
+ul li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+ul {
+  margin: 60px 0 100px;
+}
+
+li.active {
+  color: green;
+  border-bottom: 2px solid green;
+}
