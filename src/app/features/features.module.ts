@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { AssignmentComponent } from './assignment/assignment.component';
 import { AssignmentModule } from './assignment/assignment.module';
 import { AttendenceComponent } from './attendence/attendence.component';
 import { CurriculumComponent } from './curriculum/curriculum.component';
@@ -26,7 +27,8 @@ import { SharedModule } from '../shared/shared.module';
     RaiseATicketComponent,
     AttendenceComponent,
     LoginComponent,
-    ReportsComponent
+    ReportsComponent,
+    AssignmentComponent
   ],
   imports: [CommonModule, FeaturesRoutingModule, AssignmentModule, SharedModule]
 

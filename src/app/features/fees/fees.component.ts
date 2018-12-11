@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'yoo-fees',
-  templateUrl: './fees.component.html',
-  styleUrls: ['./fees.component.css']
+  template: `
+  <router-outlet></router-outlet>
+  `
 })
 export class FeesComponent implements OnInit {
 

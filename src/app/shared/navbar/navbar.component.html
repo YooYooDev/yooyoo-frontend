@@ -9,9 +9,9 @@
     <li class="has-submenu" routerLinkActive="active">
       <a [routerLink]="['/assignment']"><i class="fas fa-tasks "></i>Assignment</a>
       <ul class="submenu">
-        <li><a href="nursery.html">NURSERY</a></li>
-        <li><a href="lkg.html">L.K.G</a></li>
-        <li><a href="ukg.html">U.K.G</a></li>
+        <li><a [routerLink]="['/assignment/nursery']" routerLinkActive="active">NURSERY</a></li>
+        <li><a [routerLink]="['/assignment/lkg']" routerLinkActive="active">L.K.G</a></li>
+        <li><a [routerLink]="['/assignment/ukg']" routerLinkActive="active">U.K.G</a></li>
       </ul>
     </li>
     <li class="has-submenu" routerLinkActive="active">
@@ -23,9 +23,9 @@
     <li class="has-submenu" routerLinkActive="active">
       <a [routerLink]="['/attendence']"><i class="mdi mdi-book-multiple"></i>Attendence</a>
       <ul class="submenu">
-        <li><a href="nursery_attendance.html">NURSERY</a></li>
-        <li><a href="lkg_attendance.html">L.K.G</a></li>
-        <li><a href="ukg_attendance.html">U.K.G</a></li>
+        <li><a [routerLink]="['/attendence/nursery']" routerLinkActive="active">NURSERY</a></li>
+        <li><a [routerLink]="['/attendence/lkg']" routerLinkActive="active">L.K.G</a></li>
+        <li><a [routerLink]="['/attendence/ukg']" routerLinkActive="active">U.K.G</a></li>
       </ul>
     </li>
     <li class="has-submenu" routerLinkActive="active">
@@ -34,18 +34,18 @@
     <li class="has-submenu" routerLinkActive="active">
       <a [routerLink]="['/fees']"><i class="fas fa-money-bill"></i>Fees</a>
       <ul class="submenu">
-        <li><a href="nursery_fees.html">NURSERY</a></li>
-        <li><a href="lkg_fees.html">L.K.G</a></li>
-        <li><a href="ukg_fees.html">U.K.G</a></li>
+        <li><a [routerLink]="['/fees/nursery']" routerLinkActive="active">NURSERY</a></li>
+        <li><a [routerLink]="['/fees/lkg']" routerLinkActive="active">L.K.G</a></li>
+        <li><a [routerLink]="['/fees/ukg']" routerLinkActive="active">U.K.G</a></li>
       </ul>
     </li>
     <li class="has-submenu" routerLinkActive="active">
-      <a [routerLink]="['/notifications']"><i class="fas fa-bell"></i>Notifications</a>
+      <a [routerLink]="['/notifications/all']"><i class="fas fa-bell"></i>Notifications</a>
       <ul class="submenu">
-        <li><a href="all_notification.html">ALL</a></li>
-        <li><a href="nursery_notification.html">NURSERY</a></li>
-        <li><a href="lkg_notification.html">L.K.G</a></li>
-        <li><a href="ukg_notification.html">U.K.G</a></li>
+        <li><a [routerLink]="['/notifications/all']" routerLinkActive="active">ALL</a></li>
+        <li><a [routerLink]="['/notifications/nursery']" routerLinkActive="active">NURSERY</a></li>
+        <li><a [routerLink]="['/notifications/lkg']" routerLinkActive="active">L.K.G</a></li>
+        <li><a [routerLink]="['/notifications/ukg']" routerLinkActive="active">U.K.G</a></li>
       </ul>
     </li>
     <li class="has-submenu" routerLinkActive="active">
