@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'yoo-attendence',
+  selector: 'yoo-assignment',
   template: `
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
   `
 })
-export class AttendenceComponent implements OnInit {
+export class AssignmentComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
