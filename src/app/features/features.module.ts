@@ -13,6 +13,7 @@ import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component
 import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { UsersComponent } from './users/users.component';
     LoginComponent,
     ReportsComponent
   ],
-  imports: [CommonModule, FeaturesRoutingModule, AssignmentModule]
+  imports: [CommonModule, FeaturesRoutingModule, AssignmentModule, SharedModule]
+
 })
 export class FeaturesModule {}
