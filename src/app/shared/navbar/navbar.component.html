@@ -1,59 +1,55 @@
-<!--<ul>
-  <li routerLinkActive="active"><a [routerLink]="['/dashboard']" >Dashboard</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/users']" >Users</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/assignment']" >Assignment</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/school']" >School</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/curriculum']" >Curriculum</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/reports']" >Reports</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/notifications']" >Notifications</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/fees']" >Fees</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/raise-a-ticket']" >Raise a ticket</a></li>
-  <li routerLinkActive="active"><a [routerLink]="['/attendence']" >Attendence</a></li>
-</ul>-->
-
 <div id="navigation">
-  <!-- Navigation Menu-->
   <ul class="navigation-menu">
-
-      <li class="has-submenu">
-          <a href="home.html"><i class="mdi mdi-view-dashboard"></i>Dashboard</a>
-
-      </li>
-
-      <li class="has-submenu">
-          <a href="user.html"><i class="fas fa-users"></i>Users</a>
-
-      </li>
-      <li class="has-submenu">
-          <a href="assignment.html"><i class="fas fa-tasks "></i>Assignment</a>
-
-      </li>
-<li class="has-submenu">
-          <a href="school.html"><i class="fas fa-school"></i>School</a>
-
-      </li>
-<li class="has-submenu">
-          <a href="curriculum.html"><i class="fas fa-podcast"></i>Curriculum</a>
-
-      </li>
-<li class="has-submenu">
-          <a href="reports.html"><i class="mdi mdi-comment-text"></i>Reports</a>
-
-      </li>
-
-
-
-
-
-<li class="has-submenu">
-          <a href="notification.html"><i class="fas fa-bell"></i>Notifications</a>
-
-
-        </li>
-
-
-
-
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/dashboard']"><i class="mdi mdi-view-dashboard"></i>Dashboard</a>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/users']"><i class="fas fa-users"></i>Users</a>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/assignment']"><i class="fas fa-tasks "></i>Assignment</a>
+      <ul class="submenu">
+        <li><a href="nursery.html">NURSERY</a></li>
+        <li><a href="lkg.html">L.K.G</a></li>
+        <li><a href="ukg.html">U.K.G</a></li>
+      </ul>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/reports']"><i class="mdi mdi-comment-text"></i>Reports</a>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/school']"><i class="fas fa-school"></i>School</a>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/attendence']"><i class="mdi mdi-book-multiple"></i>Attendence</a>
+      <ul class="submenu">
+        <li><a href="nursery_attendance.html">NURSERY</a></li>
+        <li><a href="lkg_attendance.html">L.K.G</a></li>
+        <li><a href="ukg_attendance.html">U.K.G</a></li>
+      </ul>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/curriculum']"><i class="fas fa-podcast"></i>Curriculum</a>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/fees']"><i class="fas fa-money-bill"></i>Fees</a>
+      <ul class="submenu">
+        <li><a href="nursery_fees.html">NURSERY</a></li>
+        <li><a href="lkg_fees.html">L.K.G</a></li>
+        <li><a href="ukg_fees.html">U.K.G</a></li>
+      </ul>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/notifications']"><i class="fas fa-bell"></i>Notifications</a>
+      <ul class="submenu">
+        <li><a href="all_notification.html">ALL</a></li>
+        <li><a href="nursery_notification.html">NURSERY</a></li>
+        <li><a href="lkg_notification.html">L.K.G</a></li>
+        <li><a href="ukg_notification.html">U.K.G</a></li>
+      </ul>
+    </li>
+    <li class="has-submenu" routerLinkActive="active">
+      <a [routerLink]="['/raise-a-ticket']"><i class="fas fa-ticket-alt"></i>Raise a Ticket</a>
+    </li>
   </ul>
-  <!-- End navigation menu -->
-</div> <!-- end #navigation -->
+</div>

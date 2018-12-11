@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
-import { AssignmentComponent } from './assignment/assignment.component';
+// import { AssignmentComponent } from './assignment/assignment.component';
 import { SchoolComponent } from './school/school.component';
 import { CurriculumComponent } from './curriculum/curriculum.component';
 import { ReportsComponent } from './reports/reports.component';
@@ -15,7 +15,7 @@ const featuresRoutes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
   { path: 'dashboard', component: DashboardComponent,  data: { title: 'Dashboard' }},
   { path: 'users', component: UsersComponent,  data: { title: 'Users' }},
-  { path: 'assignment', component: AssignmentComponent,  data: { title: 'Assignment' }},
+  // { path: 'assignment', component: AssignmentComponent,  data: { title: 'Assignment' }},
   { path: 'school', component: SchoolComponent,  data: { title: 'School' }},
   { path: 'curriculum', component: CurriculumComponent,  data: { title: 'Curriculum' }},
   { path: 'reports', component: ReportsComponent,  data: { title: 'Reports' }},

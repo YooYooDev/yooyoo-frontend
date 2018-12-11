@@ -1,24 +1,23 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { FeaturesRoutingModule } from './features-routing.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { UsersComponent } from './users/users.component';
-import { AssignmentComponent } from './assignment/assignment.component';
-import { SchoolComponent } from './school/school.component';
-import { CurriculumComponent } from './curriculum/curriculum.component';
-import { NotificationsComponent } from './notifications/notifications.component';
-import { FeesComponent } from './fees/fees.component';
-import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component';
+import { AssignmentModule } from './assignment/assignment.module';
 import { AttendenceComponent } from './attendence/attendence.component';
+import { CurriculumComponent } from './curriculum/curriculum.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { FeaturesRoutingModule } from './features-routing.module';
+import { FeesComponent } from './fees/fees.component';
 import { LoginComponent } from './login/login.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component';
 import { ReportsComponent } from './reports/reports.component';
+import { SchoolComponent } from './school/school.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     UsersComponent,
-    AssignmentComponent,
     SchoolComponent,
     CurriculumComponent,
     NotificationsComponent,
@@ -28,6 +27,6 @@ import { ReportsComponent } from './reports/reports.component';
     LoginComponent,
     ReportsComponent
   ],
-  imports: [CommonModule, FeaturesRoutingModule]
+  imports: [CommonModule, FeaturesRoutingModule, AssignmentModule]
 })
 export class FeaturesModule {}

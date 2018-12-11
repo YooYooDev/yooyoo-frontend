@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import url(https://fonts.googleapis.com/css?family=Varela+Round);
+
+body {
+  font-family: 'Varela Round', sans-serif !important;
+  margin: 0;
+  padding-bottom: 65px;
+  overflow-x: hidden;
+  color: #797979;
+}
