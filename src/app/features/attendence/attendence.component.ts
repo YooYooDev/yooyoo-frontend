@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'yoo-attendence',
-  templateUrl: './attendence.component.html',
-  styleUrls: ['./attendence.component.css']
+  template: `
+    <p>attendence works!</p>
+  `
 })
 export class AttendenceComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
