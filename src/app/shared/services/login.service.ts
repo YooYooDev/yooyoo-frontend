@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { apiUrl } from '../../core/api';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
+
 export class LoginService {
-  private IsUserLoggedIn;
-  private username;
 
-  constructor() {
-    this.IsUserLoggedIn = false;
-  }
+  constructor(private _http: HttpClient) {}
 
-  setUserLoggedIn() {
-    this.IsUserLoggedIn = true;
-  }
-
-  getUserLoggedIn() {
-    return this.IsUserLoggedIn;
+  userAuth(formData): any {
+    return this._http.post(apiUrl, formData);
   }
 }
