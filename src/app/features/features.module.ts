@@ -17,6 +17,7 @@ import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component
 import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { UsersComponent } from './users/users.component';
     AssignmentModule,
     SharedModule,
     GridModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]

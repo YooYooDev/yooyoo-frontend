@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../../shared/services/login.service';
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/shared/services/login.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'yoo-login',
@@ -8,19 +9,21 @@ import { LoginService } from 'src/app/shared/services/login.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  constructor(private _router: Router, private _user: LoginService) {}
+  isLoginError = false;
+  constructor(private _loginService: LoginService, private _router: Router) {}
 
   ngOnInit() {}
 
-  loginUser(e) {
-    let username = e.target.elements[0].value;
-    let password = e.target.elements[1].value;
-
-    console.log(username, password);
-
-    if (username == 'admin' && password == 'admin') {
-      this._user.setUserLoggedIn();
-      this._router.navigate(['dashboard']);
-    }
+  onSubmit(f): void {
+    // console.log(f.value);
+    this._loginService.userAuth(f.value).subscribe(
+      (data: any) => {
+        localStorage.setItem('token', data.auth_token); // pass api token here
+        this._router.navigate(['/dashboard']);
+      },
+      (err: HttpErrorResponse) => {
+        this.isLoginError = true;
+      }
+    );
   }
 }
