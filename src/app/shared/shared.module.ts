@@ -9,6 +9,7 @@ import { HeaderNotificationsComponent } from './header/header-notifications/head
 import { ProfileComponent } from './header/profile/profile.component';
 import { SettingsComponent } from './header/settings/settings.component';
 import { LoginService } from './services/login.service';
+import { ToastService } from './services/toast.service';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,6 @@ import { LoginService } from './services/login.service';
     HeaderComponent,
     HeaderNotificationsComponent
   ],
-  providers: [LoginService]
+  providers: [LoginService, ToastService]
 })
 export class SharedModule {}

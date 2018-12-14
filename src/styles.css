@@ -8,3 +8,37 @@ body {
   overflow-x: hidden;
   color: #797979;
 }
+
+/* toaster styles starts */
+/* toaster styles */
+.toast-top-right {
+  top: 100px !important;
+  right: 100px !important;
+}
+
+#toast-container>div {
+  width: 400px !important;
+  opacity: 0.8;
+}
+
+#toast-container>.toast-success {
+  border: 3px solid #328132;
+}
+
+#toast-container>.toast-error {
+  border: 3px solid #a2241e;
+}
+
+#toast-container>.toast-info {
+  border: 3px solid #1d7189;
+}
+
+#toast-container>.toast-warning {
+  border: 3px solid #c47505;
+}
+
+.toast-close-button {
+  right: -0.1em !important;
+}
+
+/* toaster styles starts */
