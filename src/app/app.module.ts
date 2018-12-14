@@ -15,7 +15,7 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     CoreModule,
     SharedModule,
-    FeaturesModule,
+    FeaturesModule
   ],
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]

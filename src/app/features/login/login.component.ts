@@ -18,7 +18,8 @@ export class LoginComponent implements OnInit {
     // console.log(f.value);
     this._loginService.userAuth(f.value).subscribe(
       (data: any) => {
-        localStorage.setItem('token', data.auth_token); // pass api token here
+        localStorage.setItem('token', data.token); // pass api token name here
+        console.log(data);
         this._router.navigate(['/dashboard']);
       },
       (err: HttpErrorResponse) => {
