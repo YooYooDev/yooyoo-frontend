@@ -8,7 +8,7 @@ body {
   overflow-x: hidden;
   color: #797979;
 }
-,container {
+.container {
   width: 1300px !important;
 }
 /* toaster styles starts */
