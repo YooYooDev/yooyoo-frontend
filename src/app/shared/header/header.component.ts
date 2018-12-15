@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastService } from '../services/toast.service';
+import { UtilService } from '../services/util.service';
 
 @Component({
   selector: 'yoo-header',
@@ -7,13 +9,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  constructor(private _router: Router) {}
+  constructor(private _router: Router, private _toast: ToastService, private _removeToken: UtilService) {}
 
   ngOnInit() {}
 
   logOut(): void {
-    // console.log('Logged out');
-    localStorage.removeItem('token');
-    this._router.navigate(['/login']);
+    this._removeToken.removeToken();
+    this._router.navigate(['/logout']);
+    this._toast.success('Logged out successfully!');
   }
 }

@@ -21,6 +21,7 @@ import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component
 import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { UsersComponent } from './users/users.component';
     AttendenceComponent,
     LoginComponent,
     ReportsComponent,
-    AssignmentComponent
+    AssignmentComponent,
+    LogoutComponent
   ],
   imports: [
     CommonModule,

@@ -8,56 +8,7 @@
       <!-- End Logo container-->
       <div class="menu-extras">
         <ul class="nav navbar-nav navbar-right pull-right">
-          <li class="dropdown navbar-c-items">
-            <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
-              <i class="mdi mdi-email"></i>
-              <span class="badge up bg-danger">8</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right dropdown-lg user-list notify-list">
-              <li class="text-center">
-                <h5>Messages</h5>
-              </li>
-              <li>
-                <a href="#" class="user-list-item">
-                  <div class="avatar">
-                    <img src="assets/images/avatar.jpg" alt="">
-                  </div>
-                  <div class="user-desc">
-                    <span class="name">Patricia Beach</span>
-                    <span class="desc">There are new settings available</span>
-                    <span class="time">2 hours ago</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="user-list-item">
-                  <div class="avatar">
-                    <img src="assets/images/avatar.jpg" alt="">
-                  </div>
-                  <div class="user-desc">
-                    <span class="name">Connie Lucas</span>
-                    <span class="desc">There are new settings available</span>
-                    <span class="time">2 hours ago</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="user-list-item">
-                  <div class="avatar">
-                    <img src="assets/images/avatar.jpg" alt="">
-                  </div>
-                  <div class="user-desc">
-                    <span class="name">Margaret Becker</span>
-                    <span class="desc">There are new settings available</span>
-                    <span class="time">2 hours ago</span>
-                  </div>
-                </a>
-              </li>
-              <li class="all-msgs text-center">
-                <p class="m-0"><a href="message.html">See all Messages</a></p>
-              </li>
-            </ul>
-          </li>
+
           <li class="dropdown navbar-c-items">
             <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
               <i class="mdi mdi-bell"></i>
@@ -114,8 +65,7 @@
               </li>
               <li><a [routerLink]="['/profile']" routerLinkActive="router-link-active" ><i class="ti-user m-r-5"></i> Profile</a></li>
               <li><a href="javascript:void(0)"><i class="ti-settings m-r-5"></i> Settings</a></li>
-              <li><a href="page-lock-screen.html"><i class="ti-lock m-r-5"></i> Lock screen</a></li>
-              <li><a (click)="logOut()"><i class="ti-power-off m-r-5"></i> Logout </a></li>
+              <li><a href="javascript:void(0)" (click)="logOut()"><i class="ti-power-off m-r-5"></i> Logout </a></li>
             </ul>
           </li>
         </ul>

@@ -20,6 +20,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
 import { AuthGuard } from '../core/auth/auth.guard';
+import { LogoutComponent } from './logout/logout.component';
 
 const featuresRoutes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
@@ -71,6 +72,11 @@ const featuresRoutes: Routes = [
     canActivate: [AuthGuard],
     children: attendenceRoutes,
     data: { title: 'Attendence' }
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent,
+    data: { title: 'Logout' }
   }
 ];
 
