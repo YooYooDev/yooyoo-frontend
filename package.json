@@ -21,6 +21,8 @@
     "@angular/router": "~7.1.0",
     "@syncfusion/ej2": "^16.3.34",
     "@syncfusion/ej2-angular-base": "^16.3.34",
+    "@syncfusion/ej2-angular-buttons": "^16.3.34",
+    "@syncfusion/ej2-angular-calendars": "^16.3.34",
     "@syncfusion/ej2-angular-grids": "^16.3.34",
     "@syncfusion/ej2-angular-navigations": "^16.3.34",
     "@syncfusion/ej2-base": "^16.3.34",

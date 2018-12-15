@@ -13,7 +13,7 @@ export class ToastService {
     showCloseButton: true,
     tapToDismiss: false,
     mouseoverTimerStop: true,
-    timeout: 20000,
+    timeout: 2000,
     newestOnTop: true,
     titleClass: 'h4'
   });

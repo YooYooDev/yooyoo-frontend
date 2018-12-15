@@ -6,6 +6,6 @@ import { Injectable } from '@angular/core';
 
 export class UtilService {
   getToken(): any {
-    localStorage.getItem('token');
+    return localStorage.getItem('token');
   }
 }

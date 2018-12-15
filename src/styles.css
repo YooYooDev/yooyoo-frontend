@@ -8,7 +8,9 @@ body {
   overflow-x: hidden;
   color: #797979;
 }
-
+,container {
+  width: 1300px !important;
+}
 /* toaster styles starts */
 /* toaster styles */
 .toast-top-right {
@@ -42,3 +44,29 @@ body {
 }
 
 /* toaster styles starts */
+
+/* ej2 styles */
+.e-popup.e-popup-open.e-control.e-dialog {
+  width: 900px !important;
+}
+
+.e-control.e-grid.e-default .e-headercell,
+.e-control.e-grid.e-default .e-detailheadercell {
+  color: #fff;
+  background-color: #188ae2;
+  font-size: 18px !important;
+}
+
+.e-control.e-grid .e-columnheader th .e-headertext{
+  font-size: 18px !important;
+}
+
+.e-row.e-altrow {
+  background-color: #f7f7f7;
+}
+
+.e-control.e-grid .e-rowcell {
+  font-size: 16px;
+}
+
+/* ej2 styles */
