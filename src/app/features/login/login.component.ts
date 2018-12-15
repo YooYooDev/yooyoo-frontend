@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
       (data: any) => {
         localStorage.setItem('token', data.token); // pass api token name here
         this._router.navigate(['/dashboard']);
-        this._toast.success('Authorized user!');
+        this._toast.success('Logged in successfully!');
         console.log(data);
       },
       (err: HttpErrorResponse) => {
