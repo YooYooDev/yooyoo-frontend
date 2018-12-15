@@ -13,33 +13,33 @@ export class ToastService {
     showCloseButton: true,
     tapToDismiss: false,
     mouseoverTimerStop: true,
-    timeout: 2000,
+    timeout: 20000,
     newestOnTop: true,
     titleClass: 'h4'
   });
 
-  success(body) {
+  success(body): void {
     this.toasterService.pop({
       type: 'success',
       title: 'Success!',
       body
     });
   }
-  error(body) {
+  error(body): void {
     this.toasterService.pop({
       type: 'error',
       title: 'Failed!',
       body
     });
   }
-  info(body) {
+  info(body): void {
     this.toasterService.pop({
       type: 'info',
       title: 'Info!',
       body
     });
   }
-  warning(body) {
+  warning(body): void {
     this.toasterService.pop({
       type: 'warning',
       title: 'Warning!',

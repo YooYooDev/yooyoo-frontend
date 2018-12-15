@@ -19,48 +19,56 @@ import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component
 import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
+import { AuthGuard } from '../core/auth/auth.guard';
 
 const featuresRoutes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     data: { title: 'Dashboard' }
   },
-  { path: 'users', component: UsersComponent, data: { title: 'Users' } },
+  { path: 'users', component: UsersComponent, canActivate: [AuthGuard], data: { title: 'Users' } },
   {
     path: 'assignment',
     component: AssignmentComponent,
     children: assignmentRoutes,
+    canActivate: [AuthGuard],
     data: { title: 'Assignment' }
   },
-  { path: 'school', component: SchoolComponent, data: { title: 'School' } },
+  { path: 'school', component: SchoolComponent, canActivate: [AuthGuard], data: { title: 'School' } },
   {
     path: 'curriculum',
     component: CurriculumComponent,
+    canActivate: [AuthGuard],
     data: { title: 'Curriculum' }
   },
-  { path: 'reports', component: ReportsComponent, data: { title: 'Reports' } },
+  { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard], data: { title: 'Reports' } },
   {
     path: 'notifications',
     component: NotificationsComponent,
+    canActivate: [AuthGuard],
     children: notificationRoutes,
     data: { title: 'Notifications' }
   },
   {
     path: 'fees',
     component: FeesComponent,
+    canActivate: [AuthGuard],
     children: feesRoutes,
     data: { title: 'Fees' }
   },
   {
     path: 'raise-a-ticket',
     component: RaiseATicketComponent,
+    canActivate: [AuthGuard],
     data: { title: 'Raise-A-Ticket' }
   },
   {
     path: 'attendence',
     component: AttendenceComponent,
+    canActivate: [AuthGuard],
     children: attendenceRoutes,
     data: { title: 'Attendence' }
   }
