@@ -1,3 +1,4 @@
+import { ToastService } from './../../shared/services/toast.service';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../shared/services/login.service';
 import { Router } from '@angular/router';
@@ -10,7 +11,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LoginComponent implements OnInit {
   isLoginError = false;
-  constructor(private _loginService: LoginService, private _router: Router) {}
+  constructor(
+    private _loginService: LoginService,
+    private _router: Router,
+    private _toast: ToastService
+  ) {}
 
   ngOnInit() {}
 
@@ -19,8 +24,9 @@ export class LoginComponent implements OnInit {
     this._loginService.userAuth(f.value).subscribe(
       (data: any) => {
         localStorage.setItem('token', data.token); // pass api token name here
-        console.log(data);
         this._router.navigate(['/dashboard']);
+        this._toast.success('Authorized user!');
+        console.log(data);
       },
       (err: HttpErrorResponse) => {
         this.isLoginError = true;

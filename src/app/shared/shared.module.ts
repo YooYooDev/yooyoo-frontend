@@ -1,13 +1,18 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToasterModule } from 'angular2-toaster';
 
-import { SharedRoutingModule } from './shared-routing.module';
+import { ToastComponent } from './components/toast.component';
 import { FooterComponent } from './footer/footer.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { HeaderComponent } from './header/header.component';
 import { HeaderNotificationsComponent } from './header/header-notifications/header-notifications.component';
+import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './header/profile/profile.component';
 import { SettingsComponent } from './header/settings/settings.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { LoginService } from './services/login.service';
+import { ToastService } from './services/toast.service';
+import { SharedRoutingModule } from './shared-routing.module';
 
 @NgModule({
   declarations: [
@@ -16,15 +21,22 @@ import { SettingsComponent } from './header/settings/settings.component';
     HeaderComponent,
     HeaderNotificationsComponent,
     ProfileComponent,
-    SettingsComponent
+    SettingsComponent,
+    ToastComponent
   ],
-  imports: [CommonModule, SharedRoutingModule],
+  imports: [
+    BrowserAnimationsModule,
+    CommonModule,
+    SharedRoutingModule,
+    ToasterModule.forRoot()
+  ],
   exports: [
     FooterComponent,
     NavbarComponent,
     HeaderComponent,
-    HeaderNotificationsComponent
+    HeaderNotificationsComponent,
+    ToastComponent
   ],
-  providers: []
+  providers: [LoginService, ToastService]
 })
 export class SharedModule {}
