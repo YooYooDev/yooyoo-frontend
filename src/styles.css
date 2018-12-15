@@ -8,9 +8,12 @@ body {
   overflow-x: hidden;
   color: #797979;
 }
-.container {
-  width: 1300px !important;
+@media only screen and (min-width: 1920px) {
+  .container {
+    width: 1600px !important;
+  }
 }
+
 /* toaster styles starts */
 /* toaster styles */
 .toast-top-right {
