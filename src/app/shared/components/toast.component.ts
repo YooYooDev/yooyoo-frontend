@@ -3,15 +3,15 @@ import { ToastService } from './../services/toast.service';
 import { ToasterContainerComponent } from 'angular2-toaster';
 
 @Component({
-  selector: 'app-toaster',
+  selector: 'yoo-toaster',
   template: `
   <toaster-container [toasterconfig]="config"></toaster-container>
   `
 })
 
 export class ToastComponent {
-  constructor(private toastService: ToastService) { }
+  constructor(private _toastService: ToastService) { }
 
-  config = this.toastService.config;
+  config = this._toastService.config;
 
 }
