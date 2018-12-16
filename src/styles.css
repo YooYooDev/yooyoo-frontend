@@ -8,9 +8,12 @@ body {
   overflow-x: hidden;
   color: #797979;
 }
-,container {
+
+,
+container {
   width: 1300px !important;
 }
+
 /* toaster styles starts */
 /* toaster styles */
 .toast-top-right {
@@ -54,18 +57,30 @@ body {
 .e-control.e-grid.e-default .e-detailheadercell {
   color: #fff;
   background-color: #188ae2;
-  font-size: 18px !important;
 }
 
-.e-control.e-grid .e-columnheader th .e-headertext{
+.e-control.e-grid .e-columnheader th .e-headertext {
+  font-family: 'Varela Round', sans-serif !important;
   font-size: 18px !important;
+  font-weight: 700 !important;
 }
 
 .e-row.e-altrow {
   background-color: #f7f7f7;
 }
 
-.e-control.e-grid .e-rowcell {
+.e-control.e-grid .e-rowcell,
+.form-group input,
+.e-tbar-btn-text,
+.e-control,
+.e-css,
+.e-float-input,
+.e-float-input.e-control-wrapper,
+.e-float-input.e-disabled,
+.e-float-input.e-control-wrapper.e-disabled,
+.e-float-input.e-input-group.e-disabled,
+.e-float-input.e-input-group.e-control-wrapper.e-disabled {
+  font-family: 'Varela Round', sans-serif !important;
   font-size: 16px;
 }
 

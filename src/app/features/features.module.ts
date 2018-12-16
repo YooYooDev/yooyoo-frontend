@@ -1,11 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
-import { FilterService, GridModule, GroupService, PageService, SortService } from '@syncfusion/ej2-angular-grids';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import {
+  EditService,
+  FilterService,
+  GridModule,
+  GroupService,
+  PageService,
+  SortService,
+} from '@syncfusion/ej2-angular-grids';
 
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
@@ -37,6 +45,7 @@ import { UsersComponent } from './users/users.component';
     AssignmentComponent
   ],
   imports: [
+    BrowserModule,
     CommonModule,
     FeaturesRoutingModule,
     AssignmentModule,
@@ -45,9 +54,16 @@ import { UsersComponent } from './users/users.component';
     HttpClientModule,
     FormsModule,
     RadioButtonModule,
-    DatePickerModule
+    DatePickerModule,
+    DropDownListModule
   ],
   exports: [GridModule],
-  providers: [PageService, SortService, FilterService, GroupService]
+  providers: [
+    PageService,
+    SortService,
+    FilterService,
+    GroupService,
+    EditService
+  ]
 })
 export class FeaturesModule {}
