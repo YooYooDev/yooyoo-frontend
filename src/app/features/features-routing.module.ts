@@ -12,9 +12,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { feesRoutes } from './fees/fees-routing';
 import { FeesComponent } from './fees/fees.component';
 import { FeesModule } from './fees/fees.module';
-import { notificationRoutes } from './notifications/notifications-routing';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { NotificationsModule } from './notifications/notifications.module';
 import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component';
 import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
@@ -50,7 +48,6 @@ const featuresRoutes: Routes = [
     path: 'notifications',
     component: NotificationsComponent,
     canActivate: [AuthGuard],
-    children: notificationRoutes,
     data: { title: 'Notifications' }
   },
   {
@@ -85,8 +82,7 @@ const featuresRoutes: Routes = [
     RouterModule.forChild(featuresRoutes),
     AssignmentModule,
     AttendenceModule,
-    FeesModule,
-    NotificationsModule
+    FeesModule
   ],
   exports: [RouterModule]
 })
