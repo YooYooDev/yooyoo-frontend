@@ -12,6 +12,9 @@ body {
   .container {
     width: 1600px !important;
   }
+  .wrapper .container {
+    margin-top: 30px !important;
+  }
 }
 
 /* toaster styles starts */
