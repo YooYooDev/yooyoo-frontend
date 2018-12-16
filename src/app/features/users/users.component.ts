@@ -23,7 +23,9 @@ import {
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
+import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 
+import { IUser } from './user';
 import { UserService } from './user.service';
 
 @Component({
@@ -47,7 +49,7 @@ import { UserService } from './user.service';
   encapsulation: ViewEncapsulation.None
 })
 export class UsersComponent implements OnInit {
-  userData: Object;
+  userData: IUser;
   @ViewChild('userForm') public userForm: FormGroup;
   editparams: { params: { popupHeight: string } };
   users: any;
@@ -60,8 +62,15 @@ export class UsersComponent implements OnInit {
   groupOptions: GroupSettingsModel;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
+  @ViewChild('gender') gender: DropDownListComponent;
   line = 'Both';
   key: Object = {};
+
+  public genderDdl: Array<string> = [
+    'Male',
+    'Female',
+    'Others'
+  ];
 
   constructor(private _userService: UserService) {}
 
@@ -108,7 +117,7 @@ export class UsersComponent implements OnInit {
 
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      this.userData = Object.assign({}, args.rowData);
+      // this.userData = Object.assign({}, args.rowData);
     }
     if (args.requestType === 'save') {
       if (this.userForm.valid) {
@@ -124,10 +133,12 @@ export class UsersComponent implements OnInit {
       // Set initail Focus
       if (args.requestType === 'beginEdit') {
         (args.form.elements.namedItem(
-          'CustomerName'
+          'student_name'
         ) as HTMLInputElement).focus();
       } else if (args.requestType === 'add') {
-        (args.form.elements.namedItem('OrderID') as HTMLInputElement).focus();
+        (args.form.elements.namedItem(
+          'student_name'
+        ) as HTMLInputElement).focus();
       }
     }
   }

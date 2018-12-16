@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "sme": "./node_modules/.bin/source-map-explorer"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +24,7 @@
     "@syncfusion/ej2-angular-base": "^16.3.34",
     "@syncfusion/ej2-angular-buttons": "^16.3.34",
     "@syncfusion/ej2-angular-calendars": "^16.3.34",
+    "@syncfusion/ej2-angular-dropdowns": "^16.3.34",
     "@syncfusion/ej2-angular-grids": "^16.3.34",
     "@syncfusion/ej2-angular-navigations": "^16.3.34",
     "@syncfusion/ej2-base": "^16.3.34",
@@ -40,9 +42,9 @@
     "@angular/cli": "~7.1.2",
     "@angular/compiler-cli": "~7.1.0",
     "@angular/language-service": "~7.1.0",
-    "@types/node": "~8.9.4",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
@@ -52,6 +54,7 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
+    "source-map-explorer": "^1.6.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.1.6"
