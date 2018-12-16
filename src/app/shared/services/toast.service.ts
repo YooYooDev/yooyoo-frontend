@@ -5,7 +5,7 @@ import { ToasterConfig, ToasterService } from 'angular2-toaster';
   providedIn: 'root'
 })
 export class ToastService {
-  constructor(private toasterService: ToasterService) {}
+  constructor(private _toasterService: ToasterService) {}
 
   config: ToasterConfig = new ToasterConfig({
     positionClass: 'toast-top-right',
@@ -13,34 +13,34 @@ export class ToastService {
     showCloseButton: true,
     tapToDismiss: false,
     mouseoverTimerStop: true,
-    timeout: 2000,
+    timeout: 3000,
     newestOnTop: true,
     titleClass: 'h4'
   });
 
   success(body): void {
-    this.toasterService.pop({
+    this._toasterService.pop({
       type: 'success',
       title: 'Success!',
       body
     });
   }
   error(body): void {
-    this.toasterService.pop({
+    this._toasterService.pop({
       type: 'error',
       title: 'Failed!',
       body
     });
   }
   info(body): void {
-    this.toasterService.pop({
+    this._toasterService.pop({
       type: 'info',
       title: 'Info!',
       body
     });
   }
   warning(body): void {
-    this.toasterService.pop({
+    this._toasterService.pop({
       type: 'warning',
       title: 'Warning!',
       body
