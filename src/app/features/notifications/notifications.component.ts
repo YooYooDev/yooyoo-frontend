@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'yoo-notifications',
-  template: `
-  <router-outlet></router-outlet>
-  `
+  templateUrl: './notifications.component.html',
+  styleUrls: ['./notifications.component.css']
 })
 export class NotificationsComponent implements OnInit {
 
