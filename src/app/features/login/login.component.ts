@@ -20,13 +20,13 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit(f): void {
-    // console.log(f.value);
+    console.log(f.value);
     this._loginService.userAuth(f.value).subscribe(
       (data: any) => {
-        localStorage.setItem('token', data.token); // pass api token name here
+        console.log(data);
+        localStorage.setItem('token', data.accessToken); // pass api token parameter name here
         this._router.navigate(['/dashboard']);
         this._toast.success('Logged in successfully!');
-        console.log(data);
       },
       (err: HttpErrorResponse) => {
         this.isLoginError = true;
