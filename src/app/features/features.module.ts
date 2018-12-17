@@ -31,6 +31,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { MatInputModule } from '@angular/material/input';
     DatePickerModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    MatRadioModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]

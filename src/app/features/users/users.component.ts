@@ -55,7 +55,7 @@ export class UsersComponent implements OnInit {
   users: any;
   public editSettings: Object;
   pageSettings: PageSettingsModel;
-  toolbar: Array<ToolbarItems>;
+  toolbar = [];
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
@@ -66,11 +66,7 @@ export class UsersComponent implements OnInit {
   line = 'Both';
   key: Object = {};
 
-  public genderDdl: Array<string> = [
-    'Male',
-    'Female',
-    'Others'
-  ];
+  public genderDdl: Array<string> = ['Male', 'Female', 'Others'];
 
   constructor(private _userService: UserService) {}
 
@@ -82,7 +78,8 @@ export class UsersComponent implements OnInit {
       'Delete',
       'Search',
       'ExcelExport',
-      'PdfExport'
+      'PdfExport',
+      'Import'
     ];
     this.searchSettings = {};
     this.filterOptions = { type: 'Excel' };
@@ -104,6 +101,8 @@ export class UsersComponent implements OnInit {
       this.grid.pdfExport();
     } else if (args.item['properties'].text === 'Excel Export') {
       this.grid.excelExport();
+    } else if (args.item['properties'].text === 'Import') {
+
     }
   }
 
@@ -116,6 +115,7 @@ export class UsersComponent implements OnInit {
   }
 
   actionBegin(args: SaveEventArgs): void {
+    console.log(args.requestType);
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       // this.userData = Object.assign({}, args.rowData);
     }
