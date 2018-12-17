@@ -5,7 +5,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
-import { FilterService, GridModule, GroupService, PageService, SortService } from '@syncfusion/ej2-angular-grids';
+import {
+  FilterService,
+  GridModule,
+  GroupService,
+  PageService,
+  SortService
+} from '@syncfusion/ej2-angular-grids';
 
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
@@ -22,6 +28,9 @@ import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
 import { LogoutComponent } from './logout/logout.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -47,7 +56,10 @@ import { LogoutComponent } from './logout/logout.component';
     HttpClientModule,
     FormsModule,
     RadioButtonModule,
-    DatePickerModule
+    DatePickerModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]

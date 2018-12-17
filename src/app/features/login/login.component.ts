@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
     this._loginService.userAuth(f.value).subscribe(
       (data: any) => {
         console.log(data);
-        localStorage.setItem('token', data.accessToken); // pass api token parameter name here
+        localStorage.setItem('token', JSON.stringify(data)); // pass api token parameter name here
         this._router.navigate(['/dashboard']);
         this._toast.success('Logged in successfully!');
       },

@@ -13,6 +13,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LoginService } from './services/login.service';
 import { ToastService } from './services/toast.service';
 import { SharedRoutingModule } from './shared-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { SharedRoutingModule } from './shared-routing.module';
     BrowserAnimationsModule,
     CommonModule,
     SharedRoutingModule,
-    ToasterModule.forRoot()
+    ToasterModule.forRoot(),
+    HttpClientModule
   ],
   exports: [
     FooterComponent,
