@@ -21,24 +21,24 @@ body {
   right: 100px !important;
 }
 
-#toast-container>div {
+#toast-container > div {
   width: 400px !important;
   opacity: 0.8;
 }
 
-#toast-container>.toast-success {
+#toast-container > .toast-success {
   border: 3px solid #328132;
 }
 
-#toast-container>.toast-error {
+#toast-container > .toast-error {
   border: 3px solid #a2241e;
 }
 
-#toast-container>.toast-info {
+#toast-container > .toast-info {
   border: 3px solid #1d7189;
 }
 
-#toast-container>.toast-warning {
+#toast-container > .toast-warning {
   border: 3px solid #c47505;
 }
 
@@ -85,3 +85,28 @@ body {
 }
 
 /* ej2 styles */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* Material Design custom css */
+.mat-wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
+  margin: 4px;
+}
+.mat-header {
+  color: #333;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 17px 20px;
+    font-size: 18px;
+}
+.mat-body{
+  padding:20px;
+}
