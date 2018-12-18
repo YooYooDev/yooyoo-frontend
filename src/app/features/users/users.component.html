@@ -3,9 +3,9 @@
     [allowSorting]='true' [allowFiltering]='true' [allowPdfExport]='true' [allowExcelExport]='true' [allowGrouping]='false'
     [groupSettings]='groupOptions' [searchSettings]='searchSettings' [editSettings]='editSettings' [filterSettings]='filterOptions'
     [pageSettings]='pageSettings' [toolbar]='toolbar' [dataSource]='users' (rowSelected)='onRowSelected($event)'
-    (toolbarClick)='onToolbarClick($event)'>
+    (toolbarClick)='onToolbarClick($event)' (actionBegin)='actionBegin($event)' (actionComplete)='actionComplete($event)'>
     <e-columns>
-      <e-column field='student_name' headerText='Name' textAlign='left' width=200></e-column>
+      <e-column field='student_name' headerText='Student Name' [isPrimaryKey]='true' textAlign='left' width=200></e-column>
       <e-column field='class' headerText='Class' textAlign='left' width=150></e-column>
       <e-column field='father_name' headerText="Father's Name" textAlign='left' width=200></e-column>
       <e-column field='mother_name' headerText="Mother's Name" textAlign='left' width=200></e-column>
@@ -19,7 +19,7 @@
         <div class="form-row">
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.student_name" #student_name required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="userData.student_name" #studentName required
                 name='student_name' id="student_name" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="student_name">Student Name</label>
@@ -27,14 +27,15 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <ejs-datepicker></ejs-datepicker>
+              <input class="e-input e-field" [(ngModel)]="userData.dob" #dob
+                name='dob' id="dob" type="date" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="dob">Date of Birth</label>
             </div>
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.photo" #photo required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="userData.photo" #photo
                 name='photo' id="photo" type="file" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="photo">Photo</label>
@@ -42,23 +43,15 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <!-- <input class="e-input e-field" [(ngModel)]="userData.gender" #gender required [attr.disabled]="!data.isAdd ? '' : null"
-                name='gender' id="gender" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" /> -->
-
-                <select name="gender" id="gender" [(ngModel)]="userData.gender" #gender required class="form-control" required="required">
-                  <option value="">Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="others">Others</option>
-                </select>
-
+              <input class="e-input e-field" [(ngModel)]="userData.gender" #class
+                name='gender' id="gender" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="gender">Gender</label>
+              <label class="e-float-text e-label-top" for="class">Gender</label>
             </div>
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.class" #class required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="userData.class" #class
                 name='class' id="class" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="class">Class</label>
@@ -66,7 +59,7 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.father_name" #fatherName required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="userData.father_name" #fatherName
                 name='father_name' id="father_name" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="father_name">Father's Name</label>
@@ -74,7 +67,7 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.mother_name" #mother_name required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="userData.mother_name" #motherName
                 name='mother_name' id="mother_name" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="mother_name">Mother's Name</label>
@@ -82,8 +75,8 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.father_profession" #fatherProfession required
-                [attr.disabled]="!data.isAdd ? '' : null" name='father_profession' id="father_profession" type="text"
+              <input class="e-input e-field" [(ngModel)]="userData.father_profession" #fatherProfession
+             name='father_profession' id="father_profession" type="text"
                 (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="father_profession">Father's Profession</label>
@@ -91,8 +84,8 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.mother_profession" #motherProfession required
-                [attr.disabled]="!data.isAdd ? '' : null" name='mother_profession' id="mother_profession" type="text"
+              <input class="e-input e-field" [(ngModel)]="userData.mother_profession" #motherProfession
+             name='mother_profession' id="mother_profession" type="text"
                 (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="mother_profession">Mother's Profession</label>
@@ -100,8 +93,8 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.primary_email" #primaryEmail required
-                [attr.disabled]="!data.isAdd ? '' : null" name='primary_email' id="primary_email" type="text" (focus)="focusIn($event.target)"
+              <input class="e-input e-field" [(ngModel)]="userData.primary_email" #primaryEmail
+             name='primary_email' id="primary_email" type="email" (focus)="focusIn($event.target)"
                 (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="primary_email">Primary Email</label>
@@ -109,8 +102,8 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.alternate_email" #alternateEmail required
-                [attr.disabled]="!data.isAdd ? '' : null" name='alternate_email' id="alternate_email" type="text"
+              <input class="e-input e-field" [(ngModel)]="userData.alternate_email" #alternateEmail
+             name='alternate_email' id="alternate_email" type="email"
                 (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="alternate_email">Alternate Email</label>
@@ -118,8 +111,8 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.primary_mobile" #primaryMobile required
-                [attr.disabled]="!data.isAdd ? '' : null" name='primary_mobile' id="primary_mobile" type="text" (focus)="focusIn($event.target)"
+              <input class="e-input e-field" [(ngModel)]="userData.primary_mobile" #primaryMobile
+             name='primary_mobile' id="primary_mobile" minlength="10" maxlength="10" type="number" (focus)="focusIn($event.target)"
                 (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="primary_mobile">Primary Mobile</label>
@@ -127,16 +120,16 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.alternate_mobile" #alternateMobile required
-                [attr.disabled]="!data.isAdd ? '' : null" name='alternate_mobile' id="alternate_mobile" type="text"
+              <input class="e-input e-field" [(ngModel)]="userData.alternate_mobile" #alternateMobile
+             name='alternate_mobile' id="alternate_mobile" type="number"  minlength="10" maxlength="10"
                 (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="alternate_mobile">Alternate Email</label>
+              <label class="e-float-text e-label-top" for="alternate_mobile">Alternate Mobile</label>
             </div>
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.address" #address required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="userData.address" #address
                 name='address' id="address" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="address">Adress</label>
@@ -144,7 +137,7 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.city" #city required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="userData.city" #city
                 name='city' id="city" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="city">City</label>
@@ -152,7 +145,7 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.state" #state required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="userData.state" #state
                 name='state' id="state" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="state">State</label>
@@ -160,8 +153,8 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.pin_code" #pinCode required [attr.disabled]="!data.isAdd ? '' : null"
-                name='pin_code' id="pin_code" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
+              <input class="e-input e-field" [(ngModel)]="userData.pin_code" #pinCode
+                name='pin_code' id="pin_code" type="number"  minlength="5" maxlength="6" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="pin_code">Pin Code</label>
             </div>
