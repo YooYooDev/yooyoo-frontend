@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import {
   ColumnMenuService,
   DetailRowService,
   DialogEditEventArgs,
   EditService,
+  EditSettingsModel,
   ExcelExportService,
   FilterService,
   FilterSettingsModel,
@@ -19,13 +21,10 @@ import {
   SaveEventArgs,
   SearchSettingsModel,
   SortService,
-  ToolbarItems,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 
-import { IUser } from './user';
 import { UserService } from './user.service';
 
 @Component({
@@ -49,11 +48,11 @@ import { UserService } from './user.service';
   encapsulation: ViewEncapsulation.None
 })
 export class UsersComponent implements OnInit {
-  userData: IUser;
+  userData = {};
   @ViewChild('userForm') public userForm: FormGroup;
   editparams: { params: { popupHeight: string } };
   users: any;
-  public editSettings: Object;
+  public editSettings: EditSettingsModel;
   pageSettings: PageSettingsModel;
   toolbar = [];
   initialSort: Object;
@@ -102,7 +101,6 @@ export class UsersComponent implements OnInit {
     } else if (args.item['properties'].text === 'Excel Export') {
       this.grid.excelExport();
     } else if (args.item['properties'].text === 'Import') {
-
     }
   }
 
@@ -115,13 +113,19 @@ export class UsersComponent implements OnInit {
   }
 
   actionBegin(args: SaveEventArgs): void {
+    console.log(args.target);
     console.log(args.requestType);
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      // this.userData = Object.assign({}, args.rowData);
+      this.userData = Object.assign({}, args.rowData);
+    } else if (args.requestType === 'delete') {
+      if (confirm('Are you sure you want to delete ?') ) {
+        console.log('deleted');
+      }
     }
     if (args.requestType === 'save') {
       if (this.userForm.valid) {
         args.data = this.userData;
+        console.log(this.userData);
       } else {
         args.cancel = true;
       }
