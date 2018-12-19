@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'yoo-assignment',
-  template: `
-    <router-outlet></router-outlet>
-  `
+  templateUrl: './assignment.component.html',
+  styleUrls: ['./assignment.component.css']
 })
 export class AssignmentComponent implements OnInit {
   constructor() {}

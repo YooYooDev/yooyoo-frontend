@@ -12,8 +12,7 @@ import { FilterService, GridModule, GroupService, PageService, SortService } fro
 
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
-import { AssignmentModule } from './assignment/assignment.module';
-import { AttendenceComponent } from './attendence/attendence.component';
+import { AttendanceComponent } from './attendance/attendance.component';
 import { CurriculumComponent } from './curriculum/curriculum.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturesRoutingModule } from './features-routing.module';
@@ -35,7 +34,7 @@ import { UsersComponent } from './users/users.component';
     NotificationsComponent,
     FeesComponent,
     RaiseATicketComponent,
-    AttendenceComponent,
+    AttendanceComponent,
     LoginComponent,
     ReportsComponent,
     AssignmentComponent,
@@ -44,7 +43,6 @@ import { UsersComponent } from './users/users.component';
   imports: [
     CommonModule,
     FeaturesRoutingModule,
-    AssignmentModule,
     SharedModule,
     GridModule,
     HttpClientModule,
