@@ -8,7 +8,6 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderNotificationsComponent } from './header/header-notifications/header-notifications.component';
 import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './header/profile/profile.component';
-import { SettingsComponent } from './header/settings/settings.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginService } from './services/login.service';
 import { ToastService } from './services/toast.service';
@@ -22,7 +21,6 @@ import { HttpClientModule } from '@angular/common/http';
     HeaderComponent,
     HeaderNotificationsComponent,
     ProfileComponent,
-    SettingsComponent,
     ToastComponent
   ],
   imports: [
