@@ -12,4 +12,13 @@ export class UtilService {
   removeToken(): any {
     return localStorage.removeItem('token');
   }
+
+  getUserInfo(): any {
+    return localStorage.getItem('userInfo');
+  }
+
+  removeUserInfo(): any {
+    return localStorage.removeItem('userInfo');
+  }
+
 }

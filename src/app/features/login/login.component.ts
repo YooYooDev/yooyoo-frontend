@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../shared/services/login.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'yoo-login',
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private _loginService: LoginService,
     private _router: Router,
-    private _toast: ToastService
+    private _toast: ToastService,
+    private _authService: AuthService
   ) {}
 
   ngOnInit() {}
@@ -23,8 +25,13 @@ export class LoginComponent implements OnInit {
     console.log(f.value);
     this._loginService.userAuth(f.value).subscribe(
       (data: any) => {
-        console.log(data);
-        localStorage.setItem('token', JSON.stringify(data)); // pass api token parameter name here
+        console.log(data.role);
+        this._authService.setUserRole(data.role);
+        // this._authService.setUserRole('YOOYOOADMIN');
+        // this._authService.setUserRole('SCHOOLOWNER');
+        // this._authService.setUserRole('TEACHER');
+        localStorage.setItem('token', data.accessToken); // pass api access token parameter name here
+        localStorage.setItem('userInfo', JSON.stringify(data.userInfo)); // store user info object here
         this._router.navigate(['/dashboard']);
         this._toast.success('Logged in successfully!');
       },
