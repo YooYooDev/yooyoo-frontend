@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 import { RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { FilterService, GridModule, GroupService, PageService, SortService } from '@syncfusion/ej2-angular-grids';
@@ -52,7 +53,8 @@ import { UsersComponent } from './users/users.component';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    MatButtonModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]
