@@ -13,8 +13,16 @@ export class UtilService {
     return localStorage.removeItem('token');
   }
 
+  getUserRole(): any {
+    return localStorage.getItem('urole');
+  }
+
+  removeUserRole(): any {
+    return localStorage.removeItem('urole');
+  }
+
   getUserInfo(): any {
-    return localStorage.getItem('userInfo');
+    return JSON.parse(localStorage.getItem('userInfo'));
   }
 
   removeUserInfo(): any {

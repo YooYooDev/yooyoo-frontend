@@ -15,8 +15,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private _loginService: LoginService,
     private _router: Router,
-    private _toast: ToastService,
-    private _authService: AuthService
+    private _toast: ToastService
   ) {}
 
   ngOnInit() {}
@@ -25,11 +24,7 @@ export class LoginComponent implements OnInit {
     console.log(f.value);
     this._loginService.userAuth(f.value).subscribe(
       (data: any) => {
-        console.log(data.role);
-        this._authService.setUserRole(data.role);
-        // this._authService.setUserRole('YOOYOOADMIN');
-        // this._authService.setUserRole('SCHOOLOWNER');
-        // this._authService.setUserRole('TEACHER');
+        localStorage.setItem('urole', data.role);
         localStorage.setItem('token', data.accessToken); // pass api access token parameter name here
         localStorage.setItem('userInfo', JSON.stringify(data.userInfo)); // store user info object here
         this._router.navigate(['/dashboard']);
