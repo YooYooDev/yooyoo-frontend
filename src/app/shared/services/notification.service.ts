@@ -5,10 +5,10 @@ import { apiUrl } from '../../core/api';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class NotificationService {
   constructor(private _http: HttpClient) {}
 
-  userAuth(formData): any {
-    return this._http.post(`${apiUrl}/login` , formData);
+  saveNotification(formData): any {
+    return this._http.post(`${apiUrl}/notifications/save` , formData);
   }
 }

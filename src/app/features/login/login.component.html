@@ -10,7 +10,6 @@
               </h2>
             </div>
             <div class="account-content">
-              <div *ngIf="isLoginError" class="text-danger">Incorrect Email ID or Password</div>
               <form class="form-horizontal" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
                 <div class="form-group ">
                   <div class="col-xs-12">

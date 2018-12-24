@@ -113,3 +113,19 @@ body {
 .mat-body{
   padding:20px;
 }
+
+.mat-form-field{
+  width:100%;
+  font-size:16px;
+}
+textarea.mat-input-element{
+  height:80px;
+}
+.mat-fab.mat-accent, .mat-flat-button.mat-accent, .mat-mini-fab.mat-accent, .mat-raised-button.mat-accent{
+  background:#F06292;
+  color:#ffffff;
+}
+.mat-pseudo-checkbox-checked::after{
+  height:6px !important;
+  width:9px !important;
+}

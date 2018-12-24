@@ -11,7 +11,6 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  isLoginError = false;
   constructor(
     private _loginService: LoginService,
     private _router: Router,
@@ -21,7 +20,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit(f): void {
-    console.log(f.value);
+    // console.log(f.value);
     this._loginService.userAuth(f.value).subscribe(
       (data: any) => {
         localStorage.setItem('urole', data.role);
@@ -31,7 +30,7 @@ export class LoginComponent implements OnInit {
         this._toast.success('Logged in successfully!');
       },
       (err: HttpErrorResponse) => {
-        this.isLoginError = true;
+        this._toast.error('Incorrect Email ID or Password');
       }
     );
   }
