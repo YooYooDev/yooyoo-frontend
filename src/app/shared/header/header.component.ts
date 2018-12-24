@@ -10,7 +10,7 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  profileName: string;
+  fullName: string;
 
   constructor(
     private _router: Router,
@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     if (this._authService.isLoggedIn()) {
-      this.profileName = this._utilService.getUserInfo().userName;
+      this.fullName = this._utilService.getUserInfo().fullName;
     }
   }
 
