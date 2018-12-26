@@ -8,7 +8,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
-import { FilterService, GridModule, GroupService, PageService, SortService } from '@syncfusion/ej2-angular-grids';
+import { TextBoxModule } from '@syncfusion/ej2-angular-inputs';
+import {
+  FilterService,
+  GridModule,
+  GroupService,
+  PageService,
+  SortService
+} from '@syncfusion/ej2-angular-grids';
+import { NumericTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
+import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
@@ -38,7 +47,9 @@ import { UsersComponent } from './users/users.component';
     LoginComponent,
     ReportsComponent,
     AssignmentComponent,
-    LogoutComponent
+    LogoutComponent,
+    NumericTextBoxComponent,
+    DropDownListComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +63,8 @@ import { UsersComponent } from './users/users.component';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    TextBoxModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]
