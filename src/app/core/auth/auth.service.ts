@@ -10,11 +10,11 @@ export class AuthService {
 
   constructor(private _utilService: UtilService) {}
 
-  isLoggedIn(): boolean {
-    return !!this._utilService.getToken();
+  getuRole(): any {
+    return this.urole = observableOf(this._utilService.getUserRole());
   }
 
-  setUserRole(role: string): void {
-    this.urole = observableOf(role);
+  isLoggedIn(): boolean {
+    return !!this._utilService.getToken();
   }
 }

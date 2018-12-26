@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast.service';
 import { UtilService } from '../services/util.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'yoo-header',
@@ -9,12 +10,25 @@ import { UtilService } from '../services/util.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  constructor(private _router: Router, private _toast: ToastService, private _removeToken: UtilService) {}
+  fullName: string;
 
-  ngOnInit() {}
+  constructor(
+    private _router: Router,
+    private _toast: ToastService,
+    private _utilService: UtilService,
+    private _authService: AuthService
+  ) {}
+
+  ngOnInit() {
+    if (this._authService.isLoggedIn()) {
+      this.fullName = this._utilService.getUserInfo().fullName;
+    }
+  }
 
   logOut(): void {
-    this._removeToken.removeToken();
+    this._utilService.removeToken();
+    this._utilService.removeUserRole();
+    this._utilService.removeUserInfo();
     this._router.navigate(['/logout']);
     this._toast.success('Logged out successfully!');
   }

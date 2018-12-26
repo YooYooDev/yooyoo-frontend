@@ -11,32 +11,26 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  isLoginError = false;
   constructor(
     private _loginService: LoginService,
     private _router: Router,
-    private _toast: ToastService,
-    private _authService: AuthService
+    private _toast: ToastService
   ) {}
 
   ngOnInit() {}
 
   onSubmit(f): void {
-    console.log(f.value);
+    // console.log(f.value);
     this._loginService.userAuth(f.value).subscribe(
       (data: any) => {
-        console.log(data.role);
-        this._authService.setUserRole(data.role);
-        // this._authService.setUserRole('YOOYOOADMIN');
-        // this._authService.setUserRole('SCHOOLOWNER');
-        // this._authService.setUserRole('TEACHER');
+        localStorage.setItem('urole', data.role);
         localStorage.setItem('token', data.accessToken); // pass api access token parameter name here
         localStorage.setItem('userInfo', JSON.stringify(data.userInfo)); // store user info object here
         this._router.navigate(['/dashboard']);
         this._toast.success('Logged in successfully!');
       },
       (err: HttpErrorResponse) => {
-        this.isLoginError = true;
+        this._toast.error('Incorrect Email ID or Password');
       }
     );
   }
