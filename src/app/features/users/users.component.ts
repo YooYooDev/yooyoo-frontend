@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import {
@@ -24,7 +24,7 @@ import {
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-
+import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-inputs';
 import { UserService } from './user.service';
 
 @Component({
@@ -62,10 +62,14 @@ export class UsersComponent implements OnInit {
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
   @ViewChild('gender') gender: DropDownListComponent;
+  @ViewChild('class') class: DropDownListComponent;
+  // @ViewChild('parentMobile1') numeric: NumericTextBoxComponent;
+  public formObject: FormValidator;
   line = 'Both';
   key: Object = {};
 
   public genderDdl: Array<string> = ['Male', 'Female', 'Others'];
+  public classDdl: Array<string> = ['LKG', 'UKG', 'Nursery'];
 
   constructor(private _userService: UserService) {}
 
@@ -123,9 +127,13 @@ export class UsersComponent implements OnInit {
       }
     }
     if (args.requestType === 'save') {
+      console.log(this.userData);
+      console.log(this.userForm);
       if (this.userForm.valid) {
         args.data = this.userData;
+        this.userData['schoolId'] = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
         console.log(this.userData);
+        this._userService.createUser(this.userData).subscribe(res => console.log(res));
       } else {
         args.cancel = true;
       }
@@ -137,11 +145,11 @@ export class UsersComponent implements OnInit {
       // Set initail Focus
       if (args.requestType === 'beginEdit') {
         (args.form.elements.namedItem(
-          'student_name'
+          'firstName'
         ) as HTMLInputElement).focus();
       } else if (args.requestType === 'add') {
         (args.form.elements.namedItem(
-          'student_name'
+          'firstName'
         ) as HTMLInputElement).focus();
       }
     }
@@ -154,4 +162,5 @@ export class UsersComponent implements OnInit {
   focusOut(target: HTMLElement): void {
     target.parentElement.classList.remove('e-input-focus');
   }
+
 }
