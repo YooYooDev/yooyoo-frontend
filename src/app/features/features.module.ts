@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
+import { RadioButtonModule, SwitchModule } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { TextBoxModule } from '@syncfusion/ej2-angular-inputs';
 import {
@@ -19,7 +19,7 @@ import {
 } from '@syncfusion/ej2-angular-grids';
 import { NumericTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
-
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -34,7 +34,6 @@ import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component
 import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
-
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -50,7 +49,8 @@ import { UsersComponent } from './users/users.component';
     AssignmentComponent,
     LogoutComponent,
     NumericTextBoxComponent,
-    DropDownListComponent
+    DropDownListComponent,
+    DialogComponent
   ],
   imports: [
     CommonModule,
@@ -66,7 +66,8 @@ import { UsersComponent } from './users/users.component';
     MatInputModule,
     MatRadioModule,
     TextBoxModule,
-    MatButtonModule
+    MatButtonModule,
+    SwitchModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]

@@ -3,12 +3,13 @@
     [allowSorting]='true' [allowFiltering]='true' [allowPdfExport]='true' [allowExcelExport]='true' [allowGrouping]='false'
     [groupSettings]='groupOptions' [searchSettings]='searchSettings' [editSettings]='editSettings' [filterSettings]='filterOptions'
     [pageSettings]='pageSettings' [toolbar]='toolbar' [dataSource]='schools' (rowSelected)='onRowSelected($event)'
-    (toolbarClick)='onToolbarClick($event)'>
+    (toolbarClick)='onToolbarClick($event)'  (actionBegin)='actionBegin($event)' (actionComplete)='actionComplete($event)'>
     <e-columns>
-      <e-column field='school_name' headerText='School Name' textAlign='left' width=200></e-column>
-      <e-column field='school_code' headerText='School Code' textAlign='left' width=200></e-column>
-      <e-column field='owner_mobile' headerText="Mobile" textAlign='left' width=200></e-column>
-      <e-column field='owner_email' headerText="Email" textAlign='left' width=200></e-column>
+      <e-column field='name' headerText='School Name' textAlign='left' width=200></e-column>
+      <e-column field='code' headerText='School Code' textAlign='left' width=200></e-column>
+      <e-column field='ownerName' headerText="Owner Name" textAlign='left' width=200></e-column>
+      <e-column field='ownerMobile' headerText="Mobile" textAlign='left' width=200></e-column>
+      <e-column field='emailId' headerText="Email" textAlign='left' width=200></e-column>
       <e-column field='address' headerText='Address' textAlign='left' width=200></e-column>
       <e-column field='logo' headerText='Logo' textAlign='left' width=200></e-column>
     </e-columns>
@@ -17,39 +18,38 @@
         <div class="form-row">
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.school_name" #schoolName required [attr.disabled]="!data.isAdd ? '' : null"
-                name='school_name' id="school_name" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
+              <input class="e-input e-field" [(ngModel)]="schoolData.name" #string required
+                name='name' id="name" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="school_name">School Name</label>
+              <label class="e-float-text e-label-top" for="name">School Name</label>
             </div>
           </div>
           <div class="form-group col-md-4">
-            <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.school_code" #schoolCode required [attr.disabled]="!data.isAdd ? '' : null"
-                name='school_code' id="school_code" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
-              <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="school_code">School Code</label>
+            <div class="e-control-wrapper">
+              <ejs-numerictextbox  id="code" format= 'N0' [value]="schoolData.code" [(ngModel)]="schoolData.code" #code  name='code' placeholder= 'School Code' floatLabelType= 'Always' required></ejs-numerictextbox>           
+          
+               <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf="schoolForm.form.controls.code?.touched && !schoolForm.form.controls.code?.valid"><div class="e-tip-content"><label class="e-error" for="code">This field is required.</label></div><div class="e-arrow-tip e-tip-top"><div class="e-arrow-tip-outer e-tip-top"></div><div class="e-arrow-tip-inner e-tip-top"></div></div></div>
             </div>
           </div>
-          <div class="form-group col-md-4">
+          <!--<div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.password" #password required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="schoolData.password" #password required
                 name='password' id="password" type="password" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="password">Password</label>
             </div>
-          </div>
-          <div class="form-group col-md-4">
+          </div>-->
+          <!--<div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.logo" #logo required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="schoolData.logo" #logo required
                 name='logo' id="logo" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="logo">Logo</label>
             </div>
-          </div>
+          </div>-->
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.address" #address required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="schoolData.address" #address required
                 name='address' id="address" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="address">Address</label>
@@ -57,23 +57,7 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.state" #state required [attr.disabled]="!data.isAdd ? '' : null"
-                name='state' id="state" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
-              <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="state">State</label>
-            </div>
-          </div>
-          <div class="form-group col-md-4">
-            <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.country" #country required [attr.disabled]="!data.isAdd ? '' : null"
-                name='country' id="country" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
-              <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="country">Country</label>
-            </div>
-          </div>
-          <div class="form-group col-md-4">
-            <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.pin" #pin required [attr.disabled]="!data.isAdd ? '' : null"
+              <input class="e-input e-field" [(ngModel)]="schoolData.pin" #pin required
                 name='pin' id="pin" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="pin">Pin</label>
@@ -81,66 +65,99 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.owner_name" #ownerName required [attr.disabled]="!data.isAdd ? '' : null"
-                name='owner_name' id="owner_name" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
+              <input class="e-input e-field" [(ngModel)]="schoolData.state" #state required
+                name='state' id="state" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="owner_name">Owner Name</label>
+              <label class="e-float-text e-label-top" for="state">State</label>
             </div>
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.owner_mobile" #ownerMobile required
-                [attr.disabled]="!data.isAdd ? '' : null" name='owner_mobile' id="owner_mobile" type="text" (focus)="focusIn($event.target)"
-                (blur)="focusOut($event.target)" />
+              <input class="e-input e-field" [(ngModel)]="schoolData.country" #country required
+                name='country' id="country" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="owner_mobile">Owner Mobile</label>
+              <label class="e-float-text e-label-top" for="country">Country</label>
             </div>
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.owner_email" #ownerEmail required [attr.disabled]="!data.isAdd ? '' : null"
-                name='owner_email' id="owner_email" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
+              <input class="e-input e-field" [(ngModel)]="schoolData.contactPerson" #contactPerson required
+                name='contactPerson' id="contactPerson" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="owner_email">Owner Email</label>
+              <label class="e-float-text e-label-top" for="contactPerson">Contact Person</label>
             </div>
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.registration_name" #registrationName required
-                [attr.disabled]="!data.isAdd ? '' : null" name='registration_name' id="registration_name" type="text"
+              <input class="e-input e-field" [(ngModel)]="schoolData.ownerName" #ownerName required
+                name='ownerName' id="ownerName" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
+              <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top" for="ownerName">Owner Name</label>
+            </div>
+          </div>
+          <div class="form-group col-md-4">
+            <div class="e-control-wrapper">
+              <ejs-numerictextbox id="ownerMobile" format='N0' [min]="1000000000" [max]="9999999999" [(ngModel)]="schoolData.ownerMobile"
+                #ownerMobile required name='ownerMobile' placeholder='Owner Mobile' floatLabelType='Always'></ejs-numerictextbox>
+               <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf="schoolForm.form.controls.ownerMobile?.touched && !schoolForm.form.controls.ownerMobile?.valid"><div class="e-tip-content"><label class="e-error" for="ownerMobile">This field is required.</label></div><div class="e-arrow-tip e-tip-top"><div class="e-arrow-tip-outer e-tip-top"></div><div class="e-arrow-tip-inner e-tip-top"></div></div></div>
+            </div>
+          </div>
+          <div class="form-group col-md-4">
+            <div class="e-float-input e-control-wrapper">
+              <input class="e-input e-field" [(ngModel)]="schoolData.emailId" #emailId required
+                name='emailId' id="emailId" type="email" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
+              <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top" for="emailId">Owner Email</label>
+            </div>
+          </div>
+          <div class="form-group col-md-4">
+            <div class="e-float-input e-control-wrapper">
+              <input class="e-input e-field" [(ngModel)]="schoolData.registrationName" #registrationName required
+               name='registrationName' id="registrationName" type="text"
                 (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="registration_name">Registration Name</label>
+              <label class="e-float-text e-label-top" for="registrationName">Registration Name</label>
+            </div>
+          </div>
+          <div class="form-group col-md-4 clearfix">
+            <div class="e-float-input e-control-wrapper">
+              <ejs-switch type="number" [ngModel]="schoolData.enableFees == 1 ? true : schoolData.enableFees == 0 ? false : null" (ngModelChange)="schoolData.enableFees = $event ? 1 : 0"  #enableFees name='enableFees' id="enableFees"></ejs-switch>
+              <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top switch-label" for="enableFees">Enable Fees</label>
             </div>
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.enable_fees" #enableFees required [attr.disabled]="!data.isAdd ? '' : null"
-                name='enable_fees' id="enable_fees" type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
-              <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="enable_fees">Enable Fees</label>
+              <ejs-switch [ngModel]="schoolData.enableAttendance == 1 ? true : schoolData.enableAttendance == 0 ? false : null" (ngModelChange)="schoolData.enableAttendance = $event ? 1 : 0" #enableAttendance name='enableAttendance' id="enableAttendance"></ejs-switch>
+               <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top switch-label" for="enableAttendance"> Enable Attendance </label>
             </div>
           </div>
           <div class="form-group col-md-4">
-            <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.enable_attendance" #enableAttendance required
-                [attr.disabled]="!data.isAdd ? '' : null" name='enable_attendance' id="enable_attendance" type="text"
-                (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
-              <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="enable_attendance">Enable Attendance</label>
-            </div>
-          </div>
-          <div class="form-group col-md-4">
-            <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="schoolData.enable_printed_worksheet" #enablePrintedWorksheet
-                required [attr.disabled]="!data.isAdd ? '' : null" name='enable_printed_worksheet' id="enable_printed_worksheet"
-                type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
-              <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="enable_printed_worksheet">Enable Printed Worksheet</label>
+            <div class="e-float-input e-control-wrappe">
+                 <ejs-switch [ngModel]="schoolData.enablePrintedWorksheet == 1 ? true : schoolData.enablePrintedWorksheet == 0 ? false : null" (ngModelChange)="schoolData.enablePrintedWorksheet = $event ? 1 : 0" #enablePrintedWorksheet name='enablePrintedWorksheet' id="enablePrintedWorksheet"></ejs-switch>
+               <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top switch-label" for="enablePrintedWorksheet"> Enable Printed Worksheet </label>
             </div>
           </div>
         </div>
       </div>
     </ng-template>
+   
   </ejs-grid>
+   <!--<ejs-dialog id='dialog' #template showCloseIcon='true' (open)="dialogOpen()" [height]='height' [target]='targetElement' width='435px'>
+      <ng-template #footerTemplate>
+            <input id="inVal" class="e-input" type="text" placeholder="Enter your message here!"/>
+            <button id="sendButton" class="e-control e-btn e-primary sendButton" data-ripple="true">Send</button>
+        </ng-template>
+        <ng-template #content>
+            <div class="dialogContent">
+                <span class="dialogText">Greetings Nancy! When will you share me the source files of the project?</span>
+            </div>
+        </ng-template>
+        <ng-template #header>
+          
+            <div title="Nancy" class="e-icon-settings dlg-template"> Nancy </div>
+        </ng-template>
+      </ejs-dialog>-->
 </div>
