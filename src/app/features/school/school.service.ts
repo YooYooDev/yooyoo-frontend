@@ -28,7 +28,7 @@ export class SchoolService {
   }
   deleteSchool(id): Observable<any> {
       return this.httpClient
-        .post(`${apiUrl}/schools/delete/${id}`, '')
+        .delete(`${apiUrl}/schools/delete/${id}`)
         .pipe(map(res => res));
   }
 }

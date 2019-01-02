@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { RadioButtonModule, SwitchModule } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
-import { TextBoxModule } from '@syncfusion/ej2-angular-inputs';
+import { TextBoxModule, UploaderModule } from "@syncfusion/ej2-angular-inputs";
 import {
   FilterService,
   GridModule,
@@ -67,7 +67,8 @@ import { UsersComponent } from './users/users.component';
     MatRadioModule,
     TextBoxModule,
     MatButtonModule,
-    SwitchModule
+    SwitchModule,
+    UploaderModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]
