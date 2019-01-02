@@ -6,17 +6,18 @@
     (toolbarClick)='onToolbarClick($event)' (actionBegin)='actionBegin($event)' (actionComplete)='actionComplete($event)'>
     <e-columns>
       <e-column field='firstName' headerText='Student Name' [isPrimaryKey]='true' textAlign='left' width=200></e-column>
-      <e-column field='class' headerText='Class' textAlign='left' width=150></e-column>
+      <e-column field='gradeId' headerText='Class' textAlign='left' width=150></e-column>
       <e-column field='fatherName' headerText="Father's Name" textAlign='left' width=200></e-column>
       <e-column field='motherName' headerText="Mother's Name" textAlign='left' width=200></e-column>
       <e-column field='parentMobile1' headerText='Primary Mobile' textAlign='left' width=200></e-column>
       <e-column field='parentMobile2' headerText='Alternate Mobile' textAlign='left' width=200></e-column>
-      <e-column field='parentEmail1' headerText='Primary Email' textAlign='left' width=200></e-column>
-      <e-column field='parentEmail2' headerText='Alternate Email' textAlign='left' width=200></e-column>
+      <e-column field='primaryEmail' headerText='Primary Email' textAlign='left' width=200></e-column>
+      <e-column field='secondaryEmail' headerText='Alternate Email' textAlign='left' width=200></e-column>
     </e-columns>
     <ng-template #editSettingsTemplate let-data>
       <div ngForm #userForm="ngForm">
         <div class="form-row">
+        
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
               <input class="e-input e-field" [(ngModel)]="userData.firstName" #firstName required
@@ -35,22 +36,23 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <ejs-radiobutton label="Male" value="Male" cssClass="e-style" #gender [(ngModel)]="userData.gender" name="gender" ></ejs-radiobutton>
-              <ejs-radiobutton label="Female" value="Female" cssClass="e-style" #gender [(ngModel)]="userData.gender" name="gender" ></ejs-radiobutton>
-              <ejs-radiobutton label="Others" value="Others" cssClass="e-style" #gender [(ngModel)]="userData.gender" name="gender" ></ejs-radiobutton>
+              <ejs-radiobutton label="Male" value="Male" cssClass="e-style" #gender [(ngModel)]="userData.gender" name="gender" required ></ejs-radiobutton>
+              <ejs-radiobutton label="Female" value="Female" cssClass="e-style" #gender [(ngModel)]="userData.gender" name="gender" required></ejs-radiobutton>
+              <ejs-radiobutton label="Others" value="Others" cssClass="e-style" #gender [(ngModel)]="userData.gender" name="gender" required></ejs-radiobutton>
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top genderLbl" for="gender">Gender</label>
+              
             </div>
           </div>
   <div class="row px-15">
       <div class="form-group col-md-4">
           <div class="e-control-wrapper">
             <div class="e-float-input e-control-wrapper">
-              <ejs-radiobutton label="LKG" value="LKG" cssClass="e-style" #class [(ngModel)]="userData.class" name="class" ></ejs-radiobutton>
-              <ejs-radiobutton label="UKG" value="UKG" cssClass="e-style" #class [(ngModel)]="userData.class" name="class" ></ejs-radiobutton>
-              <ejs-radiobutton label="Nursery" value="Nursery" cssClass="e-style" #class [(ngModel)]="userData.class" name="class" ></ejs-radiobutton>
+              <ejs-radiobutton label="LKG" value="1" cssClass="e-style" #gradeId [(ngModel)]="userData.gradeId" name="gradeId" required></ejs-radiobutton>
+              <ejs-radiobutton label="UKG" value="2" cssClass="e-style" #gradeId [(ngModel)]="userData.gradeId" name="gradeId" required></ejs-radiobutton>
+              <ejs-radiobutton label="Nursery" value="3" cssClass="e-style" #gradeId [(ngModel)]="userData.gradeId" name="gradeId" required></ejs-radiobutton>
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top genderLbl" for="class">Class</label>
+              <label class="e-float-text e-label-top genderLbl" for="gradeId">Grade</label>
             </div>
           </div>
         </div>
@@ -92,21 +94,21 @@
                 </div>
                 <div class="form-group col-md-4">
                   <div class="e-float-input e-control-wrapper">
-                    <input class="e-input e-field" [(ngModel)]="userData.parentEmail1" #parentEmail1
-                   name='parentEmail1' id="parentEmail1" type="email" required (focus)="focusIn($event.target)"
+                    <input class="e-input e-field" [(ngModel)]="userData.primaryEmail" #primaryEmail
+                   name='primaryEmail' id="primaryEmail" type="email" required (focus)="focusIn($event.target)"
                       (blur)="focusOut($event.target)" />
                     <span class="e-float-line"></span>
-                    <label class="e-float-text e-label-top" for="parentEmail1">Primary Email</label>
+                    <label class="e-float-text e-label-top" for="primaryEmail">Primary Email</label>
                   </div>
                 </div>
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-              <input class="e-input e-field" [(ngModel)]="userData.parentEmail2" #parentEmail2
-             name='parentEmail2' id="parentEmail2" type="email" required
+              <input class="e-input e-field" [(ngModel)]="userData.secondaryEmail" #secondaryEmail
+             name='secondaryEmail' id="secondaryEmail" type="email" required
                 (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="parentEmail2">Alternate Email</label>
+              <label class="e-float-text e-label-top" for="secondaryEmail">Alternate Email</label>
             </div>
           </div>
           <div class="form-group col-md-4">
@@ -152,9 +154,41 @@
             </div>
           </div>
         </div>
+        <div class="col-md-12">
+          <div class="e-control-wrapper pull-right">
+          <button type="submit" [disabled]="userForm.invalid" class="e-control e-btn e-primary e-flat" (click)="onSubmit()">Save</button>
+          <button type="button" class="e-control e-btn e-flat" (click)="cancel()">Cancel</button>
+        </div>
+        </div>
       </div>
       <br>
-      <div>{{ userForm.value | json }}</div> 
+      <!--<div>{{ userForm.value | json }}</div> -->
+ 
+    
     </ng-template>
   </ejs-grid>
+  <ejs-dialog #Dialog [visible]='hidden' [position]='position' [header]='header' [showCloseIcon]='showCloseIcon'
+    [target]='target' [width]='width'>
+    <ng-template #content>
+      <form id="template_driven" #userForm="ngForm" novalidate>
+      <div class="selected-files">
+     
+        <div class="form-group uploader-section">
+    
+          <ejs-uploader #defaultupload id='fileupload' allowedExtensions="*.csv" [autoUpload]=false [multiple]='multiple' (selected)='onFileSelect($event)'></ejs-uploader>
+        </div>
+      </div>
+      <!--<span class='error-root' *ngIf="(uploadval.invalid && (uploadval.dirty || uploadval.touched))">
+        <span class="e-error errorClass" *ngIf="uploadval.errors.required">
+            * Select a file
+        </span>
+      </span>-->
+      <div class="form-group" style="padding-top: 11px;">
+        <div class="submitBtn">
+          <button class="submit-btn e-btn" id="submit-btn" [disabled]="userForm.invalid" type="reset" (click)="Submit()">Submit</button>
+        </div>
+      </div>
+    </form>   
+    </ng-template>
+  </ejs-dialog>
 </div>

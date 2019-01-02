@@ -53,7 +53,7 @@ body {
 
 /* ej2 styles */
 .e-popup.e-popup-open.e-control.e-dialog {
-  width: 900px !important;
+  width: 900px;
 }
 
 .e-control.e-grid.e-default .e-headercell,

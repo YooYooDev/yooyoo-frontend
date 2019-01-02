@@ -25,9 +25,9 @@ export class SchoolService {
       .pipe(map(res => res));
   }
   deleteSchool(id): Observable<any> {
-    return this.httpClient
-      .post(`${apiUrl}/schools/delete/${id}`, '')
-      .pipe(map(res => res));
+      return this.httpClient
+        .delete(`${apiUrl}/schools/delete/${id}`)
+        .pipe(map(res => res));
   }
 
   // returns all school for notification form

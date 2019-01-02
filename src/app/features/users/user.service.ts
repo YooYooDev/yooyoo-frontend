@@ -8,16 +8,28 @@ import { Observable, of as observableOf } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  constructor(private _http: HttpClient) {}
+  constructor(private httpClient: HttpClient) {}
 
-  getUsers(): Observable<any> {
-    return observableOf(users);
-    //   return this.httpClient
-    //     .get('https://jsonplaceholder.typicode.com/users')
-    //     .pipe(map(res => res));
+  getAllStudents(): Observable<any> {
+    const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    return this.httpClient
+      .get(`${apiUrl}/students/getAllStudents/${schoolId}`)
+      .pipe(map(res => res));
+  }
+  addStudent(formData): Observable<any> {
+    return this.httpClient
+      .post(`${apiUrl}/students/create`, formData)
+      .pipe(map(res => res));
+  }
+  updateStudent(formData): Observable<any> {
+    return this.httpClient
+      .post(`${apiUrl}/students/update`, formData)
+      .pipe(map(res => res));
   }
 
-  createUser(formData) {
-    return this._http.post(`${apiUrl}/students/create`, formData).pipe(map(res => res));
+  deleteStudent(id): Observable<any> {
+    return this.httpClient
+      .delete(`${apiUrl}/students/delete/${id}`)
+      .pipe(map(res => res));
   }
 }
