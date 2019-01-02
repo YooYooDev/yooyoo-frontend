@@ -11,25 +11,27 @@ export class SchoolService {
   constructor(private httpClient: HttpClient) {}
 
   getSchools(): Observable<any> {
-   // return observableOf(schools);
-      return this.httpClient
-        .get(`${apiUrl}/schools/load`)
-        .pipe(map(res => res));
+    // return observableOf(schools);
+    return this.httpClient.get(`${apiUrl}/schools/load`).pipe(map(res => res));
   }
   updateSchool(schoolData): Observable<any> {
-      return this.httpClient
-        .post(`${apiUrl}/schools/edit`, schoolData)
-        .pipe(map(res => res));
+    return this.httpClient
+      .post(`${apiUrl}/schools/edit`, schoolData)
+      .pipe(map(res => res));
   }
   addSchool(schoolData): Observable<any> {
-      return this.httpClient
-        .post(`${apiUrl}/schools/save`, schoolData)
-        .pipe(map(res => res));
+    return this.httpClient
+      .post(`${apiUrl}/schools/save`, schoolData)
+      .pipe(map(res => res));
   }
   deleteSchool(id): Observable<any> {
       return this.httpClient
         .delete(`${apiUrl}/schools/delete/${id}`)
         .pipe(map(res => res));
   }
-}
 
+  // returns all school for notification form
+  getAllSchools(): Observable<any> {
+    return this.httpClient.get(`${apiUrl}/schools/load`);
+  }
+}

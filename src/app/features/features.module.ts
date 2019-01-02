@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RadioButtonModule, SwitchModule } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { TextBoxModule, UploaderModule } from "@syncfusion/ej2-angular-inputs";
@@ -69,6 +70,8 @@ import { UsersComponent } from './users/users.component';
     MatButtonModule,
     SwitchModule,
     UploaderModule
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]
