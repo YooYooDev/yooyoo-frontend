@@ -1,5 +1,5 @@
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,9 +8,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { RadioButtonModule, SwitchModule } from '@syncfusion/ej2-angular-buttons';
+import {
+  RadioButtonModule,
+  SwitchModule
+} from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
-import { TextBoxModule, UploaderModule } from "@syncfusion/ej2-angular-inputs";
+import {
+  NumericTextBoxComponent,
+  TextBoxModule,
+  UploaderModule
+} from '@syncfusion/ej2-angular-inputs';
 import {
   FilterService,
   GridModule,
@@ -18,9 +25,8 @@ import {
   PageService,
   SortService
 } from '@syncfusion/ej2-angular-grids';
-import { NumericTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
+import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -69,7 +75,7 @@ import { UsersComponent } from './users/users.component';
     TextBoxModule,
     MatButtonModule,
     SwitchModule,
-    UploaderModule
+    UploaderModule,
     MatAutocompleteModule,
     ReactiveFormsModule
   ],
