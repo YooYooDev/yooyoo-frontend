@@ -34,4 +34,8 @@ export class SchoolService {
   getAllSchools(): Observable<any> {
     return this.httpClient.get(`${apiUrl}/schools/load`);
   }
+  // return array of students based on the class
+  getStudentsByClass(schoolId): Observable<any> {
+    return this.httpClient.get(`${apiUrl}/students/getStudentsBySchool/${schoolId}`);
+  }
 }
