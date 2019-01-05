@@ -3,7 +3,7 @@ export interface IUser {
   dob: Date;
   photo: string;
   gender: string;
-  class: string;
+  grade: number;
   father_name: string;
   mother_name: string;
   father_profession: string;

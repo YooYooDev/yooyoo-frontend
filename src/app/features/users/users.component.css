@@ -18,6 +18,11 @@
   margin-right: 10px;
   margin-left: -5px;
 }
+
 .px-15 {
   padding: 0 15px;
+}
+
+.switch-label {
+  margin-top: -20px;
 }

@@ -1,23 +1,23 @@
 <div class="control-section">
-  <ejs-grid #grid [showColumnMenu]='true' [allowReordering]='true' [gridLines]='line' [allowPaging]='true'
-    [allowSorting]='true' [allowFiltering]='true' [allowPdfExport]='true' [allowExcelExport]='true' [allowGrouping]='false'
-    [groupSettings]='groupOptions' [searchSettings]='searchSettings' [editSettings]='editSettings' [filterSettings]='filterOptions'
+  <ejs-grid #grid [showColumnMenu]='false' [allowReordering]='false'  [gridLines]='line' [allowPaging]='true'
+    [allowSorting]='true' [allowFiltering]='true' [allowExcelExport]='true' [allowGrouping]='false'
+    [groupSettings]='groupOptions' [searchSettings]='searchSettings' [editSettings]='editSettings' [filterSettings]='filterOptions' [selectionSettings]='selectionOptions'
     [pageSettings]='pageSettings' [toolbar]='toolbar' [dataSource]='users' (rowSelected)='onRowSelected($event)'
     (toolbarClick)='onToolbarClick($event)' (actionBegin)='actionBegin($event)' (actionComplete)='actionComplete($event)'>
     <e-columns>
-      <e-column field='firstName' headerText='Student Name' [isPrimaryKey]='true' textAlign='left' width=200></e-column>
-      <e-column field='gradeId' headerText='Class' textAlign='left' width=150></e-column>
-      <e-column field='fatherName' headerText="Father's Name" textAlign='left' width=200></e-column>
-      <e-column field='motherName' headerText="Mother's Name" textAlign='left' width=200></e-column>
-      <e-column field='parentMobile1' headerText='Primary Mobile' textAlign='left' width=200></e-column>
-      <e-column field='parentMobile2' headerText='Alternate Mobile' textAlign='left' width=200></e-column>
-      <e-column field='primaryEmail' headerText='Primary Email' textAlign='left' width=200></e-column>
-      <e-column field='secondaryEmail' headerText='Alternate Email' textAlign='left' width=200></e-column>
+      <e-column type='checkbox' width='50'></e-column>
+      <e-column field='firstName' headerText='Student Name' [isPrimaryKey]='true' textAlign='left' width=250></e-column>
+      <e-column field='gradeName' headerText='Class' textAlign='left' width=150></e-column>
+      <e-column field='fatherName' headerText="Father's Name" textAlign='left' width=250></e-column>
+      <e-column field='motherName' headerText="Mother's Name" textAlign='left' width=250></e-column>
+      <e-column field='parentMobile1' headerText='Primary Mobile' textAlign='left' width=250></e-column>
+      <e-column field='parentMobile2' headerText='Alternate Mobile' textAlign='left' width=250></e-column>
+      <e-column field='primaryEmail' headerText='Primary Email' textAlign='left' width=250></e-column>
+      <e-column field='secondaryEmail' headerText='Alternate Email' textAlign='left' width=250></e-column>
     </e-columns>
     <ng-template #editSettingsTemplate let-data>
       <div ngForm #userForm="ngForm">
         <div class="form-row">
-        
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
               <input class="e-input e-field" [(ngModel)]="userData.firstName" #firstName required
@@ -28,10 +28,12 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-control-wrapper">
-                <ejs-datepicker cssClass="e-style" [(ngModel)]="userData.dob" format='yyyy-MM-dd' #dob name="dob" required></ejs-datepicker>
+              <input class="e-input e-field hidden" [ngModel]="userData.dob | date:'dd/MM/yyyy'"
+                name="dob" #dob />
+                <ejs-datepicker cssClass="e-style" [(ngModel)]="userData.dob" format='yyyy-MM-dd' #date name="date" required></ejs-datepicker>
                <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top y-date" for="dob">Date of Birth</label>
-              <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf="userForm.form.controls.dob?.touched && !userForm.form.controls.dob?.valid"><div class="e-tip-content"><label class="e-error" for="dob">This field is invalid.</label></div><div class="e-arrow-tip e-tip-top"><div class="e-arrow-tip-outer e-tip-top"></div><div class="e-arrow-tip-inner e-tip-top"></div></div></div>
+              <label class="e-float-text e-label-top y-date" for="date">Date of Birth</label>
+              <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf="userForm.form.controls.date?.touched && !userForm.form.controls.date?.valid"><div class="e-tip-content"><label class="e-error" for="date">This field is invalid.</label></div><div class="e-arrow-tip e-tip-top"><div class="e-arrow-tip-outer e-tip-top"></div><div class="e-arrow-tip-inner e-tip-top"></div></div></div>
             </div>
           </div>
           <div class="form-group col-md-4">
@@ -44,15 +46,18 @@
               
             </div>
           </div>
+    
   <div class="row px-15">
       <div class="form-group col-md-4">
           <div class="e-control-wrapper">
             <div class="e-float-input e-control-wrapper">
-              <ejs-radiobutton label="LKG" value="1" cssClass="e-style" #gradeId [(ngModel)]="userData.gradeId" name="gradeId" required></ejs-radiobutton>
-              <ejs-radiobutton label="UKG" value="2" cssClass="e-style" #gradeId [(ngModel)]="userData.gradeId" name="gradeId" required></ejs-radiobutton>
-              <ejs-radiobutton label="Nursery" value="3" cssClass="e-style" #gradeId [(ngModel)]="userData.gradeId" name="gradeId" required></ejs-radiobutton>
+              <input class="e-input e-field hidden" [ngModel]="userData.gradeName == 'L.K.G' ? 2 : userData.gradeName == 'U.K.G' ? 3 : 1"
+                name="gradeId" #gradeId />
+              <ejs-radiobutton label="NURSERY" value="NURSERY" cssClass="e-style" #gradeName [(ngModel)]="userData.gradeName" name="gradeName" required></ejs-radiobutton>
+              <ejs-radiobutton label="L.K.G" value="L.K.G" cssClass="e-style" #gradeName [(ngModel)]="userData.gradeName" name="gradeName" required ></ejs-radiobutton>
+              <ejs-radiobutton label="U.K.G" value="U.K.G" cssClass="e-style" #gradeName [(ngModel)]="userData.gradeName" name="gradeName" required></ejs-radiobutton>
               <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top genderLbl" for="gradeId">Grade</label>
+              <label class="e-float-text e-label-top" for="gradeName">Grade</label>
             </div>
           </div>
         </div>
@@ -66,7 +71,7 @@
         </div>
         <div class="form-group col-md-4">
           <div class="e-float-input e-control-wrapper">
-            <input class="e-input e-field" [(ngModel)]="userData.motherName" #motherName
+               <input class="e-input e-field" [(ngModel)]="userData.motherName" #motherName
               name='motherName' id="motherName" required type="text" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)" />
             <span class="e-float-line"></span>
             <label class="e-float-text e-label-top" for="motherName">Mother's Name</label>
@@ -153,6 +158,14 @@
                 <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf="userForm.form.controls.pinCode?.touched && !userForm.form.controls.pinCode?.valid"><div class="e-tip-content"><label class="e-error" for="pinCode">This field is required.</label></div><div class="e-arrow-tip e-tip-top"><div class="e-arrow-tip-outer e-tip-top"></div><div class="e-arrow-tip-inner e-tip-top"></div></div></div>
             </div>
           </div>
+          <div class="form-group col-md-4">
+            <div class="e-float-input e-control-wrappe">
+              <ejs-switch [ngModel]="userData.delete == 'yes' ? true : userData.delete == 'no' ? false : null" (ngModelChange)="userData.delete = $event ? 'yes' : 'no'"
+                #delete name='delete' id="delete"></ejs-switch>
+              <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top switch-label" for="delete"> Enable/Disable </label>
+            </div>
+          </div>
         </div>
         <div class="col-md-12">
           <div class="e-control-wrapper pull-right">
@@ -162,13 +175,13 @@
         </div>
       </div>
       <br>
-      <!--<div>{{ userForm.value | json }}</div> -->
+      <!-- <div>{{ userForm.value | json }}</div> -->
  
     
     </ng-template>
   </ejs-grid>
-  <ejs-dialog #Dialog [visible]='hidden' [position]='position' [header]='header' [showCloseIcon]='showCloseIcon'
-    [target]='target' [width]='width'>
+  <ejs-dialog #Dialog [visible]='false' [position]='position' [header]='header' [showCloseIcon]='showCloseIcon'
+     [width]='width'>
     <ng-template #content>
       <form id="template_driven" #userForm="ngForm" novalidate>
       <div class="selected-files">
