@@ -1,5 +1,5 @@
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
-import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,7 +14,7 @@ import {
 } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import {
-  NumericTextBoxComponent,
+  NumericTextBoxModule,
   TextBoxModule,
   UploaderModule
 } from '@syncfusion/ej2-angular-inputs';
@@ -25,8 +25,8 @@ import {
   PageService,
   SortService
 } from '@syncfusion/ej2-angular-grids';
-import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
-import { HttpClientModule } from '@angular/common/http';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -54,10 +54,7 @@ import { UsersComponent } from './users/users.component';
     LoginComponent,
     ReportsComponent,
     AssignmentComponent,
-    LogoutComponent,
-    NumericTextBoxComponent,
-    DropDownListComponent,
-    DialogComponent
+    LogoutComponent
   ],
   imports: [
     CommonModule,
@@ -77,7 +74,10 @@ import { UsersComponent } from './users/users.component';
     SwitchModule,
     UploaderModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DropDownListModule,
+    DialogModule,
+    NumericTextBoxModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]
