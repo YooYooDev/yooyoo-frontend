@@ -11,4 +11,8 @@ export class NotificationService {
   saveNotification(formData): any {
     return this._http.post(`${apiUrl}/notifications/save` , formData);
   }
+
+  getAllNotification(): any {
+    return this._http.get(`${apiUrl}/notifications/getAllNotifications`);
+  }
 }

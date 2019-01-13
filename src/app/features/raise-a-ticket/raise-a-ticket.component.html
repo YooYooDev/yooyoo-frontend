@@ -14,23 +14,43 @@
     <div class="card-box">
       <div class="row">
         <div class="col-md-12">
-          <form class="demo-box">
+          <form class="demo-box" #f="ngForm" (ngSubmit)="onFormSubmit(f)">
             <div class="row">
               <div class="col-md-12">
-                <p class="text-muted m-b-15 m-t-30 font-13"> Subject: </p> <input type="text" class="form-control"
-                  value="">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Subject" value="" ngModel name="subject" required>
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                  <textarea matInput placeholder="Leave a Message" ngModel name="message" required></textarea>
+                </mat-form-field>
               </div>
             </div>
-            <div style="margin-top:30px;">
-              <p class="text-muted m-b-15 m-t-30 font-13"> Message: </p> <textarea class="form-control" rows="7" style="border: 1px solid #ccc;"></textarea>
-              <div class="form-group text-right m-b-0" style="text-align:center;width:40%;margin-left:30%;"> <button
-                  type="reset" class="btn btn-pink waves-effect w-md waves-light m-b-5"> Reset </button> <button type="submit"
-                  class="btn btn-purple waves-effect w-md waves-light m-b-5"> Send </button> </div>
+            <div class="row mt-20">
+              <div class="col-md-12 text-center">
+                <button mat-raised-button color="accent" type="reset" (click)="f.reset()">
+                  Reset</button>&nbsp;&nbsp;&nbsp;
+                <button mat-raised-button color="primary" [disabled]="f.invalid" type="submit">
+                  Submit
+                </button>
+              </div>
             </div>
           </form>
         </div>
-      </div> <!-- end row -->
-    </div> <!-- end card -->
-  </div> <!-- end col -->
-  <div class="col-md-1 col-xs-12"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-12 mt-40">
+  <div class="control-section">
+    <ejs-grid #grid [showColumnMenu]='true' [allowReordering]='true' [gridLines]='line' [allowPaging]='true'
+      [allowSorting]='true' [allowFiltering]='true' [allowPdfExport]='true' [allowExcelExport]='true' [allowGrouping]='false'
+      [groupSettings]='groupOptions' [searchSettings]='searchSettings' [editSettings]='editSettings' [filterSettings]='filterOptions'
+      [pageSettings]='pageSettings' [toolbar]='toolbar' [dataSource]='tickets' (rowSelected)='onRowSelected($event)'
+      (toolbarClick)='onToolbarClick($event)'>
+      <e-columns>
+        <e-column field='message' headerText='Message' textAlign='left' width=200></e-column>
+        <e-column field='subject' headerText='Subject' textAlign='left' width=400></e-column>
+      </e-columns>
+    </ejs-grid>
+  </div>
 </div>
