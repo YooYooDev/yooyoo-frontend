@@ -1,9 +1,9 @@
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { map } from 'rxjs/operators';
+
+import { ToastService } from './../../shared/services/toast.service';
 import { UtilService } from './../../shared/services/util.service';
 import { SchoolService } from './../school/school.service';
-import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { MatSelectChange } from '@angular/material/select';
 import { AttendanceService } from './attendence.service';
 
 @Component({
@@ -17,9 +17,10 @@ export class AttendanceComponent implements OnInit {
   students = [];
   data = [];
   isChanged = false;
+  attendedSIds = [];
   constructor(
     private _schoolService: SchoolService,
-    private _utilService: UtilService,
+    private _util: UtilService,
     private _attendanceService: AttendanceService,
     private _toast: ToastService
   ) {}
@@ -40,18 +41,23 @@ export class AttendanceComponent implements OnInit {
       });
   }
   onChangeClass(value): void {
-    console.log(this.data);
+    this.attendedSIds = [];
     this.students = this.data.filter(val => val.id == value)[0].students;
     this.isChanged = true;
+
+    this._attendanceService.getAttendence().subscribe(res => {
+      this.attendedSIds = res;
+console.log(this.attendedSIds )
+    });
   }
 
   onFormSubmit(f): void {
     const students = f.value;
-    const schoolId = this._utilService.getSchoolId();
+    const schoolId = this._util.getSchoolId();
     const grade = parseInt(this.selectedClass.value, 10);
-    const date = this._utilService.getFormattedDate();
+    const date = this._util.getFormattedDate();
     const studentList = [];
-    console.log(students);
+
     Object.keys(students).map(key => {
       if (students[key] !== '') {
         studentList.push({
@@ -66,7 +72,7 @@ export class AttendanceComponent implements OnInit {
       date,
       studentList
     };
-    console.log(attendanceData);
+
     this._attendanceService.submitAttendance(attendanceData).subscribe(res => {
       if (res) {
         this._toast.success('Attendance submitted successfully!');
