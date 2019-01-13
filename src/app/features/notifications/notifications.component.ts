@@ -29,7 +29,7 @@ import {
   styleUrls: ['./notifications.component.css']
 })
 export class NotificationsComponent
-  implements AfterViewInit, OnDestroy, OnInit {
+  implements AfterViewInit, OnInit {
   urole: string;
   notificationForm = new FormGroup({
     schoolId: new FormControl(''),
