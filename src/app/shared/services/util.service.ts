@@ -51,7 +51,10 @@ export class UtilService {
 
     return `${now.getDate()}-${months[now.getMonth()]}-${now.getFullYear()}`;
   }
-
+  getFormattedDate2(data): any {
+    const now = new Date(data);
+    return `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+  }
   compareDates(date) {
     // date - 'yyyy-mm-dd'
     const now = new Date();

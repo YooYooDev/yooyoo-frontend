@@ -1,11 +1,15 @@
+import {
+  AutoCompleteModule,
+  DropDownListModule
+} from '@syncfusion/ej2-angular-dropdowns';
 import { HttpClientModule } from '@angular/common/http';
-import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -15,6 +19,7 @@ import {
 } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import {
+  MaskedTextBoxModule,
   NumericTextBoxModule,
   TextBoxModule,
   UploaderModule
@@ -26,7 +31,7 @@ import {
   PageService,
   SortService
 } from '@syncfusion/ej2-angular-grids';
-import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
@@ -42,6 +47,7 @@ import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component
 import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
+import { CredManagerComponent } from './users/cred-manager/cred-manager.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -55,7 +61,8 @@ import { UsersComponent } from './users/users.component';
     LoginComponent,
     ReportsComponent,
     AssignmentComponent,
-    LogoutComponent
+    LogoutComponent,
+    CredManagerComponent
   ],
   imports: [
     CommonModule,
@@ -71,6 +78,7 @@ import { UsersComponent } from './users/users.component';
     MatSelectModule,
     MatInputModule,
     MatRadioModule,
+    MatTabsModule,
     TextBoxModule,
     MatButtonModule,
     SwitchModule,
@@ -79,7 +87,9 @@ import { UsersComponent } from './users/users.component';
     ReactiveFormsModule,
     DropDownListModule,
     DialogModule,
-    NumericTextBoxModule
+    NumericTextBoxModule,
+    MaskedTextBoxModule,
+    AutoCompleteModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]

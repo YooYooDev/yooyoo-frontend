@@ -27,7 +27,7 @@
     "@syncfusion/ej2-angular-base": "^16.3.34",
     "@syncfusion/ej2-angular-buttons": "^16.4.42",
     "@syncfusion/ej2-angular-calendars": "^16.3.34",
-    "@syncfusion/ej2-angular-dropdowns": "^16.3.34",
+    "@syncfusion/ej2-angular-dropdowns": "^16.4.44",
     "@syncfusion/ej2-angular-grids": "^16.3.34",
     "@syncfusion/ej2-angular-inputs": "^16.4.44",
     "@syncfusion/ej2-angular-navigations": "^16.3.34",
@@ -40,11 +40,12 @@
     "hammerjs": "^2.0.8",
     "jquery": "^3.3.1",
     "rxjs": "~6.3.3",
+    "save": "^2.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.11.0",
+    "@angular-devkit/build-angular": "^0.11.4",
     "@angular/cli": "~7.1.2",
     "@angular/compiler-cli": "~7.1.0",
     "@angular/language-service": "~7.1.0",
