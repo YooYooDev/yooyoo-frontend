@@ -42,11 +42,9 @@
 </div>
 <div class="col-md-12 mt-40">
   <div class="control-section">
-    <ejs-grid #grid [showColumnMenu]='true' [allowReordering]='true' [gridLines]='line' [allowPaging]='true'
-      [allowSorting]='true' [allowFiltering]='true' [allowPdfExport]='true' [allowExcelExport]='true' [allowGrouping]='false'
-      [groupSettings]='groupOptions' [searchSettings]='searchSettings' [editSettings]='editSettings' [filterSettings]='filterOptions'
-      [pageSettings]='pageSettings' [toolbar]='toolbar' [dataSource]='tickets' (rowSelected)='onRowSelected($event)'
-      (toolbarClick)='onToolbarClick($event)'>
+    <ejs-grid #grid [showColumnMenu]='true' [allowReordering]='true' [allowPaging]='true'
+      [allowSorting]='true' [allowFiltering]='true' [allowPdfExport]='true' [allowExcelExport]='true' [allowGrouping]='false' [searchSettings]='searchSettings' [editSettings]='editSettings' [filterSettings]='filterOptions'
+      [pageSettings]='pageSettings' [toolbar]='toolbar' [dataSource]='tickets'>
       <e-columns>
         <e-column field='message' headerText='Message' textAlign='left' width=200></e-column>
         <e-column field='subject' headerText='Subject' textAlign='left' width=400></e-column>

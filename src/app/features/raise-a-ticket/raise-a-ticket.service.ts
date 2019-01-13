@@ -24,7 +24,7 @@ export class RaiseTicketService {
   }
 
   deleteTicket(id): Observable<any> {
-    return this._http.delete(`${apiUrl}/delete/${id}`, data)
+    return this._http.delete(`${apiUrl}/delete/${id}`)
         .pipe(map(res => res));
   }
 
