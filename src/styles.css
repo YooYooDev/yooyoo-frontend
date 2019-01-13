@@ -143,3 +143,7 @@ textarea.mat-input-element {
   height: 6px !important;
   width: 9px !important;
 }
+.custom-height{
+  overflow-y: scroll;
+  height: 250px;
+}
