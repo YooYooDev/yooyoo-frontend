@@ -24,7 +24,7 @@
                       >
                         <mat-option
                           *ngFor="let school of (filteredSchools | async)"
-                          [value]="school.name"
+                          [value]="school.id"
                           [id]="school.id"
                         >
                         {{ school.name }}
@@ -63,7 +63,7 @@
                         >
                           <mat-option
                             *ngFor="let student of (filteredStudents | async)"
-                            [value]="student.firstName"
+                            [value]="student.id"
                             [id]="student.id"
                           >
                           {{ student.firstName }}
