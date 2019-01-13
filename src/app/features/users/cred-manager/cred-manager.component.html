@@ -1,0 +1,226 @@
+<div class="control-section">
+  <ejs-grid
+    #grid
+    [showColumnMenu]="false"
+    [allowReordering]="false"
+    [gridLines]="line"
+    [allowPaging]="true"
+    [allowSorting]="true"
+    [allowFiltering]="true"
+    [allowExcelExport]="true"
+    [allowGrouping]="false"
+    [searchSettings]="searchSettings"
+    [editSettings]="editSettings"
+    [filterSettings]="filterOptions"
+    [pageSettings]="pageSettings"
+    [toolbar]="toolbar"
+    [dataSource]="credManager"
+    (toolbarClick)="onToolbarClick($event)"
+    (actionBegin)="actionBegin($event)"
+    (actionComplete)="actionComplete($event)"
+  >
+    <e-columns>
+      <e-column
+        field="userName"
+        headerText="User Name"
+        [isPrimaryKey]="true"
+        textAlign="left"
+        width="150"
+      ></e-column>
+      <e-column
+        field="email"
+        headerText="Email"
+        textAlign="left"
+        width="120"
+      ></e-column>
+      <e-column
+        field="schoolName"
+        headerText="school Name"
+        textAlign="left"
+        width="120"
+      ></e-column>
+      <e-column
+        field="role"
+        headerText="role"
+        textAlign="left"
+        width="150"
+      ></e-column>
+      <e-column
+        field="fullName"
+        headerText="Full Name"
+        textAlign="left"
+        width="150"
+      ></e-column>
+      <e-column
+        field="mobile"
+        headerText="Mobile"
+        textAlign="left"
+        width="120"
+      ></e-column>
+      <e-column
+        field="city"
+        headerText="City"
+        textAlign="left"
+        width="100"
+      ></e-column>
+    </e-columns>
+    <ng-template #editSettingsTemplate let-data>
+      <div ngForm #credManagerForm="ngForm">
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <div class="e-float-input e-control-wrapper">
+              <input
+                class="e-input e-field"
+                [(ngModel)]="credManagerData.userName"
+                #userName
+                required
+                name="userName"
+                id="userName"
+                type="text"
+                (focus)="focusIn($event.target)"
+                (blur)="focusOut($event.target)"
+                autocomplete="off"
+              />
+              <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top" for="userName"
+                >User Name</label
+              >
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <div class="e-float-input e-control-wrapper">
+              <input
+                class="e-input e-field"
+                [(ngModel)]="credManagerData.email"
+                name="email"
+                type="email"
+                required
+                (focus)="focusIn($event.target)"
+                (blur)="focusOut($event.target)"
+              />
+              <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top" for="email">Email</label>
+            </div>
+          </div>
+          <div class="form-group col-md-4">
+            <ejs-dropdownlist
+              #roleId
+              [dataSource]="roleData"
+              [(ngModel)]="credManagerData.roleId"
+              [fields]="roleFields"
+              placeholder="Role"
+              floatLabelType="Always"
+              name="roleId"
+              required
+            ></ejs-dropdownlist>
+          </div>
+          <div class="form-group col-md-4">
+            <ejs-autocomplete
+              #schoolName
+              [dataSource]="schools"
+              [(ngModel)]="credManagerData.schoolName"
+              [fields]="{ value: 'name' }"
+              placeholder="School Name"
+              floatLabelType="Always"
+              name="schoolName"
+              required
+              [disabled]="
+                credManagerData.roleId == 1
+                  ? true
+                  : credManagerData.roleId == 2
+                  ? true
+                  : false
+              "
+            ></ejs-autocomplete>
+          </div>
+
+          <div class="form-group col-md-4">
+            <div class="e-float-input e-control-wrapper">
+              <input
+                class="e-input e-field"
+                [(ngModel)]="credManagerData.fullName"
+                #fullName
+                name="fullName"
+                id="fullName"
+                required
+                type="text"
+                (focus)="focusIn($event.target)"
+                (blur)="focusOut($event.target)"
+              />
+              <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top" for="fullName"
+                >Full Name</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-4">
+          <div class="e-control-wrapper">
+            <ejs-maskedtextbox
+              mask="000-000-0000"
+              #mobile
+              [(ngModel)]="credManagerData.mobile"
+              name="mobile"
+              placeholder="Mobile"
+              floatLabelType="Always"
+              required
+            ></ejs-maskedtextbox>
+            <div
+              class="e-tooltip-wrap e-control e-popup e-griderror"
+              *ngIf="
+                credManagerForm.form.controls.mobile?.touched &&
+                !credManagerForm.form.controls.mobile?.valid
+              "
+            >
+              <div class="e-tip-content">
+                <label class="e-error" for="mobile"
+                  >This field is required.</label
+                >
+              </div>
+              <div class="e-arrow-tip e-tip-top">
+                <div class="e-arrow-tip-outer e-tip-top"></div>
+                <div class="e-arrow-tip-inner e-tip-top"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-4 clearfix">
+          <div class="e-float-input e-control-wrapper">
+            <input
+              class="e-input e-field"
+              name="city"
+              type="text"
+              [(ngModel)]="credManagerData.city"
+              required
+              (focus)="focusIn($event.target)"
+              (blur)="focusOut($event.target)"
+            />
+            <span class="e-float-line"></span>
+            <label class="e-float-text e-label-top" for="city">City</label>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="e-control-wrapper pull-right">
+            <button
+              type="submit"
+              [disabled]="credManagerForm.invalid"
+              class="e-control e-btn e-primary e-flat"
+              (click)="onSubmit()"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="e-control e-btn e-flat"
+              (click)="cancel()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ejs-grid>
+</div>

@@ -16,6 +16,20 @@ export class UserService {
       .get(`${apiUrl}/students/getAllStudents/${schoolId}`)
       .pipe(map(res => res));
   }
+  getAllCredManager(): Observable<any> {
+    return this.httpClient.get(`${apiUrl}/cred/loadAll`).pipe(map(res => res));
+  }
+  createCredManager(formData): Observable<any> {
+    return this.httpClient
+      .post(`${apiUrl}/cred/save`, formData)
+      .pipe(map(res => res));
+  }
+  uploadStudents(formData): Observable<any> {
+    const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    return this.httpClient
+      .post(`${apiUrl}/students/uploadStudents/${schoolId}`, formData)
+      .pipe(map(res => res));
+  }
   addStudent(formData): Observable<any> {
     return this.httpClient
       .post(`${apiUrl}/students/create`, formData)

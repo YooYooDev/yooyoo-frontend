@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
+import {
+  AutoCompleteComponent,
+  DropDownListComponent
+} from '@syncfusion/ej2-angular-dropdowns';
 import {
   DialogEditEventArgs,
   EditService,
@@ -13,23 +16,20 @@ import {
   RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
-  SelectionSettingsModel,
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
-import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
-import { UserService } from './user.service';
+import { UserService } from '../user.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
-import { SchoolService } from '../school/school.service';
-import { UtilService } from 'src/app/shared/services/util.service';
+import { SchoolService } from '../../school/school.service';
 
 @Component({
-  selector: 'yoo-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css'],
+  selector: 'yoo-cred-manager',
+  templateUrl: './cred-manager.component.html',
+  styleUrls: ['./cred-manager.component.css'],
   providers: [
     ToolbarService,
     ExcelExportService,
@@ -40,17 +40,14 @@ import { UtilService } from 'src/app/shared/services/util.service';
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class UsersComponent implements OnInit {
-  @ViewChild('userForm') public userForm: FormGroup;
+export class CredManagerComponent implements OnInit {
+  @ViewChild('credManagerForm') public credManagerForm: FormGroup;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
-  @ViewChild('gender') gender: DropDownListComponent;
-  @ViewChild('class') class: DropDownListComponent;
   @ViewChild('Dialog') Dialog: DialogComponent;
-  @ViewChild('formUpload') public uploadObj: UploaderComponent;
+  @ViewChild('schoolName') schoolObj: AutoCompleteComponent;
   schoolId = '';
   requestType: string;
-  userData = {};
   credManagerData = {};
   editparams: { params: { popupHeight: string } };
   users: any;
@@ -60,7 +57,6 @@ export class UsersComponent implements OnInit {
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
-  selectionOptions: SelectionSettingsModel;
   line = 'Both';
   public formData: FormData = new FormData();
   public header: String = 'Upload Student';
@@ -72,62 +68,59 @@ export class UsersComponent implements OnInit {
   constructor(
     private userService: UserService,
     private toast: ToastService,
-    private schoolService: SchoolService,
-    private utilService: UtilService
-
+    private schoolService: SchoolService
   ) {}
+  public roleData = [
+    { roleName: 'YOOYOO ADMIN', id: '1' },
+    { roleName: 'SUPER ADMIN', id: '2' },
+    { roleName: 'SCHOOL OWNER', id: '3' },
+    { roleName: 'TEACHER', id: '4' }
+  ];
+  public roleFields: Object = { text: 'roleName', value: 'id' };
+  public schoolFields: Object = { value: 'name', text: 'name' };
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport', 'Import'];
+    this.toolbar = ['Add', 'Search', 'ExcelExport'];
     this.searchSettings = {};
     this.filterOptions = { type: 'Excel' };
     this.editSettings = {
-      allowEditing: true,
+      allowEditing: false,
       allowAdding: true,
       mode: 'Dialog'
     };
-    this.selectionOptions = { mode: 'Both' };
     this.editparams = { params: { popupHeight: '800px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-    this.userService.getAllStudents().subscribe(res => (this.users = res));
-
+    this.userService
+      .getAllCredManager()
+      .subscribe(res => (this.credManager = res));
+    this.schoolService.getSchools().subscribe(res => (this.schools = res));
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
   }
-  rowDataBound(args: RowDataBoundEventArgs): void {
-    if (args.data['deleted']) {
-      args.row.classList.add('deleted');
-    }
-  }
+
   onToolbarClick(args: ClickEventArgs): void {
-    if (args.item['properties'].text === 'PDF Export') {
-      this.grid.pdfExport();
-    } else if (args.item['properties'].text === 'Excel Export') {
+    if (args.item['properties'].text === 'Excel Export') {
       this.grid.excelExport();
-    } else if (args.item['properties'].text === 'Import') {
-      this.Dialog.show();
     }
   }
 
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
-      this.userData = { ...args.rowData };
-    } else if (args.requestType === 'delete') {
-      if (confirm('Are you sure you want to delete ?')) {
-        this.deleteStudent(args.data[0].id);
-      }
+      this.credManagerData = { ...args.rowData };
     }
     if (args.requestType === 'save') {
-      if (this.userForm.valid) {
-        args.data = this.userData;
-        args.data['schoolId'] = this.schoolId;
-        const date = this.utilService.getFormattedDate2(args.data['dob']);
-        args.data['dob'] = date;
-        if (this.requestType === 'beginEdit') {
-          console.log(args.data);
-          this.editStudent(args.data);
-        } else if (this.requestType === 'add') {
-          this.addStudent(args.data);
+      if (this.credManagerForm.valid) {
+        args.data = this.credManagerData;
+        // console.log(args.data['roleId']);
+        // console.log(this.schoolObj['itemData']['id']);
+        if (args.data['roleId'] !== '1' && args.data['roleId'] !== '2') {
+          args.data['schoolId'] = this.schoolObj['itemData']['id'];
+        } else {
+          args.data['schoolId'] = '1';
+        }
+
+        if (this.requestType === 'add') {
+          this.addCredManager(args.data);
         }
       } else {
         args.cancel = true;
@@ -145,51 +138,31 @@ export class UsersComponent implements OnInit {
         'class',
         'hidden'
       );
-
+      // if (args.requestType === 'beginEdit') {
+      //   (args.form.elements.namedItem('firstName') as HTMLInputElement).focus();
+      // } else if (args.requestType === 'add') {
+      //   (args.form.elements.namedItem('firstName') as HTMLInputElement).focus();
+      // }
     }
   }
 
-  onUploadSuccess(args: any): void {
-    if (args.operation === 'upload') {
-      console.log('File uploaded successfully');
-    }
-  }
-  onFileChange(event): void {
-    const fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      const file: File = fileList[0];
-      this.formData.append('file', file, file.name);
-    }
-  }
   cancel(): void {
     this.grid.closeEdit();
   }
   onSubmit(): void {
     this.grid.endEdit();
   }
-  uploadSubmit(): void {
-    this.userService.uploadStudents(this.formData).subscribe(res => {
-      this.Dialog.hide();
-      this.userService.getAllStudents().subscribe(res => (this.users = res));
-      this.toast.success(res.message);
-    });
-  }
-  editStudent(formData): void {
+
+  addCredManager(formData): void {
     console.log(formData);
-    this.userService.updateStudent(formData).subscribe(res => {
+    this.userService.createCredManager(formData).subscribe(res => {
       this.toast.success(res.message);
+      this.userService
+        .getAllCredManager()
+        .subscribe(res => (this.credManager = res));
     });
   }
-  addStudent(formData): void {
-    this.userService.addStudent(formData).subscribe(res => {
-      this.toast.success(res.message);
-    });
-  }
-  deleteStudent(id): void {
-    this.userService.deleteStudent(id).subscribe(res => {
-      this.toast.success(res.message);
-    });
-  }
+
   focusIn(target: HTMLElement): void {
     target.parentElement.classList.add('e-input-focus');
   }

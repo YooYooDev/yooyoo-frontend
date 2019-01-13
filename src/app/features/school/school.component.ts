@@ -3,25 +3,20 @@ import { FormGroup } from '@angular/forms';
 import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-inputs';
 import { ToastService } from './../../shared/services/toast.service';
 import {
-  ColumnMenuService,
-  DetailRowService,
   DialogEditEventArgs,
   EditService,
+  EditSettingsModel,
   ExcelExportService,
   FilterService,
   FilterSettingsModel,
   GridComponent,
-  GroupService,
-  GroupSettingsModel,
   PageService,
   PageSettingsModel,
-  PdfExportService,
-  ReorderService,
-  ResizeService,
+  RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
+  SelectionSettingsModel,
   SortService,
-  ToolbarItems,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
@@ -37,14 +32,8 @@ import { NumericTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
   styleUrls: ['./school.component.css'],
   providers: [
     ToolbarService,
-    PdfExportService,
     ExcelExportService,
-    ReorderService,
-    DetailRowService,
     SortService,
-    ResizeService,
-    GroupService,
-    ColumnMenuService,
     PageService,
     FilterService,
     EditService
@@ -64,11 +53,10 @@ export class SchoolComponent implements OnInit {
   schools: any;
   public editSettings: Object;
   pageSettings: PageSettingsModel;
-  toolbar: Array<ToolbarItems>;
+  toolbar: Array<string>;
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
-  groupOptions: GroupSettingsModel;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
   @ViewChild('gender') gender: DropDownListComponent;
@@ -80,26 +68,26 @@ export class SchoolComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = [
-      'Add',
-      'Edit',
-      'Delete',
-      'Search',
-      'ExcelExport',
-      'PdfExport'
-    ];
+    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport'];
     this.searchSettings = {};
     this.filterOptions = { type: 'Excel' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
-      allowDeleting: true,
       mode: 'Dialog'
     };
     this.editparams = { params: { popupHeight: '800px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
 
-    this.schoolService.getSchools().subscribe(res => (this.schools = res));
+    this.schoolService.getSchools().subscribe(res => {
+      this.schools = res;
+      console.log(this.schools);
+    });
+  }
+  rowDataBound(args: RowDataBoundEventArgs): void {
+    if (args.data['active']) {
+      args.row.classList.add('deleted');
+    }
   }
   onToolbarClick(args: ClickEventArgs): void {
     console.log(args.item['properties'].text);
@@ -144,32 +132,40 @@ export class SchoolComponent implements OnInit {
   }
 
   actionComplete(args: DialogEditEventArgs): void {
-
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      // args.dialog.buttons[0].controlParent.btnObj[0].element.setAttribute('disabled', 'disabled');
-      // Set initail Focus
-    if (args.requestType === 'beginEdit') {
-    } else if (args.requestType === 'add') {
-      // args.form.ej2_instances[0].rules = {
-      //   'code': { required: [true, 'Number is required'] }
-      // };
-      //  args.form.ej2_instances[0].addRules('code', );
+      args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
+        'class',
+        'hidden'
+      );
+      args.dialog.buttons[1]['controlParent'].btnObj[1].element.setAttribute(
+        'class',
+        'hidden'
+      );
+
     }
-    }
-    }
+  }
+  cancel(): void {
+    this.grid.closeEdit();
+  }
+  onSubmit(): void {
+    this.grid.endEdit();
+  }
   editSchoolData(data): void {
     this.schoolService.updateSchool(data).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   addSchoolData(data): void {
     this.schoolService.addSchool(data).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   deletSchoolData(id): void {
     this.schoolService.deleteSchool(id).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   focusIn(target: HTMLElement): void {
@@ -178,5 +174,9 @@ export class SchoolComponent implements OnInit {
 
   focusOut(target: HTMLElement): void {
     target.parentElement.classList.remove('e-input-focus');
+  }
+
+  reload(): any {
+    this.schoolService.getSchools().subscribe(res => (this.schools = res));
   }
 }

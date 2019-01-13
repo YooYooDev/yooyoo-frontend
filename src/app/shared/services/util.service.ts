@@ -51,4 +51,8 @@ export class UtilService {
 
     return `${now.getDate()}-${months[now.getMonth()]}-${now.getFullYear()}`;
   }
+  getFormattedDate2(data): any {
+    const now = new Date(data);
+    return `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+  }
 }
