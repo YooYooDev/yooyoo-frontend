@@ -55,15 +55,15 @@ export class UtilService {
     const now = new Date(data);
     return `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
   }
-  compareDates(date) {
+  compareDates(date): any {
     // date - 'yyyy-mm-dd'
     const now = new Date();
 
-    let dayofMonth = now.getDate();
-    dayofMonth = dayofMonth < 10 ? `0${dayofMonth}` : `${dayofMonth}`;
+    const day = now.getDate();
+    const dayofMonth = day < 10 ? `0${day}` : `${day}`;
 
-    let month = now.getMonth() + 1;
-    month = month < 10 ? `0${month}` : `${month}`;
+    const monthNum = now.getMonth() + 1;
+    const month = monthNum < 10 ? `0${monthNum}` : `${monthNum}`;
 
     const formattedDate = `${now.getFullYear()}-${month}-${dayofMonth}`;
 
