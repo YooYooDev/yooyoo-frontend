@@ -59,11 +59,37 @@ body {
 /* toaster styles starts */
 
 /* ej2 styles */
+td.e-rowcell .statustxt.e-activecolor {
+  color: #00cc00;
+  position: relative;
 
+}
+
+td.e-rowcell .statustxt.e-inactivecolor {
+  color: #e60000;
+  position: relative;
+
+}
+
+.statustemp.e-inactivecolor {
+  background-color: #ffd7cc;
+  width: 64px;
+}
+
+.statustemp.e-activecolor {
+  background-color: #ccffcc;
+  width: 57px;
+}
+
+.statustemp {
+  position: relative;
+  height: 19px;
+  border-radius: 5px;
+  text-align: center
+}
 .e-control.e-grid td.e-active {
   background-color: #005f79;
   color: #fff;
-  cursor: pointer;
 }
 
 .e-popup.e-popup-open.e-control.e-dialog {
@@ -107,7 +133,6 @@ body {
 .e-float-input.e-input-group.e-control-wrapper.e-disabled {
   font-family: "Varela Round", sans-serif !important;
   font-size: 16px;
-  cursor: pointer;
 }
 
 /* ej2 styles */

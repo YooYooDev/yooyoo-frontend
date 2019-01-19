@@ -9,7 +9,19 @@
       (toolbarClick)='onToolbarClick($event)' (actionBegin)='actionBegin($event)' (actionComplete)='actionComplete($event)'
       (rowDataBound)='rowDataBound($event)'>
       <e-columns>
-        <e-column field='deleted' headerText='E/D' width='100' type='boolean' [displayAsCheckBox]='true'></e-column>
+        <!-- <e-column field='deleted' headerText='E/D' width='100' type='boolean' [displayAsCheckBox]='true'></e-column> -->
+        <e-column field='status' headerText='Status' width='150'>
+            <ng-template #template let-data>                       
+                <div *ngIf="data.status === 'Active' ;else login" class="statustemp e-activecolor">
+                        <span class="statustxt e-activecolor">Active</span>           
+                </div>
+                <ng-template #login>
+                    <div class="statustemp e-inactivecolor">
+                        <span class="statustxt e-inactivecolor">InActive</span>
+                    </div>
+                </ng-template>
+            </ng-template>               
+        </e-column>
         <e-column field='firstName' headerText='Student Name' [isPrimaryKey]='true' textAlign='left' width=250></e-column>
         <e-column field='gradeName' headerText='Class' textAlign='left' width=150></e-column>
         <e-column field='fatherName' headerText="Father's Name" textAlign='left' width=250></e-column>
@@ -128,7 +140,7 @@
             </div>
             <div class="form-group col-md-4">
               <div class="e-control-wrapper">
-                <ejs-maskedtextbox mask="000-000-0000" [(ngModel)]="userData.parentMobile1" #parentMobile1 required name='parentMobile1'
+                <ejs-maskedtextbox mask="000-000-0000" [(ngModel)]="userData.parentMobile1" #parentMobile1 required name='parentMobile1' minlength="10"
                   placeholder='Primary Mobile' floatLabelType='Always'></ejs-maskedtextbox>
                 <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf="userForm.form.controls.parentMobile1?.touched && !userForm.form.controls.parentMobile1?.valid">
                   <div class="e-tip-content"><label class="e-error" for="parentMobile1">This field is required.</label></div>
@@ -141,7 +153,7 @@
             </div>
             <div class="form-group col-md-4">
               <div class="e-control-wrapper">
-                <ejs-maskedtextbox mask="000-000-0000" [(ngModel)]="userData.parentMobile2" #parentMobile2 required name='parentMobile2'
+                <ejs-maskedtextbox mask="000-000-0000" [(ngModel)]="userData.parentMobile2" #parentMobile2 required name='parentMobile2' minlength="10"
                   placeholder='Alternate Mobile' floatLabelType='Always'></ejs-maskedtextbox>
                 <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf="userForm.form.controls.parentMobile2?.touched && !userForm.form.controls.parentMobile2?.valid">
                   <div class="e-tip-content"><label class="e-error" for="parentMobile2">This field is required.</label></div>
@@ -178,7 +190,7 @@
             </div>
             <div class="form-group col-md-4">
               <div class="e-control-wrapper">
-                <ejs-maskedtextbox mask="000000" [(ngModel)]="userData.pinCode" #pinCode required name='pinCode'
+                <ejs-maskedtextbox mask="000000" minlength="6" [(ngModel)]="userData.pinCode" #pinCode required name='pinCode'
                   placeholder='Pin Code' floatLabelType='Always'></ejs-maskedtextbox>
                 <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf="userForm.form.controls.pinCode?.touched && !userForm.form.controls.pinCode?.valid">
                   <div class="e-tip-content"><label class="e-error" for="pinCode">This field is required.</label></div>
@@ -191,7 +203,7 @@
             </div>
             <div class="form-group col-md-4">
               <div class="e-float-input e-control-wrappe">
-                <ejs-switch [ngModel]="userData.deleted == 1? true : userData.deleted == 0 ? false : null"
+                <ejs-switch [ngModel]="userData.deleted === 1? true : userData.deleted === 0 ? false : null"
                   (ngModelChange)="userData.deleted = $event ? 1 : 0"
                   #deleted name="deleted" id="deleted"></ejs-switch>
                 <span class="e-float-line"></span>

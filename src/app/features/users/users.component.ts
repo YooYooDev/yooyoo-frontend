@@ -23,7 +23,6 @@ import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
 import { UserService } from './user.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
-import { SchoolService } from '../school/school.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 
 @Component({
@@ -72,7 +71,6 @@ export class UsersComponent implements OnInit {
   constructor(
     private userService: UserService,
     private toast: ToastService,
-    private schoolService: SchoolService,
     private utilService: UtilService
 
   ) {}
@@ -89,9 +87,8 @@ export class UsersComponent implements OnInit {
     this.selectionOptions = { mode: 'Both' };
     this.editparams = { params: { popupHeight: '800px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-    this.userService.getAllStudents().subscribe(res => (this.users = res));
-
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    this.reload();
   }
   rowDataBound(args: RowDataBoundEventArgs): void {
     if (args.data['deleted']) {
@@ -148,7 +145,6 @@ export class UsersComponent implements OnInit {
 
     }
   }
-
   onUploadSuccess(args: any): void {
     if (args.operation === 'upload') {
       console.log('File uploaded successfully');
@@ -170,24 +166,26 @@ export class UsersComponent implements OnInit {
   uploadSubmit(): void {
     this.userService.uploadStudents(this.formData).subscribe(res => {
       this.Dialog.hide();
-      this.userService.getAllStudents().subscribe(res => (this.users = res));
+      this.reload();
       this.toast.success(res.message);
     });
   }
   editStudent(formData): void {
-    console.log(formData);
     this.userService.updateStudent(formData).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   addStudent(formData): void {
     this.userService.addStudent(formData).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   deleteStudent(id): void {
     this.userService.deleteStudent(id).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   focusIn(target: HTMLElement): void {
@@ -196,5 +194,18 @@ export class UsersComponent implements OnInit {
 
   focusOut(target: HTMLElement): void {
     target.parentElement.classList.remove('e-input-focus');
+  }
+  reload(): void {
+    this.userService.getAllStudents().subscribe(res => {
+      this.users = res;
+      res.filter(data => {
+        if (data.deleted) {
+          data.status = 'Inactive';
+        } else {
+          data.status = 'Active';
+        }
+        return data;
+      });
+    });
   }
 }
