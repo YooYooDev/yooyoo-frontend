@@ -55,6 +55,11 @@ export class UtilService {
     const now = new Date(data);
     return `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
   }
+  getLastThreeYearsDate(): any {
+    const now = new Date();
+    return `${now.getMonth() + 6}/${now.getDate()}/${now.getFullYear() - 3}`;
+
+  }
   compareDates(date): any {
     // date - 'yyyy-mm-dd'
     const now = new Date();

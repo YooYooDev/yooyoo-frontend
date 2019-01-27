@@ -4,6 +4,8 @@ import { ToastService } from './../../shared/services/toast.service';
 import {
   DialogEditEventArgs,
   EditService,
+  EditSettingsModel,
+  ExcelExportProperties,
   ExcelExportService,
   FilterService,
   FilterSettingsModel,
@@ -44,19 +46,20 @@ export class SchoolComponent implements OnInit {
   @ViewChild('schoolForm') public schoolForm: FormGroup;
   editparams: { params: { popupHeight: string } };
   schools: any;
-  public editSettings: Object;
+  public editSettings: EditSettingsModel;
   pageSettings: PageSettingsModel;
   toolbar: Array<string>;
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
+  showLoader = false;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
   @ViewChild('gender') gender: DropDownListComponent;
   line = 'Both';
   key: Object = {};
   public genderDdl: Array<string> = ['Male', 'Female', 'Others'];
-
+  excelExportProperties: ExcelExportProperties;
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport'];
@@ -67,8 +70,11 @@ export class SchoolComponent implements OnInit {
       allowAdding: true,
       mode: 'Dialog'
     };
-    this.editparams = { params: { popupHeight: '800px' } };
+    this.editparams = { params: { popupHeight: '600px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
+    this.excelExportProperties  = {
+      fileName: 'School.xlsx'
+   };
     this.reload();
   }
 
@@ -82,8 +88,6 @@ export class SchoolComponent implements OnInit {
     if (args.item['properties'].text === 'PDF Export') {
       this.grid.pdfExport();
     } else if (args.item['properties'].text === 'Excel Export') {
-      this.grid.excelExport();
-    } else if (args.item['properties'].text === 'Import') {
       this.grid.excelExport();
     }
   }
@@ -176,6 +180,7 @@ onChange(e): void {
         }
         return data;
       });
+      this.showLoader = true;
     });
   }
 }

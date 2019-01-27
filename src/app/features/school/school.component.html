@@ -1,6 +1,7 @@
 <div class="control-section">
   <ejs-grid
     #grid
+    *ngIf="showLoader"
     [showColumnMenu]="false"
     [allowReordering]="false"
     [gridLines]="line"

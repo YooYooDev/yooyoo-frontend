@@ -119,6 +119,7 @@
             <ejs-autocomplete
               #schoolName
               [dataSource]="schools"
+              [allowCustom]=false
               [(ngModel)]="credManagerData.schoolName"
               [fields]="{ value: 'name' }"
               placeholder="School Name"
@@ -160,6 +161,7 @@
           <div class="e-control-wrapper">
             <ejs-maskedtextbox
               mask="000-000-0000"
+              minlength="10"
               #mobile
               [(ngModel)]="credManagerData.mobile"
               name="mobile"
