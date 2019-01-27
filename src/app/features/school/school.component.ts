@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-inputs';
 import { ToastService } from './../../shared/services/toast.service';
 import {
   DialogEditEventArgs,
   EditService,
   EditSettingsModel,
+  ExcelExportProperties,
   ExcelExportService,
   FilterService,
   FilterSettingsModel,
@@ -15,16 +15,12 @@ import {
   RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
-  SelectionSettingsModel,
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { SchoolService } from './school.service';
-import { ISchool } from './school';
-import { NumericTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
 
 @Component({
   selector: 'yoo-school',
@@ -47,43 +43,41 @@ export class SchoolComponent implements OnInit {
   ) {}
   requestType: string;
   schoolData = {};
-  @ViewChild('numeric') numeric: NumericTextBoxComponent;
   @ViewChild('schoolForm') public schoolForm: FormGroup;
   editparams: { params: { popupHeight: string } };
   schools: any;
-  public editSettings: Object;
+  public editSettings: EditSettingsModel;
   pageSettings: PageSettingsModel;
   toolbar: Array<string>;
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
+  showLoader = false;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
   @ViewChild('gender') gender: DropDownListComponent;
-  @ViewChild('template') template: DialogComponent;
   line = 'Both';
   key: Object = {};
-
   public genderDdl: Array<string> = ['Male', 'Female', 'Others'];
-
+  excelExportProperties: ExcelExportProperties;
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport'];
     this.searchSettings = {};
-    this.filterOptions = { type: 'Excel' };
+    this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
       mode: 'Dialog'
     };
-    this.editparams = { params: { popupHeight: '800px' } };
+    this.editparams = { params: { popupHeight: '600px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-
-    this.schoolService.getSchools().subscribe(res => {
-      this.schools = res;
-      console.log(this.schools);
-    });
+    this.excelExportProperties  = {
+      fileName: 'School.xlsx'
+   };
+    this.reload();
   }
+
   rowDataBound(args: RowDataBoundEventArgs): void {
     if (args.data['active']) {
       args.row.classList.add('deleted');
@@ -95,11 +89,11 @@ export class SchoolComponent implements OnInit {
       this.grid.pdfExport();
     } else if (args.item['properties'].text === 'Excel Export') {
       this.grid.excelExport();
-    } else if (args.item['properties'].text === 'Import') {
-      this.grid.excelExport();
     }
   }
-
+onChange(e): void {
+  console.log(this.schoolForm['form'].controls.pin.valid);
+}
   onRowSelected(e): void {
     const rowData = '';
     this.key = {
@@ -141,7 +135,6 @@ export class SchoolComponent implements OnInit {
         'class',
         'hidden'
       );
-
     }
   }
   cancel(): void {
@@ -177,6 +170,17 @@ export class SchoolComponent implements OnInit {
   }
 
   reload(): any {
-    this.schoolService.getSchools().subscribe(res => (this.schools = res));
+    this.schoolService.getSchools().subscribe(res => {
+      this.schools = res;
+      res.filter(data => {
+        if (data.active) {
+          data.status = 'Inactive';
+        } else {
+          data.status = 'Active';
+        }
+        return data;
+      });
+      this.showLoader = true;
+    });
   }
 }

@@ -9,3 +9,6 @@
 .example-full-width {
   width: 100%;
 }
+.e-popup.e-popup-open.e-control.e-dialog {
+  width: 300px !important;
+}

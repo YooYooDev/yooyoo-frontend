@@ -16,7 +16,7 @@
                         placeholder="Select School"
                         required
                         [matAutocomplete]="auto"
-                        formControlName="schoolId"
+                        formControlName="schoolName"
                       />
                       <mat-autocomplete
                         #auto="matAutocomplete"
@@ -24,7 +24,7 @@
                       >
                         <mat-option
                           *ngFor="let school of (filteredSchools | async)"
-                          [value]="school.id"
+                          [value]="school.name"
                           [id]="school.id"
                         >
                         {{ school.name }}
@@ -49,13 +49,14 @@
                     </mat-form-field>
                   </div>
                   <div class="col-md-6">
+                   
                     <mat-form-field>
                         <input
                           matInput
                           placeholder="Select Student"
                           required
                           [matAutocomplete]="autoStudent"
-                          formControlName="studentId"
+                          formControlName="studentName"
                         />
                         <mat-autocomplete
                           #autoStudent="matAutocomplete"
@@ -63,7 +64,7 @@
                         >
                           <mat-option
                             *ngFor="let student of (filteredStudents | async)"
-                            [value]="student.id"
+                            [value]="student.firstName"
                             [id]="student.id"
                           >
                           {{ student.firstName }}

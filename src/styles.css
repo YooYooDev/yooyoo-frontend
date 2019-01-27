@@ -59,11 +59,37 @@ body {
 /* toaster styles starts */
 
 /* ej2 styles */
+td.e-rowcell .statustxt.e-activecolor {
+  color: #00cc00;
+  position: relative;
 
+}
+
+td.e-rowcell .statustxt.e-inactivecolor {
+  color: #e60000;
+  position: relative;
+
+}
+
+.statustemp.e-inactivecolor {
+  background-color: #ffd7cc;
+  width: 64px;
+}
+
+.statustemp.e-activecolor {
+  background-color: #ccffcc;
+  width: 57px;
+}
+
+.statustemp {
+  position: relative;
+  height: 19px;
+  border-radius: 5px;
+  text-align: center
+}
 .e-control.e-grid td.e-active {
   background-color: #005f79;
   color: #fff;
-  cursor: pointer;
 }
 
 .e-popup.e-popup-open.e-control.e-dialog {
@@ -107,7 +133,6 @@ body {
 .e-float-input.e-input-group.e-control-wrapper.e-disabled {
   font-family: "Varela Round", sans-serif !important;
   font-size: 16px;
-  cursor: pointer;
 }
 
 /* ej2 styles */
@@ -166,3 +191,59 @@ textarea.mat-input-element {
   overflow-y: scroll;
   height: 250px;
 }
+
+/* Loader */
+.hidden {
+  display: none;
+}
+
+.loader-overlay {
+  position: absolute;
+  width: 100%;
+  z-index: 500000;
+  top: 0;
+}
+
+.loader {
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #FFF;
+}
+
+.loader:before {
+  display: block;
+  position: absolute;
+  content: "";
+  left: -200px;
+  width: 200px;
+  height: 4px;
+  background-color: red;
+  animation: loading 2s linear infinite;
+}
+ejs-switch {
+  margin-top: 15px !important;
+}
+@keyframes loading {
+  from {
+      left: -200px;
+      width: 30%;
+  }
+  50% {
+      width: 30%;
+  }
+  70% {
+      width: 70%;
+  }
+  80% {
+      left: 50%;
+  }
+  95% {
+      left: 120%;
+  }
+  to {
+      left: 100%;
+  }
+}
+

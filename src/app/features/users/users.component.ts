@@ -1,9 +1,10 @@
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import {
   DialogEditEventArgs,
   EditService,
   EditSettingsModel,
+  ExcelExportProperties,
   ExcelExportService,
   FilterService,
   FilterSettingsModel,
@@ -13,18 +14,17 @@ import {
   RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
-  SelectionSettingsModel,
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
+import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
 import { UserService } from './user.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
-import { SchoolService } from '../school/school.service';
 import { UtilService } from 'src/app/shared/services/util.service';
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
   selector: 'yoo-users',
@@ -60,38 +60,42 @@ export class UsersComponent implements OnInit {
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
-  selectionOptions: SelectionSettingsModel;
   line = 'Both';
   public formData: FormData = new FormData();
   public header: String = 'Upload Student';
   public showCloseIcon: Boolean = true;
   public width: String = '300px';
   public position: object = { X: 'center', Y: 'center' };
+  public maxDate: Date = new Date ();
   toolbar: Array<string>;
   schools: any;
+  excelExportProperties: ExcelExportProperties;
+  urole: any;
+  showLoader = false;
   constructor(
     private userService: UserService,
     private toast: ToastService,
-    private schoolService: SchoolService,
-    private utilService: UtilService
-
+    private utilService: UtilService,
+    private authService: AuthService
   ) {}
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport', 'Import'];
     this.searchSettings = {};
-    this.filterOptions = { type: 'Excel' };
+    this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
       mode: 'Dialog'
     };
-    this.selectionOptions = { mode: 'Both' };
-    this.editparams = { params: { popupHeight: '800px' } };
+    this.excelExportProperties  = {
+      fileName: 'Users.xlsx'
+   };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-    this.userService.getAllStudents().subscribe(res => (this.users = res));
-
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    this.authService.getuRole().subscribe(res => this.urole = res);
+    this.maxDate = this.utilService.getLastThreeYearsDate();
+    this.reload();
   }
   rowDataBound(args: RowDataBoundEventArgs): void {
     if (args.data['deleted']) {
@@ -99,10 +103,8 @@ export class UsersComponent implements OnInit {
     }
   }
   onToolbarClick(args: ClickEventArgs): void {
-    if (args.item['properties'].text === 'PDF Export') {
-      this.grid.pdfExport();
-    } else if (args.item['properties'].text === 'Excel Export') {
-      this.grid.excelExport();
+    if (args.item['properties'].text === 'Excel Export') {
+      this.grid.excelExport(this.excelExportProperties);
     } else if (args.item['properties'].text === 'Import') {
       this.Dialog.show();
     }
@@ -119,15 +121,14 @@ export class UsersComponent implements OnInit {
     }
     if (args.requestType === 'save') {
       if (this.userForm.valid) {
-        args.data = this.userData;
-        args.data['schoolId'] = this.schoolId;
+        this.userData['schoolId'] = this.schoolId;
         const date = this.utilService.getFormattedDate2(args.data['dob']);
-        args.data['dob'] = date;
+        this.userData['dob'] = date;
+        this.userData['gradeId'] = args.data['gradeId'];
         if (this.requestType === 'beginEdit') {
-          console.log(args.data);
-          this.editStudent(args.data);
+          this.editStudent(this.userData);
         } else if (this.requestType === 'add') {
-          this.addStudent(args.data);
+          this.addStudent(this.userData);
         }
       } else {
         args.cancel = true;
@@ -148,7 +149,6 @@ export class UsersComponent implements OnInit {
 
     }
   }
-
   onUploadSuccess(args: any): void {
     if (args.operation === 'upload') {
       console.log('File uploaded successfully');
@@ -170,24 +170,26 @@ export class UsersComponent implements OnInit {
   uploadSubmit(): void {
     this.userService.uploadStudents(this.formData).subscribe(res => {
       this.Dialog.hide();
-      this.userService.getAllStudents().subscribe(res => (this.users = res));
+      this.reload();
       this.toast.success(res.message);
     });
   }
   editStudent(formData): void {
-    console.log(formData);
     this.userService.updateStudent(formData).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   addStudent(formData): void {
     this.userService.addStudent(formData).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   deleteStudent(id): void {
     this.userService.deleteStudent(id).subscribe(res => {
       this.toast.success(res.message);
+      this.reload();
     });
   }
   focusIn(target: HTMLElement): void {
@@ -196,5 +198,19 @@ export class UsersComponent implements OnInit {
 
   focusOut(target: HTMLElement): void {
     target.parentElement.classList.remove('e-input-focus');
+  }
+  reload(): void {
+    this.userService.getAllStudents().subscribe(res => {
+      this.users = res;
+      res.filter(data => {
+        if (data.deleted) {
+          data.status = 'Inactive';
+        } else {
+          data.status = 'Active';
+        }
+        return data;
+      });
+      this.showLoader = true;
+    });
   }
 }

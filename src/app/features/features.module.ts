@@ -1,8 +1,8 @@
+import { CommonModule } from '@angular/common';
 import {
   AutoCompleteModule,
   DropDownListModule
 } from '@syncfusion/ej2-angular-dropdowns';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,7 +32,7 @@ import {
   SortService
 } from '@syncfusion/ej2-angular-grids';
 import { DialogModule } from '@syncfusion/ej2-angular-popups';
-import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { AttendanceComponent } from './attendance/attendance.component';

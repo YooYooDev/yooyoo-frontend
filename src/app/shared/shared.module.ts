@@ -3,16 +3,18 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToasterModule } from 'angular2-toaster';
 
+import { LoginService } from './services/login.service';
 import { ToastComponent } from './components/toast.component';
-import { FooterComponent } from './footer/footer.component';
 import { HeaderNotificationsComponent } from './header/header-notifications/header-notifications.component';
 import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './header/profile/profile.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { LoginService } from './services/login.service';
+import { FooterComponent } from './footer/footer.component';
 import { ToastService } from './services/toast.service';
 import { SharedRoutingModule } from './shared-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { LoaderInterceptorService } from './services/loader-interceptor.service';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     HeaderComponent,
     HeaderNotificationsComponent,
     ProfileComponent,
-    ToastComponent
+    ToastComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -35,8 +38,14 @@ import { HttpClientModule } from '@angular/common/http';
     NavbarComponent,
     HeaderComponent,
     HeaderNotificationsComponent,
-    ToastComponent
+    ToastComponent,
+    LoaderComponent
   ],
-  providers: [LoginService, ToastService]
+  providers: [LoginService, ToastService,
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: LoaderInterceptorService,
+    multi: true
+  }]
 })
 export class SharedModule {}

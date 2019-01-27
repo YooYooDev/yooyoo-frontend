@@ -33,8 +33,10 @@ export class NotificationsComponent
   urole: string;
   notificationForm = new FormGroup({
     schoolId: new FormControl(''),
+    schoolName: new FormControl(''),
     gradeId: new FormControl(''),
     studentId: new FormControl(''),
+    studentName: new FormControl(''),
     header: new FormControl(''),
     message: new FormControl('')
   });
@@ -49,6 +51,7 @@ export class NotificationsComponent
   @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
 
   subscription: Subscription;
+  schoolId: any;
 
   constructor(
     private _notificationService: NotificationService,
@@ -60,12 +63,17 @@ export class NotificationsComponent
   ngOnInit() {
     // fetch  user role
     this._authService.getuRole().subscribe(res => (this.urole = res));
-
-    this.notificationForm.get('gradeId').disable();
-    this.notificationForm.get('studentId').disable();
+    this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    console.log(this.schoolId);
+    if (!this.schoolId) {
+      this.disableField();
+    } else{
+      this.notificationForm.get('schoolId').setValue(this.schoolId);
+      this.schoolChange(this.schoolId);
+    }
 
     // school auto complete
-    this.filteredSchools = this.notificationForm.get('schoolId').valueChanges.pipe(
+    this.filteredSchools = this.notificationForm.get('schoolName').valueChanges.pipe(
       startWith(undefined),
       debounceTime(200),
       distinctUntilChanged(),
@@ -75,7 +83,7 @@ export class NotificationsComponent
     );
 
     // student auto complete
-    this.filteredStudents = this.notificationForm.get('studentId').valueChanges.pipe(
+    this.filteredStudents = this.notificationForm.get('studentName').valueChanges.pipe(
       startWith(''),
       map(val => this.filterStudent(val))
     );
@@ -95,10 +103,13 @@ export class NotificationsComponent
       e => {
         if (!e || !e.source) {
           this.notificationForm.get('schoolId').setValue(undefined);
+          this.notificationForm.get('schoolName').setValue(undefined);
           this.notificationForm.get('gradeId').setValue(undefined);
-          this.notificationForm.get('gradeId').disable();
           this.notificationForm.get('studentId').setValue(undefined);
-          this.notificationForm.get('studentId').disable();
+          this.notificationForm.get('studentName').setValue(undefined);
+          if (!this.schoolId) {
+            this.disableField();
+          }
         }
       },
       err => this._subscribeToClosingActions(),
@@ -111,43 +122,50 @@ export class NotificationsComponent
     this.notificationForm.get('gradeId').setValue(undefined);
     this.classes = [];
     this.notificationForm.get('studentId').setValue(undefined);
+    this.notificationForm.get('studentName').setValue(undefined);
     this.students = [];
-    this.notificationForm.get('schoolId').setValue(event.option.value);
+    this.notificationForm.get('schoolName').setValue(event.option.value);
     const schoolId = event.option.id;
     // const schoolId = 1 ;
-    this._schoolService
-      .getStudentsByClass(schoolId)
-      .pipe(map(res => res))
-      .subscribe(res => {
-        this.classes = [];
-        this.data = res;
-        res.map(r => {
-          this.classes.push({ name: r.name, id: r.id });
-        });
-        if (this.classes.length === 0) {
-          this._toastService.warning('No class record found');
-          this.notificationForm.get('gradeId').disable();
-          this.notificationForm.get('studentId').disable();
-        } else {
-          this.notificationForm.get('gradeId').enable();
-        }
-      });
-  }
+    this.schoolChange(schoolId);
 
+  }
+schoolChange(schoolId): any {
+  this.notificationForm.get('schoolId').setValue(schoolId);
+  this._schoolService
+  .getStudentsByClass(schoolId)
+  .pipe(map(res => res))
+  .subscribe(res => {
+    this.classes = [];
+    this.data = res;
+    res.map(r => {
+      this.classes.push({ name: r.name, id: r.id });
+    });
+    if (this.classes.length === 0) {
+      this._toastService.warning('No class record found');
+      this.disableField();
+    } else {
+      this.notificationForm.get('gradeId').enable();
+    }
+  });
+  console.log(this.classes);
+}
   onChangeClass(value): void {
     this.notificationForm.get('studentId').setValue(undefined);
     this.students = [];
     this.students = this.data.filter(val => val.id === value)[0].students;
     if (this.students.length === 0) {
       this._toastService.warning('No student record found');
-      this.notificationForm.get('studentId').disable();
+      this.notificationForm.get('studentName').disable();
     } else {
-      this.notificationForm.get('studentId').enable();
+      this.notificationForm.get('studentName').enable();
     }
   }
 
   onChangeStudent(event: MatAutocompleteSelectedEvent): void {
-    this.notificationForm.get('studentId').setValue(event.option.value);
+    console.log(event);
+    this.notificationForm.get('studentId').setValue(event.option.id);
+    this.notificationForm.get('studentName').setValue(event.option.value);
   }
 
   // school filter
@@ -166,10 +184,9 @@ export class NotificationsComponent
 
   // student filter
   filterStudent(val: string): any {
+    // console.log(val);
     return val ? this.students.filter(option => option.firstName.toLowerCase().indexOf(val.toLowerCase()) > -1) : this.students;
   }
-
-
 
   onFormSubmit(): any {
     console.log(this.notificationForm.value);
@@ -177,10 +194,22 @@ export class NotificationsComponent
       (res: any) => {
         this.notificationFormValues.resetForm();
         this._toastService.success('We have sent a notification successfully!');
+        if (!this.schoolId) {
+          this.disableField();
+        } else {
+          this.students = [];
+        }
       },
       (err: HttpErrorResponse) => {
         this._toastService.error('Something went wrong!');
       }
     );
+  }
+
+  disableField(): any {
+    this.classes = [];
+    this.students = [];
+    this.notificationForm.get('gradeId').disable();
+    this.notificationForm.get('studentName').disable();
   }
 }

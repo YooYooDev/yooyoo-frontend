@@ -7,3 +7,6 @@
 .clearfix {
   clear: both;
 }
+.e-popup.e-popup-open.e-control.e-dialog {
+  width: 800px !important;
+}
