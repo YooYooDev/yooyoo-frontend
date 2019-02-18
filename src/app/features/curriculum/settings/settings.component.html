@@ -1,0 +1,62 @@
+<div clsaa="col-md-12">
+  <div class="control-section col-md-6 yooyoo">
+    <ejs-grid
+      #grid
+      [showColumnMenu]="false"
+      [allowReordering]="false"
+      [gridLines]="line"
+      [allowPaging]="true"
+      [allowSorting]="true"
+      [allowFiltering]="true"
+      [allowExcelExport]="true"
+      [allowGrouping]="false"
+      [searchSettings]="searchSettings"
+      [editSettings]="editSettings"
+      [filterSettings]="filterOptions"
+      [pageSettings]="pageSettings"
+      [toolbar]="toolbar"
+      [dataSource]="subjects"
+      (toolbarClick)="onToolbarClick($event)"
+      (actionBegin)="actionBegin($event)"
+    >
+      <e-columns>
+        <e-column
+          field="name"
+          headerText="SUBJECTS NAME"
+          textAlign="left"
+          width="150"
+        ></e-column>
+      </e-columns>
+    </ejs-grid>
+  </div>
+  <div class="control-section col-md-6 yooyoo">
+    <ejs-grid
+      #grid
+      [showColumnMenu]="false"
+      [allowReordering]="false"
+      [gridLines]="line"
+      [allowPaging]="true"
+      [allowSorting]="true"
+      [allowFiltering]="true"
+      [allowExcelExport]="true"
+      [allowGrouping]="false"
+      [searchSettings]="searchSettings"
+      [editSettings]="editSettings"
+      [filterSettings]="filterOptions"
+      [pageSettings]="pageSettings"
+      [toolbar]="toolbar"
+      [dataSource]="categories"
+      (toolbarClick)="onToolbarClick($event)"
+      (actionBegin)="actionBegin2($event)"
+    >
+      <e-columns>
+        <e-column
+          field="name"
+          headerText="CATEGORIES NAME"
+          textAlign="left"
+          width="150"
+        ></e-column>
+      </e-columns>
+    </ejs-grid>
+  </div>
+</div>

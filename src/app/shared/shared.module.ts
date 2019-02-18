@@ -15,6 +15,7 @@ import { SharedRoutingModule } from './shared-routing.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoaderInterceptorService } from './services/loader-interceptor.service';
 import { LoaderComponent } from './loader/loader.component';
+import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { LoaderComponent } from './loader/loader.component';
     CommonModule,
     SharedRoutingModule,
     ToasterModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    ListViewModule
   ],
   exports: [
     FooterComponent,
@@ -41,11 +43,14 @@ import { LoaderComponent } from './loader/loader.component';
     ToastComponent,
     LoaderComponent
   ],
-  providers: [LoginService, ToastService,
+  providers: [
+    LoginService,
+    ToastService,
     {
-    provide: HTTP_INTERCEPTORS,
-    useClass: LoaderInterceptorService,
-    multi: true
-  }]
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptorService,
+      multi: true
+    }
+  ]
 })
 export class SharedModule {}

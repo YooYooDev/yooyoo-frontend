@@ -1,1 +1,197 @@
-<p>Assignment</p>
+<div class="control-section yooyoo">
+  <ejs-grid
+    #grid
+    *ngIf="showLoader"
+    [showColumnMenu]="false"
+    [allowReordering]="false"
+    [gridLines]="line"
+    [allowPaging]="true"
+    [allowSorting]="true"
+    [allowFiltering]="true"
+    [allowExcelExport]="true"
+    [allowGrouping]="false"
+    [searchSettings]="searchSettings"
+    [editSettings]="editSettings"
+    [filterSettings]="filterOptions"
+    [pageSettings]="pageSettings"
+    [toolbar]="toolbar"
+    [dataSource]="assignments"
+    (toolbarClick)="onToolbarClick($event)"
+    (actionBegin)="actionBegin($event)"
+    (actionComplete)="actionComplete($event)"
+  >
+    <e-columns>
+      <e-column field="status" headerText="STATUS" width="150">
+        <ng-template #template let-data>
+          <div
+            *ngIf="data.status === 'Active'; else login"
+            class="statustemp e-activecolor"
+          >
+            <span class="statustxt e-activecolor">Assign</span>
+          </div>
+          <ng-template #login>
+            <div class="statustemp e-inactivecolor">
+              <span class="statustxt e-inactivecolor">UnAssign</span>
+            </div>
+          </ng-template>
+        </ng-template>
+      </e-column>
+      <e-column
+        field="grade.name"
+        headerText="CLASS"
+        textAlign="left"
+        width="150"
+      ></e-column>
+      <e-column
+        field="subject.name"
+        headerText="SUBJECT"
+        textAlign="left"
+        width="250"
+      ></e-column>
+      <e-column
+        field="topic.name"
+        headerText="TOPIC"
+        textAlign="left"
+        width="250"
+      ></e-column>
+      <e-column headerText="MEDIA" textAlign="left" width="250">
+        <ng-template #template let-data>
+          <button
+            type="button"
+            class="btn btn-googleplus waves-effect waves-light"
+            (click)="onOpenDialog($event, topic.videoLink)"
+          >
+            <i class="far fa-file-pdf m-r-5"></i>
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-instagram waves-effect waves-light"
+          >
+            <i class="fas fa-video m-r-5"></i>
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-googleplus waves-effect waves-light"
+          >
+            <i class="far fa-question-circle m-r-5"></i>
+          </button>
+        </ng-template>
+      </e-column>
+    </e-columns>
+    <ng-template #editSettingsTemplate let-data>
+      <div ngForm #assignmentForm="ngForm">
+        <div class="form-row">
+          <div
+            class="form-group col-md-6"
+            [ngClass]="data.isAdd ? 'hidden' : ''"
+          >
+            <ejs-dropdownlist
+              #schoolId
+              [dataSource]="schoolData"
+              [attr.disabled]="data.isAdd"
+              [(ngModel)]="assignmentData.schoolId"
+              [fields]="{ value: 'name', text: 'name' }"
+              placeholder="School"
+              floatLabelType="Always"
+              name="schoolId"
+              [required]="!data.isAdd"
+            ></ejs-dropdownlist>
+          </div>
+          <div class="form-group col-md-6">
+            <ejs-dropdownlist
+              #grade
+              [dataSource]="gradeData"
+              [(ngModel)]="assignmentData.grade"
+              [fields]="{ value: 'name', text: 'name' }"
+              placeholder="Grade"
+              floatLabelType="Always"
+              name="grade"
+              required
+            ></ejs-dropdownlist>
+          </div>
+          <div class="form-group col-md-6">
+            <ejs-dropdownlist
+              #subjectId
+              [dataSource]="subjects"
+              [(ngModel)]="assignmentData.subjectId"
+              [fields]="{ value: 'id', text: 'name' }"
+              (change)="onSubjectChange($event)"
+              placeholder="Subject"
+              floatLabelType="Always"
+              name="subjectId"
+              required
+            ></ejs-dropdownlist>
+          </div>
+          <div class="form-group col-md-6">
+            <ejs-dropdownlist
+              #topic
+              [dataSource]="topicData"
+              [(ngModel)]="assignmentData.topicId"
+              [fields]="{ value: 'id', text: 'name' }"
+              placeholder="Topic"
+              floatLabelType="Always"
+              name="topicId"
+              required
+            ></ejs-dropdownlist>
+          </div>
+          <div class="form-group col-md-6">
+            <div class="e-control-wrapper">
+              <ejs-datepicker
+                cssClass="e-style"
+                strictMode="true"
+                [max]="maxDate"
+                [(ngModel)]="assignmentData.date"
+                #date
+                name="date"
+                required
+              ></ejs-datepicker>
+              <span class="e-float-line"></span>
+              <label class="e-float-text e-label-top y-date" for="date"
+                >Select Date</label
+              >
+              <div
+                class="e-tooltip-wrap e-control e-popup e-griderror"
+                *ngIf="
+                  assignmentForm.form.controls.date?.touched &&
+                  !assignmentForm.form.controls.date?.valid
+                "
+              >
+                <div class="e-tip-content">
+                  <label class="e-error" for="date"
+                    >This field is invalid.</label
+                  >
+                </div>
+                <div class="e-arrow-tip e-tip-top">
+                  <div class="e-arrow-tip-outer e-tip-top"></div>
+                  <div class="e-arrow-tip-inner e-tip-top"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="e-control-wrapper pull-right">
+            <button
+              type="submit"
+              [disabled]="assignmentForm.invalid"
+              class="e-control e-btn e-primary e-flat"
+              (click)="onSubmit()"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="e-control e-btn e-flat"
+              (click)="cancel()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ejs-grid>
+</div>

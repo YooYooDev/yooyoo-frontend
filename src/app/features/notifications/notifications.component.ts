@@ -1,9 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NotificationService } from '../../shared/services/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastService } from '../../shared/services/toast.service';
@@ -28,8 +23,7 @@ import {
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.css']
 })
-export class NotificationsComponent
-  implements AfterViewInit, OnInit {
+export class NotificationsComponent implements AfterViewInit, OnInit {
   urole: string;
   notificationForm = new FormGroup({
     schoolId: new FormControl(''),
@@ -51,7 +45,7 @@ export class NotificationsComponent
   @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
 
   subscription: Subscription;
-  schoolId: any;
+  schoolId = '';
 
   constructor(
     private _notificationService: NotificationService,
@@ -63,31 +57,35 @@ export class NotificationsComponent
   ngOnInit() {
     // fetch  user role
     this._authService.getuRole().subscribe(res => (this.urole = res));
-    this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-    console.log(this.schoolId);
-    if (!this.schoolId) {
-      this.disableField();
-    } else{
+    if (this.urole !== 'SUPERADMIN') {
+      this.schoolId = JSON.parse(
+        localStorage.getItem('userInfo')
+      ).schoolInfo.id;
       this.notificationForm.get('schoolId').setValue(this.schoolId);
       this.schoolChange(this.schoolId);
+    } else {
+      this.disableClass();
     }
-
+    this.disableStudent();
     // school auto complete
-    this.filteredSchools = this.notificationForm.get('schoolName').valueChanges.pipe(
-      startWith(undefined),
-      debounceTime(200),
-      distinctUntilChanged(),
-      switchMap(val => {
-        return this.filterSchool(val || '');
-      })
-    );
+    this.filteredSchools = this.notificationForm
+      .get('schoolName')
+      .valueChanges.pipe(
+        startWith(undefined),
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(val => {
+          return this.filterSchool(val || '');
+        })
+      );
 
     // student auto complete
-    this.filteredStudents = this.notificationForm.get('studentName').valueChanges.pipe(
-      startWith(''),
-      map(val => this.filterStudent(val))
-    );
-
+    this.filteredStudents = this.notificationForm
+      .get('studentName')
+      .valueChanges.pipe(
+        startWith(''),
+        map(val => this.filterStudent(val))
+      );
   }
 
   ngAfterViewInit() {
@@ -107,9 +105,10 @@ export class NotificationsComponent
           this.notificationForm.get('gradeId').setValue(undefined);
           this.notificationForm.get('studentId').setValue(undefined);
           this.notificationForm.get('studentName').setValue(undefined);
-          if (!this.schoolId) {
-            this.disableField();
+          if (this.urole === 'SUPERADMIN') {
+            this.disableClass();
           }
+          this.disableStudent();
         }
       },
       err => this._subscribeToClosingActions(),
@@ -128,28 +127,28 @@ export class NotificationsComponent
     const schoolId = event.option.id;
     // const schoolId = 1 ;
     this.schoolChange(schoolId);
-
   }
-schoolChange(schoolId): any {
-  this.notificationForm.get('schoolId').setValue(schoolId);
-  this._schoolService
-  .getStudentsByClass(schoolId)
-  .pipe(map(res => res))
-  .subscribe(res => {
-    this.classes = [];
-    this.data = res;
-    res.map(r => {
-      this.classes.push({ name: r.name, id: r.id });
-    });
-    if (this.classes.length === 0) {
-      this._toastService.warning('No class record found');
-      this.disableField();
-    } else {
-      this.notificationForm.get('gradeId').enable();
-    }
-  });
-  console.log(this.classes);
-}
+  schoolChange(schoolId): any {
+    // tslint:disable-next-line:newline-per-chained-call
+    this.notificationForm.get('schoolId').setValue(schoolId);
+    this._schoolService
+      .getStudentsByClass(schoolId)
+      .pipe(map(res => res))
+      .subscribe(res => {
+        this.classes = [];
+        this.data = res;
+        res.map(r => {
+          this.classes.push({ name: r.name, id: r.id });
+        });
+        if (this.classes.length === 0) {
+          this._toastService.warning('No class record found');
+          this.disableClass();
+          this.disableStudent();
+        } else {
+          this.notificationForm.get('gradeId').enable();
+        }
+      });
+  }
   onChangeClass(value): void {
     this.notificationForm.get('studentId').setValue(undefined);
     this.students = [];
@@ -185,31 +184,43 @@ schoolChange(schoolId): any {
   // student filter
   filterStudent(val: string): any {
     // console.log(val);
-    return val ? this.students.filter(option => option.firstName.toLowerCase().indexOf(val.toLowerCase()) > -1) : this.students;
+    return val
+      ? this.students.filter(
+          option =>
+            option.firstName.toLowerCase().indexOf(val.toLowerCase()) > -1
+        )
+      : this.students;
   }
 
   onFormSubmit(): any {
-    console.log(this.notificationForm.value);
-    this._notificationService.saveNotification(this.notificationForm.value).subscribe(
-      (res: any) => {
-        this.notificationFormValues.resetForm();
-        this._toastService.success('We have sent a notification successfully!');
-        if (!this.schoolId) {
-          this.disableField();
-        } else {
-          this.students = [];
+    this._notificationService
+      .saveNotification(this.notificationForm.value)
+      .subscribe(
+        (res: any) => {
+          this.notificationFormValues.resetForm();
+          this._toastService.success(
+            'We have sent a notification successfully!'
+          );
+          if (this.urole === 'SUPERADMIN') {
+            this.disableClass();
+          }else{
+            this.notificationForm.get('schoolId').setValue(this.schoolId);
+          }
+          this.disableStudent();
+          
+        },
+        (err: HttpErrorResponse) => {
+          this._toastService.error('Something went wrong!');
         }
-      },
-      (err: HttpErrorResponse) => {
-        this._toastService.error('Something went wrong!');
-      }
-    );
+      );
   }
 
-  disableField(): any {
+  disableClass(): any {
     this.classes = [];
-    this.students = [];
     this.notificationForm.get('gradeId').disable();
+  }
+  disableStudent(): any {
+    this.students = [];
     this.notificationForm.get('studentName').disable();
   }
 }

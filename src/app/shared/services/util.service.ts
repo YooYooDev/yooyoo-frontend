@@ -51,6 +51,25 @@ export class UtilService {
 
     return `${now.getDate()}-${months[now.getMonth()]}-${now.getFullYear()}`;
   }
+  getFormattedDate1(data): any {
+    const now = new Date(data);
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+
+    return `${now.getDate()}-${months[now.getMonth()]}-${now.getFullYear()}`;
+  }
   getFormattedDate2(data): any {
     const now = new Date(data);
     return `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
@@ -58,7 +77,6 @@ export class UtilService {
   getLastThreeYearsDate(): any {
     const now = new Date();
     return `${now.getMonth() + 6}/${now.getDate()}/${now.getFullYear() - 3}`;
-
   }
   compareDates(date): any {
     // date - 'yyyy-mm-dd'

@@ -1,4 +1,4 @@
-<div class="control-section">
+<div class="control-section yooyoo">
   <ejs-grid
     #grid
     *ngIf="showLoader"
@@ -19,56 +19,59 @@
     (toolbarClick)="onToolbarClick($event)"
     (actionBegin)="actionBegin($event)"
     (actionComplete)="actionComplete($event)"
-    (rowDataBound)='rowDataBound($event)'
+    (rowDataBound)="rowDataBound($event)"
   >
     <e-columns>
-        <!-- <e-column field='active' headerText='E/D' width='100' type='boolean' [displayAsCheckBox]='true'></e-column> -->
-        <e-column field='status' headerText='Status' width='150'>
-          <ng-template #template let-data>                       
-              <div *ngIf="data.status === 'Active' ;else login" class="statustemp e-activecolor">
-                      <span class="statustxt e-activecolor">Active</span>           
-              </div>
-              <ng-template #login>
-                  <div class="statustemp e-inactivecolor">
-                      <span class="statustxt e-inactivecolor">InActive</span>
-                  </div>
-              </ng-template>
-          </ng-template>               
+      <!-- <e-column field='active' headerText='E/D' width='100' type='boolean' [displayAsCheckBox]='true'></e-column> -->
+      <e-column field="status" headerText="STATUS" width="150">
+        <ng-template #template let-data>
+          <div
+            *ngIf="data.status === 'Active'; else login"
+            class="statustemp e-activecolor"
+          >
+            <span class="statustxt e-activecolor">Active</span>
+          </div>
+          <ng-template #login>
+            <div class="statustemp e-inactivecolor">
+              <span class="statustxt e-inactivecolor">InActive</span>
+            </div>
+          </ng-template>
+        </ng-template>
       </e-column>
       <e-column
         field="name"
-        headerText="School Name"
+        headerText="SCHOOL NAME"
         textAlign="left"
         width="200"
-        [isPrimaryKey]='true'
+        [isPrimaryKey]="true"
       ></e-column>
       <e-column
         field="code"
-        headerText="School Code"
+        headerText="SCHOOL CODE"
         textAlign="left"
         width="200"
       ></e-column>
       <e-column
         field="ownerName"
-        headerText="Owner Name"
+        headerText="OWNER NAME"
         textAlign="left"
         width="200"
       ></e-column>
       <e-column
         field="ownerMobile"
-        headerText="Mobile"
+        headerText="MOBILE"
         textAlign="left"
         width="200"
       ></e-column>
       <e-column
         field="emailId"
-        headerText="Email"
+        headerText="EMAIL"
         textAlign="left"
         width="200"
       ></e-column>
       <e-column
         field="address"
-        headerText="Address"
+        headerText="ADDRESS"
         textAlign="left"
         width="200"
       ></e-column>
@@ -95,7 +98,7 @@
               >
             </div>
           </div>
-          <div class="form-group col-md-4">
+          <!-- <div class="form-group col-md-4">
             <div class="e-control-wrapper">
               <ejs-numerictextbox
                 id="code"
@@ -127,7 +130,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
@@ -149,18 +152,33 @@
             </div>
           </div>
           <div class="form-group col-md-4">
-            <ejs-maskedtextbox mask="000000" [(ngModel)]="schoolData.pin" #pin required name='pin' placeholder='Pin Code'
-              floatLabelType='Always' minlength="6"></ejs-maskedtextbox>
-            <div class="e-tooltip-wrap e-control e-popup e-griderror" *ngIf=" schoolForm.form.controls.pin?.touched &&
-            !schoolForm.form.controls.pin?.valid" >
-              <div class="e-tip-content"><label class="e-error" for="pin">This field is required.</label></div>
+            <ejs-maskedtextbox
+              mask="000000"
+              [(ngModel)]="schoolData.pin"
+              #pin
+              required
+              name="pin"
+              placeholder="Pin Code"
+              floatLabelType="Always"
+              minlength="6"
+            ></ejs-maskedtextbox>
+            <div
+              class="e-tooltip-wrap e-control e-popup e-griderror"
+              *ngIf="
+                schoolForm.form.controls.pin?.touched &&
+                !schoolForm.form.controls.pin?.valid
+              "
+            >
+              <div class="e-tip-content">
+                <label class="e-error" for="pin">This field is required.</label>
+              </div>
               <div class="e-arrow-tip e-tip-top">
                 <div class="e-arrow-tip-outer e-tip-top"></div>
                 <div class="e-arrow-tip-inner e-tip-top"></div>
               </div>
             </div>
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-4 clearfix">
             <div class="e-float-input e-control-wrapper">
               <input
                 class="e-input e-field"
@@ -265,7 +283,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group col-md-4 clearfix">
+          <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
               <input
                 class="e-input e-field"
@@ -303,7 +321,7 @@
               >
             </div>
           </div>
-          <div class="form-group col-md-4 clearfix">
+          <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
               <ejs-switch
                 type="number"
@@ -379,9 +397,19 @@
           </div>
           <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrappe">
-              <ejs-switch [ngModel]="schoolData.active === 1? true : schoolData.active === 0 ? false : null"
+              <ejs-switch
+                [ngModel]="
+                  schoolData.active === 1
+                    ? true
+                    : schoolData.active === 0
+                    ? false
+                    : null
+                "
                 (ngModelChange)="schoolData.active = $event ? 1 : 0"
-                #active name="active" id="active"></ejs-switch>
+                #active
+                name="active"
+                id="active"
+              ></ejs-switch>
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top switch-label" for="active">
                 Enable/Disable
@@ -391,8 +419,21 @@
         </div>
         <div class="col-md-12">
           <div class="e-control-wrapper pull-right">
-            <button type="submit" [disabled]="schoolForm.invalid" class="e-control e-btn e-primary e-flat" (click)="onSubmit()">Save</button>
-            <button type="button" class="e-control e-btn e-flat" (click)="cancel()">Cancel</button>
+            <button
+              type="submit"
+              [disabled]="schoolForm.invalid"
+              class="e-control e-btn e-primary e-flat"
+              (click)="onSubmit()"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="e-control e-btn e-flat"
+              (click)="cancel()"
+            >
+              Cancel
+            </button>
           </div>
         </div>
         <!-- {{ schoolForm.value | json }} -->

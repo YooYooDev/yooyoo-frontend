@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import {
   AutoCompleteModule,
-  DropDownListModule
+  DropDownListModule,
+  MultiSelectModule
 } from '@syncfusion/ej2-angular-dropdowns';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -48,6 +49,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
 import { CredManagerComponent } from './users/cred-manager/cred-manager.component';
+import { SettingsComponent } from './curriculum/settings/settings.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -62,7 +64,8 @@ import { CredManagerComponent } from './users/cred-manager/cred-manager.componen
     ReportsComponent,
     AssignmentComponent,
     LogoutComponent,
-    CredManagerComponent
+    CredManagerComponent,
+    SettingsComponent
   ],
   imports: [
     CommonModule,
@@ -89,7 +92,8 @@ import { CredManagerComponent } from './users/cred-manager/cred-manager.componen
     DialogModule,
     NumericTextBoxModule,
     MaskedTextBoxModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    MultiSelectModule
   ],
   exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]
