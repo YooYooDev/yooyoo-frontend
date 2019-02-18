@@ -1,14 +1,15 @@
 .mt-20 {
-  margin-top: 20px;
+ margin-top: 20px;
 }
 
 .mt-40 {
-  margin-top: 40px;
+ margin-top: 40px;
 }
 
 .example-full-width {
-  width: 100%;
+ width: 100%;
 }
+
 .e-popup.e-popup-open.e-control.e-dialog {
-  width: 300px !important;
+ width: 600px !important;
 }

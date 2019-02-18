@@ -5,7 +5,7 @@
 >
   <mat-tab>
     <ng-template mat-tab-label>App Users</ng-template>
-    <div class="control-section">
+    <div class="control-section yooyoo">
       <ejs-grid
         #grid
         *ngIf="showLoader"
@@ -30,7 +30,7 @@
       >
         <e-columns>
           <!-- <e-column field='deleted' headerText='E/D' width='100' type='boolean' [displayAsCheckBox]='true'></e-column> -->
-          <e-column field="status" headerText="Status" width="150">
+          <e-column field="status" headerText="STATUS" width="150">
             <ng-template #template let-data>
               <div
                 *ngIf="data.status === 'Active'; else login"
@@ -47,50 +47,50 @@
           </e-column>
           <e-column
             field="firstName"
-            headerText="Student Name"
+            headerText="STUDENT NAME"
             [isPrimaryKey]="true"
             textAlign="left"
             width="250"
           ></e-column>
           <e-column
             field="gradeName"
-            headerText="Class"
+            headerText="CLASS"
             textAlign="left"
             width="150"
           ></e-column>
           <e-column
             field="fatherName"
-            headerText="Father's Name"
+            headerText="FATHER'S NAME"
             textAlign="left"
             width="250"
           ></e-column>
           <e-column
             field="motherName"
-            headerText="Mother's Name"
+            headerText="MOTHER'S NAME"
             textAlign="left"
             width="250"
           ></e-column>
           <e-column
             field="parentMobile1"
-            headerText="Primary Mobile"
+            headerText="PRIMARY MOBILE"
             textAlign="left"
             width="250"
           ></e-column>
           <e-column
             field="parentMobile2"
-            headerText="Alternate Mobile"
+            headerText="ALTERNATE MOBILE"
             textAlign="left"
             width="250"
           ></e-column>
           <e-column
             field="primaryEmail"
-            headerText="Primary Email"
+            headerText="PRIMARY EMAIL"
             textAlign="left"
             width="250"
           ></e-column>
           <e-column
             field="secondaryEmail"
-            headerText="Alternate Email"
+            headerText="ALTERNATE EMAIL"
             textAlign="left"
             width="250"
           ></e-column>

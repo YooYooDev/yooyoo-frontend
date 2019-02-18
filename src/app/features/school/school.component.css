@@ -1,12 +1,15 @@
 .form-group.col-md-6 {
-  width: 300px;
+ width: 300px;
 }
-.switch-label{
-   margin-top: -20px;
+
+.switch-label {
+ margin-top: -20px;
 }
+
 .clearfix {
-  clear: both;
+ clear: both;
 }
+
 .e-popup.e-popup-open.e-control.e-dialog {
-  width: 800px !important;
+ width: 900px !important;
 }

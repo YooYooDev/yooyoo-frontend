@@ -59,16 +59,15 @@ body {
 /* toaster styles starts */
 
 /* ej2 styles */
+
 td.e-rowcell .statustxt.e-activecolor {
   color: #00cc00;
   position: relative;
-
 }
 
 td.e-rowcell .statustxt.e-inactivecolor {
   color: #e60000;
   position: relative;
-
 }
 
 .statustemp.e-inactivecolor {
@@ -85,40 +84,54 @@ td.e-rowcell .statustxt.e-inactivecolor {
   position: relative;
   height: 19px;
   border-radius: 5px;
-  text-align: center
+  text-align: center;
 }
+
 .e-control.e-grid td.e-active {
-  background-color: #005f79;
-  color: #fff;
+  background-color: #999;
+  color: #000 !important;
 }
 
 .e-popup.e-popup-open.e-control.e-dialog {
   width: 900px;
 }
 
-.e-control.e-grid.e-default .e-headercell,
-.e-control.e-grid.e-default .e-detailheadercell {
-  color: #fff;
-  background-color: #673ab7;
+.e-control.e-grid.e-default.e-bothlines .e-headercell,
+.e-control.e-grid.e-default.e-bothlines .e-detailheadercell {
+  background-color: #f1f1f1;
 }
 
 .e-control.e-grid .e-columnheader th .e-headertext {
-  font-family: "Varela Round", sans-serif !important;
-  font-size: 18px !important;
-  font-weight: 700 !important;
+  font-family: "Hind Madurai", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+.yooyoo td,
+.yooyoo th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.yooyoo tr:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+.yooyoo tr:hover {
+  background-color: #ddd;
 }
 
 /* .e-row.e-altrow {
  background-color: #f7f7f7;
 } */
 
-.deleted {
+/* .deleted {
   background-color: #cccccc;
 }
 
 .deleted td {
   color: #999 !important;
-}
+} */
 
 .e-control.e-grid .e-rowcell,
 .form-group input,
@@ -132,7 +145,8 @@ td.e-rowcell .statustxt.e-inactivecolor {
 .e-float-input.e-input-group.e-disabled,
 .e-float-input.e-input-group.e-control-wrapper.e-disabled {
   font-family: "Varela Round", sans-serif !important;
-  font-size: 16px;
+  font-size: 14px;
+  color: #797979 !important;
 }
 
 /* ej2 styles */
@@ -144,7 +158,7 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, "Varela Round", sans-serif;
 }
 
 /* Material Design custom css */
@@ -187,12 +201,14 @@ textarea.mat-input-element {
   height: 6px !important;
   width: 9px !important;
 }
-.custom-height{
-  overflow-y: scroll;
-  height: 250px;
+
+.custom-height {
+  /* overflow-y: scroll; */
+  height: 350px;
 }
 
 /* Loader */
+
 .hidden {
   display: none;
 }
@@ -209,7 +225,7 @@ textarea.mat-input-element {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .loader:before {
@@ -222,28 +238,29 @@ textarea.mat-input-element {
   background-color: red;
   animation: loading 2s linear infinite;
 }
+
 ejs-switch {
   margin-top: 15px !important;
 }
+
 @keyframes loading {
   from {
-      left: -200px;
-      width: 30%;
+    left: -200px;
+    width: 30%;
   }
   50% {
-      width: 30%;
+    width: 30%;
   }
   70% {
-      width: 70%;
+    width: 70%;
   }
   80% {
-      left: 50%;
+    left: 50%;
   }
   95% {
-      left: 120%;
+    left: 120%;
   }
   to {
-      left: 100%;
+    left: 100%;
   }
 }
-

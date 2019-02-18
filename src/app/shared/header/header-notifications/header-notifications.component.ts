@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NotificationService } from '../../services/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'yoo-header-notifications',
@@ -6,7 +9,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header-notifications.component.css']
 })
 export class HeaderNotificationsComponent implements OnInit {
-  constructor() {}
+  notifications: [];
+  notificationCount: number;
 
-  ngOnInit() {}
+  constructor(
+    private _toast: ToastService,
+    private _notificationService: NotificationService
+  ) {}
+
+  ngOnInit() {
+    this._notificationService.getAllNotification().subscribe(
+      (data: any) => {
+        this.notifications = data;
+        this.notificationCount = this.notifications.length;
+        console.log(this.notifications);
+      },
+      (err: HttpErrorResponse) => {
+        this._toast.error('Something went wrong');
+      }
+    );
+  }
 }
