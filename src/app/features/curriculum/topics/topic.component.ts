@@ -19,17 +19,21 @@ import {
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
+import {
+  DropDownListComponent,
+  MultiSelectComponent,
+  SelectEventArgs
+} from '@syncfusion/ej2-angular-dropdowns';
 import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
-import { UserService } from './user.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { UtilService } from 'src/app/shared/services/util.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { ToastService } from '../../../shared/services/toast.service';
+import { UtilService } from '../../../shared/services/util.service';
+import { AuthService } from '../../../core/auth/auth.service';
+import { CurriculumService } from '../curriculum.service';
 
 @Component({
-  selector: 'yoo-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css'],
+  selector: 'yoo-topic',
+  templateUrl: './topic.component.html',
+  styleUrls: ['./topic.component.css'],
   providers: [
     ToolbarService,
     ExcelExportService,
@@ -40,17 +44,18 @@ import { AuthService } from 'src/app/core/auth/auth.service';
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class UsersComponent implements OnInit {
-  @ViewChild('userForm') public userForm: FormGroup;
+export class TopicComponent implements OnInit {
+  @ViewChild('curriculumForm') public curriculumForm: FormGroup;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
-  @ViewChild('gender') gender: DropDownListComponent;
-  @ViewChild('class') class: DropDownListComponent;
+  @ViewChild('subjectName') subjectName: DropDownListComponent;
+  @ViewChild('categoryName') categoryName: MultiSelectComponent;
+
   @ViewChild('Dialog') Dialog: DialogComponent;
   @ViewChild('formUpload') public uploadObj: UploaderComponent;
   schoolId = '';
   requestType: string;
-  userData = {};
+  curriculumData = {};
   credManagerData = {};
   editparams: { params: { popupHeight: string } };
   users: any;
@@ -66,21 +71,23 @@ export class UsersComponent implements OnInit {
   public showCloseIcon: Boolean = true;
   public width: String = '300px';
   public position: object = { X: 'center', Y: 'center' };
-  public maxDate: Date = new Date ();
+  public maxDate: Date = new Date();
   toolbar: Array<string>;
   schools: any;
   excelExportProperties: ExcelExportProperties;
   urole: any;
   showLoader = false;
+  subjects: any;
+  categories: any;
   constructor(
-    private userService: UserService,
+    private curriculumService: CurriculumService,
     private toast: ToastService,
     private utilService: UtilService,
     private authService: AuthService
   ) {}
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport', 'Import'];
+    this.toolbar = ['Add', 'Edit', 'Search'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
@@ -88,13 +95,16 @@ export class UsersComponent implements OnInit {
       allowAdding: true,
       mode: 'Dialog'
     };
-    this.excelExportProperties  = {
-      fileName: 'Users.xlsx'
-   };
+
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-    this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-    this.authService.getuRole().subscribe(res => this.urole = res);
-    this.maxDate = this.utilService.getLastThreeYearsDate();
+    this.authService.getuRole().subscribe(res => (this.urole = res));
+    this.curriculumService.getAllSubjects().subscribe(res => {
+      this.subjects = res;
+    });
+    this.curriculumService.getAllCategories().subscribe(res => {
+      this.categories = res;
+    });
+    // this.Dialog.hide();
     this.reload();
   }
   rowDataBound(args: RowDataBoundEventArgs): void {
@@ -105,30 +115,36 @@ export class UsersComponent implements OnInit {
   onToolbarClick(args: ClickEventArgs): void {
     if (args.item['properties'].text === 'Excel Export') {
       this.grid.excelExport(this.excelExportProperties);
-    } else if (args.item['properties'].text === 'Import') {
-      this.Dialog.show();
     }
   }
-
+  onOpenDialog(event: any): void {
+    this.Dialog.show();
+}
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
-      this.userData = { ...args.rowData };
+      this.curriculumData = { ...args.rowData };
+
     } else if (args.requestType === 'delete') {
       if (confirm('Are you sure you want to delete ?')) {
-        this.deleteStudent(args.data[0].id);
+        // this.deleteStudent(args.data[0].id);
       }
     }
     if (args.requestType === 'save') {
-      if (this.userForm.valid) {
-        this.userData['schoolId'] = this.schoolId;
-        const date = this.utilService.getFormattedDate2(args.data['dob']);
-        this.userData['dob'] = date;
-        this.userData['gradeId'] = args.data['gradeId'];
+      if (this.curriculumForm.valid) {
+        const cat = this.curriculumData['categoryName'];
+        const categories = this.categories.filter(obj => {
+          return cat.some(obj2 => {
+              return obj.name === obj2;
+          });
+      });
+        this.curriculumData['categories'] = categories;
+        this.curriculumData['subjects'] = this.subjectName['itemData'];
+        console.log(this.curriculumData);
         if (this.requestType === 'beginEdit') {
-          this.editStudent(this.userData);
+         this.updateTopic(this.curriculumData);
         } else if (this.requestType === 'add') {
-          this.addStudent(this.userData);
+          this.createTopic(this.curriculumData);
         }
       } else {
         args.cancel = true;
@@ -138,7 +154,7 @@ export class UsersComponent implements OnInit {
 
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      args.dialog.width = '800px';
+      args.dialog.width = '350px';
       args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
         'class',
         'hidden'
@@ -147,48 +163,30 @@ export class UsersComponent implements OnInit {
         'class',
         'hidden'
       );
+    }
+  }
 
-    }
-  }
-  onUploadSuccess(args: any): void {
-    if (args.operation === 'upload') {
-      console.log('File uploaded successfully');
-    }
-  }
-  onFileChange(event): void {
-    const fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      const file: File = fileList[0];
-      this.formData.append('file', file, file.name);
-    }
-  }
   cancel(): void {
     this.grid.closeEdit();
   }
   onSubmit(): void {
     this.grid.endEdit();
   }
-  uploadSubmit(): void {
-    this.userService.uploadStudents(this.formData).subscribe(res => {
-      this.Dialog.hide();
-      this.reload();
-      this.toast.success(res.message);
-    });
-  }
-  editStudent(formData): void {
-    this.userService.updateStudent(formData).subscribe(res => {
+
+  updateTopic(formData): void {
+    this.curriculumService.updateTopic(formData).subscribe(res => {
       this.toast.success(res.message);
       this.reload();
     });
   }
-  addStudent(formData): void {
-    this.userService.addStudent(formData).subscribe(res => {
+  createTopic(formData): void {
+    this.curriculumService.createTopic(formData).subscribe(res => {
       this.toast.success(res.message);
       this.reload();
     });
   }
-  deleteStudent(id): void {
-    this.userService.deleteStudent(id).subscribe(res => {
+  deleteTopic(id): void {
+    this.curriculumService.deleteTopic(id).subscribe(res => {
       this.toast.success(res.message);
       this.reload();
     });
@@ -200,17 +198,20 @@ export class UsersComponent implements OnInit {
   focusOut(target: HTMLElement): void {
     target.parentElement.classList.remove('e-input-focus');
   }
-  reload(): void {
-    this.userService.getAllStudents().subscribe(res => {
+  reload() {
+    this.curriculumService.getAllTopics().subscribe(res => {
       this.users = res;
       res.filter(data => {
-        if (data.deleted) {
-          data.status = 'Inactive';
-        } else {
-          data.status = 'Active';
-        }
+        data.categoryName = Array.prototype.map
+          .call(data.categories, s => s.name);
+        if (data.subjects !== null) {
+            data.subjectName = data.subjects.name;
+          } else {
+            data.subjectName = '';
+          }
         return data;
       });
+      console.log(this.users);
       this.showLoader = true;
     });
   }

@@ -1,3 +1,4 @@
+import { DialogViewComponent } from './assignment/dialog-view.component';
 import { CommonModule } from '@angular/common';
 import {
   AutoCompleteModule,
@@ -50,6 +51,10 @@ import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
 import { CredManagerComponent } from './users/cred-manager/cred-manager.component';
 import { SettingsComponent } from './curriculum/settings/settings.component';
+import { AssignmentSchoolComponent } from './assignment-school/assignment-school.component';
+import { QuizComponent } from './curriculum/quiz/quiz.component';
+import { TopicComponent } from './curriculum/topics/topic.component';
+import { AttendanceReportComponent } from './reports/attendance-report/attendance-report.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -63,9 +68,14 @@ import { SettingsComponent } from './curriculum/settings/settings.component';
     LoginComponent,
     ReportsComponent,
     AssignmentComponent,
+    AssignmentSchoolComponent,
     LogoutComponent,
     CredManagerComponent,
-    SettingsComponent
+    SettingsComponent,
+    QuizComponent,
+    TopicComponent,
+    DialogViewComponent,
+    AttendanceReportComponent
   ],
   imports: [
     CommonModule,
@@ -95,7 +105,7 @@ import { SettingsComponent } from './curriculum/settings/settings.component';
     AutoCompleteModule,
     MultiSelectModule
   ],
-  exports: [GridModule],
+  exports: [GridModule,DialogViewComponent],
   providers: [PageService, SortService, FilterService, GroupService]
 })
 export class FeaturesModule {}

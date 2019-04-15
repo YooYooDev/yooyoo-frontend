@@ -70,9 +70,34 @@ export class UtilService {
 
     return `${now.getDate()}-${months[now.getMonth()]}-${now.getFullYear()}`;
   }
+  getFormattedMonth(data): any {
+    const now = new Date(data);
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+
+    return `${months[now.getMonth()]}-${now.getFullYear()}`;
+  }
   getFormattedDate2(data): any {
     const now = new Date(data);
-    return `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+    const day = now.getDate();
+    const dayofMonth = day < 10 ? `0${day}` : `${day}`;
+
+    const monthNum = now.getMonth() + 1;
+    const month = monthNum < 10 ? `0${monthNum}` : `${monthNum}`;
+
+    return `${dayofMonth}-${month}-${now.getFullYear()}`;
   }
   getLastThreeYearsDate(): any {
     const now = new Date();
@@ -95,5 +120,18 @@ export class UtilService {
     } else {
       return false;
     }
+  }
+  weekCompareDates(_date): any {
+    // date - 'yyyy-mm-dd'
+    const now = new Date(_date);
+
+    const day = now.getDate();
+    const dayofMonth = day < 10 ? `0${day}` : `${day}`;
+
+    const monthNum = now.getMonth() + 1;
+    const month = monthNum < 10 ? `0${monthNum}` : `${monthNum}`;
+
+    return `${now.getFullYear()}-${month}-${dayofMonth}`;
+
   }
 }

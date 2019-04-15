@@ -1,3 +1,12 @@
+<mat-tab-group  [ngClass]="
+urole !== 'SUPERADMIN' && urole !== 'YOOYOOADMIN' ? 'header-less-tabs' : ''
+">
+<mat-tab>
+    <ng-template mat-tab-label> School Assignment</ng-template>
+    <yoo-assignment-school></yoo-assignment-school>
+  </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>Create Assignment</ng-template>
 <div class="control-section yooyoo">
   <ejs-grid
     #grid
@@ -21,7 +30,7 @@
     (actionComplete)="actionComplete($event)"
   >
     <e-columns>
-      <e-column field="status" headerText="STATUS" width="150">
+      <!-- <e-column field="status" headerText="STATUS" width="150">
         <ng-template #template let-data>
           <div
             *ngIf="data.status === 'Active'; else login"
@@ -35,7 +44,14 @@
             </div>
           </ng-template>
         </ng-template>
-      </e-column>
+      </e-column> -->
+      <e-column
+        field="school.name"
+        headerText="SCHOOL"
+        textAlign="left"
+        width="250"
+        [isPrimaryKey]="true"
+      ></e-column>
       <e-column
         field="grade.name"
         headerText="CLASS"
@@ -59,7 +75,7 @@
           <button
             type="button"
             class="btn btn-googleplus waves-effect waves-light"
-            (click)="onOpenDialog($event, topic.videoLink)"
+            (click)="onOpenDialog($event)"
           >
             <i class="far fa-file-pdf m-r-5"></i>
           </button>
@@ -80,23 +96,35 @@
         </ng-template>
       </e-column>
     </e-columns>
+    <ejs-dialog
+          id="dialog"
+          #Dialog
+          header=""
+          [visible]="false"
+          showOnInit="false"
+          showCloseIcon="true"
+        >
+          <iframe
+            style="width:50%;height:50%;padding:20px; margin-left: 25%; margin-top: 15%;"
+            src="https://www.youtube.com/embed/mWZDcLoeMXw"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen=""
+          ></iframe>
+        </ejs-dialog>
     <ng-template #editSettingsTemplate let-data>
       <div ngForm #assignmentForm="ngForm">
         <div class="form-row">
-          <div
-            class="form-group col-md-6"
-            [ngClass]="data.isAdd ? 'hidden' : ''"
-          >
+          <div class="form-group col-md-6">
             <ejs-dropdownlist
               #schoolId
               [dataSource]="schoolData"
-              [attr.disabled]="data.isAdd"
               [(ngModel)]="assignmentData.schoolId"
-              [fields]="{ value: 'name', text: 'name' }"
+              [fields]="{ value: 'id', text: 'name' }"
               placeholder="School"
               floatLabelType="Always"
               name="schoolId"
-              [required]="!data.isAdd"
+              required
             ></ejs-dropdownlist>
           </div>
           <div class="form-group col-md-6">
@@ -141,7 +169,7 @@
               <ejs-datepicker
                 cssClass="e-style"
                 strictMode="true"
-                [max]="maxDate"
+                [min]="maxDate"
                 [(ngModel)]="assignmentData.date"
                 #date
                 name="date"
@@ -195,3 +223,7 @@
     </ng-template>
   </ejs-grid>
 </div>
+</mat-tab>
+
+</mat-tab-group>
+

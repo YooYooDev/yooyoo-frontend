@@ -31,7 +31,3 @@
  display: none !important;
  margin-top: 20px;
 }
-
-.e-popup.e-popup-open.e-control.e-dialog {
- width: 900px;
-}

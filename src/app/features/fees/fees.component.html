@@ -20,6 +20,7 @@
     (actionBegin)="actionBegin($event)"
     (actionComplete)="actionComplete($event)"
     (rowDataBound)="rowDataBound($event)"
+    (dataBound)='dataBound($event)'
   >
     <e-columns>
       <!-- <e-column field='deleted' headerText='E/D' width='100' type='boolean' [displayAsCheckBox]='true'></e-column> -->
@@ -34,186 +35,35 @@
         field="gradeName"
         headerText="Class"
         textAlign="left"
-        width="150"
+        width="100"
         [allowEditing]="false"
       ></e-column>
-      <e-column  field="totalBillAmount" headerText="Total Amount" textAlign="left" width="250">
-        <!-- <ng-template #template let-data let-value let-rowIndex></ng-template> -->
+      <e-column  #tuition field="tuition" headerText="Tuition Fees" textAlign="left" width="150">
+          <ng-template #template let-data let-value let-rowIndex>
+              <input class="e-input e-field" [value]="" required name="name" type="text" />
+            </ng-template>
+      </e-column>
+      <e-column  field="transport" headerText="Transport Fees" textAlign="left" width="150">
+          <ng-template #template let-data let-value let-rowIndex>
+              <input class="e-input e-field" [value]="" required name="name" type="text" />
+            </ng-template>
+      </e-column>
+      <e-column headerText="Total Amount" textAlign="left" width="150" [allowEditing]="false">
+
       </e-column>
       <e-column
         field="paidBillAmount"
         headerText="Paid Amount"
         textAlign="left"
-        width="250"
+        width="150"
       ></e-column>
       <e-column
         field="pendingAmount"
         headerText="Pending Amount"
         textAlign="left"
-        width="250"
+        width="150"
+        [allowEditing]="false"
       ></e-column>
     </e-columns>
-    <!-- <ng-template #editSettingsTemplate let-data>
-      <div ngForm #feesForm="ngForm">
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <div class="e-float-input e-control-wrapper">
-              <input
-                class="e-input e-field"
-                [(ngModel)]="feesData.gradeName"
-                #gradeName
-                name="gradeName"
-                id="gradeName"
-                type="text"
-                disabled
-                (focus)="focusIn($event.target)"
-                (blur)="focusOut($event.target)"
-              />
-              <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="gradeName"
-                >Class</label
-              >
-            </div>
-          </div>
-          <div class="form-group col-md-4">
-            <ejs-autocomplete
-              #studentName
-              [dataSource]="students"
-              [(ngModel)]="feesData.studentName"
-              [fields]="{ value: 'name' }"
-              placeholder="student Name"
-              floatLabelType="Always"
-              name="studentName"
-              required
-            ></ejs-autocomplete>
-          </div>
-          <div class="form-group col-md-4">
-            <div class="e-control-wrapper">
-              <ejs-numerictextbox
-                id="totalBillAmount"
-                format="N0"
-                [value]="feesData.totalBillAmount"
-                [(ngModel)]="feesData.totalBillAmount"
-                #totalBillAmount
-                name="totalBillAmount"
-                placeholder="Total Bill Amount"
-                floatLabelType="Always"
-                required
-              ></ejs-numerictextbox>
-              <div
-                class="e-tooltip-wrap e-control e-popup e-griderror"
-                *ngIf="
-                  feesForm.form.controls.totalBillAmount?.touched &&
-                  !feesForm.form.controls.totalBillAmount?.valid
-                "
-              >
-                <div class="e-tip-content">
-                  <label class="e-error" for="totalBillAmount"
-                    >This field is required.</label
-                  >
-                </div>
-                <div class="e-arrow-tip e-tip-top">
-                  <div class="e-arrow-tip-outer e-tip-top"></div>
-                  <div class="e-arrow-tip-inner e-tip-top"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group col-md-4">
-            <div class="e-control-wrapper">
-              <ejs-numerictextbox
-                id="paidBillAmount"
-                format="N0"
-                [value]="feesData.paidBillAmount"
-                [(ngModel)]="feesData.paidBillAmount"
-                #paidBillAmount
-                name="paidBillAmount"
-                placeholder="Paid Bill Amount"
-                floatLabelType="Always"
-                required
-              ></ejs-numerictextbox>
-              <div
-                class="e-tooltip-wrap e-control e-popup e-griderror"
-                *ngIf="
-                  feesForm.form.controls.paidBillAmount?.touched &&
-                  !feesForm.form.controls.paidBillAmount?.valid
-                "
-              >
-                <div class="e-tip-content">
-                  <label class="e-error" for="paidBillAmount"
-                    >This field is required.</label
-                  >
-                </div>
-                <div class="e-arrow-tip e-tip-top">
-                  <div class="e-arrow-tip-outer e-tip-top"></div>
-                  <div class="e-arrow-tip-inner e-tip-top"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group col-md-4">
-            <div class="e-control-wrapper">
-              <ejs-numerictextbox
-                id="pendingAmount"
-                format="N0"
-                [value]="feesData.pendingAmount"
-                [(ngModel)]="feesData.pendingAmount"
-                #pendingAmount
-                name="pendingAmount"
-                placeholder="Pending Amount"
-                floatLabelType="Always"
-                disabled
-              ></ejs-numerictextbox>
-            </div>
-          </div>
-          <div class="form-group col-md-4">
-            <div class="e-float-input e-control-wrappe">
-              <ejs-switch
-                [ngModel]="
-                  feesData.deleted == 1
-                    ? true
-                    : feesData.deleted == 0
-                    ? false
-                    : null
-                "
-                (ngModelChange)="feesData.deleted = $event ? 1 : 0"
-                #deleted
-                name="deleted"
-                id="deleted"
-              ></ejs-switch>
-              <span class="e-float-line"></span>
-              <label
-                class="e-float-text e-label-top switch-label"
-                for="deleted"
-              >
-                Enable/Disable
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="e-control-wrapper pull-right">
-            <button
-              type="submit"
-              [disabled]="feesForm.invalid"
-              class="e-control e-btn e-primary e-flat"
-              (click)="onSubmit()"
-            >
-              Save
-            </button>
-            <button
-              type="button"
-              class="e-control e-btn e-flat"
-              (click)="cancel()"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-      <br />
-
-      <div class="col-md-12 clearfix">{{ feesForm.value | json }}</div>
-    </ng-template> -->
   </ejs-grid>
 </div>
