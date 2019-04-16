@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import url(https://fonts.googleapis.com/css?family=Varela+Round);
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
 body {
   font-family: "Varela Round", sans-serif !important;
   margin: 0;
@@ -92,10 +94,17 @@ td.e-rowcell .statustxt.e-inactivecolor {
   color: #000 !important;
 }
 
-.e-popup.e-popup-open.e-control.e-dialog {
-  width: 900px;
-}
+#dialog {
+  height: 100% !important;
+  overflow: hidden;
+  width: 100% !important;
 
+}
+#dialog .e-dlg-content {
+
+  background-color: rgba(0, 0, 0, 0.87);
+
+}
 .e-control.e-grid.e-default.e-bothlines .e-headercell,
 .e-control.e-grid.e-default.e-bothlines .e-detailheadercell {
   background-color: #f1f1f1;

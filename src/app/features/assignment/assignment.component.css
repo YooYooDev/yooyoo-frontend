@@ -30,10 +30,10 @@
 .clearfix {
  clear: both;
 }
-
-.e-popup.e-popup-open.e-control.e-dialog {
- width: 350px !important;
-}
+.header-less-tabs.mat-tab-group .mat-tab-header {
+  display: none !important;
+  margin-top: 20px;
+ }
 
 .btn-googleplus {
  color: #ffffff !important;

@@ -13,6 +13,11 @@ export class AssignmentService {
       .get(`${apiUrl}/assignment/getAllAssignments`)
       .pipe(map(res => res));
   }
+  getAllSchoolAssignments(schoolId): Observable<any> {
+    return this.httpClient
+      .get(`${apiUrl}/assignment/getAssignmentsBySchool/${schoolId}`)
+      .pipe(map(res => res));
+  }
   getTopicsBySubject(subjectId): Observable<any> {
     return this.httpClient
       .get(`${apiUrl}/assignment/getTopicsBySubject/${subjectId}`)
@@ -20,6 +25,11 @@ export class AssignmentService {
   }
 
   saveAssignment(formData): Observable<any> {
+    return this.httpClient
+      .post(`${apiUrl}/assignment/save`, formData)
+      .pipe(map(res => res));
+  }
+  editAssignment(formData): Observable<any> {
     return this.httpClient
       .post(`${apiUrl}/assignment/save`, formData)
       .pipe(map(res => res));

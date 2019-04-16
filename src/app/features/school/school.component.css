@@ -9,7 +9,3 @@
 .clearfix {
  clear: both;
 }
-
-.e-popup.e-popup-open.e-control.e-dialog {
- width: 900px !important;
-}

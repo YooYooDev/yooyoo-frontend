@@ -33,6 +33,11 @@ export class CurriculumService {
       .get(`${apiUrl}/curriculum/getSubjects`)
       .pipe(map(res => res));
   }
+  getAllQuizs(): Observable<any> {
+    return this.httpClient
+      .get(`${apiUrl}/quiz/getAllQuizs`)
+      .pipe(map(res => res));
+  }
   updateSubjects(formData): Observable<any> {
     return this.httpClient
       .put(`${apiUrl}/curriculum/update-subject`, formData)
@@ -53,7 +58,16 @@ export class CurriculumService {
       .put(`${apiUrl}/curriculum/update-topic`, formData)
       .pipe(map(res => res));
   }
-
+  uploadMedia(questionId, formData): Observable<any> {
+    return this.httpClient
+      .post(`${apiUrl}/media/questions/upload/${questionId}`, formData)
+      .pipe(map(res => res));
+  }
+  createQuiz(formData): Observable<any> {
+    return this.httpClient
+      .post(`${apiUrl}/quiz/save`, formData)
+      .pipe(map(res => res));
+  }
   deleteTopic(id): Observable<any> {
     return this.httpClient
       .delete(`${apiUrl}/curriculum/delete-topic/${id}`)

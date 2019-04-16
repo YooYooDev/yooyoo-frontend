@@ -26,6 +26,7 @@ import { ToastService } from 'src/app/shared/services/toast.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { CurriculumService } from '../curriculum/curriculum.service';
+import { SchoolService } from '../school/school.service';
 
 @Component({
   selector: 'yoo-assignment',
@@ -42,6 +43,7 @@ import { CurriculumService } from '../curriculum/curriculum.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AssignmentComponent implements OnInit {
+  schoolData: any;
   @ViewChild('assignmentForm') public assignmentForm: FormGroup;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
@@ -80,15 +82,17 @@ export class AssignmentComponent implements OnInit {
     private toast: ToastService,
     private curriculumService: CurriculumService,
     private authService: AuthService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private schoolService: SchoolService
   ) {}
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search'];
+    this.toolbar = ['Add', 'Edit', 'Delete', 'Search'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
+      allowDeleting: true,
       allowAdding: true,
       mode: 'Dialog'
     };
@@ -103,6 +107,9 @@ export class AssignmentComponent implements OnInit {
     this.curriculumService.getAllSubjects().subscribe(res => {
       this.subjects = res;
     });
+    this.schoolService.getSchools().subscribe(res => {
+      this.schoolData = res;
+    });
   }
   rowDataBound(args: RowDataBoundEventArgs): void {
     if (args.data['deleted']) {
@@ -110,6 +117,7 @@ export class AssignmentComponent implements OnInit {
     }
   }
   onToolbarClick(args: ClickEventArgs): void {
+    console.log(args);
     if (args.item['properties'].text === 'Excel Export') {
       this.grid.excelExport(this.excelExportProperties);
     } else if (args.item['properties'].text === 'Import') {
@@ -117,10 +125,20 @@ export class AssignmentComponent implements OnInit {
     }
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  async actionBegin(args: SaveEventArgs): Promise<any> {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.assignmentData = { ...args.rowData };
+      this.assignmentData['schoolId'] = args.rowData['school'].id;
+      this.assignmentData['grade'] = args.rowData['grade'].name;
+      this.assignmentData['subjectId'] = args.rowData['subject'].id;
+      await this.assignmentService
+      .getTopicsBySubject(args.rowData['subject'].id)
+      .subscribe(res => {
+        this.topicData = res;
+        this.assignmentData['topicId'] = args.rowData['topic'].id;
+      });
+      console.log(this.assignmentData);
     } else if (args.requestType === 'delete') {
       if (confirm('Are you sure you want to delete ?')) {
         this.deleteAssignment(args.data[0].id);
@@ -128,16 +146,13 @@ export class AssignmentComponent implements OnInit {
     }
     if (args.requestType === 'save') {
       if (this.assignmentForm.valid) {
-        //  this.assignmentData['schoolId'] = this.schoolId;
         const date = this.utilService.getFormattedDate1(args.data['date']);
         this.assignmentData['date'] = date;
-        // this.assignmentData['gradeId'] = args.data['gradeId'];
-       // console.log(args.data);
         console.log(this.assignmentData);
         if (this.requestType === 'beginEdit') {
-          //  this.editAssignment(this.assignmentData);
+          this.editAssignment(this.assignmentData);
         } else if (this.requestType === 'add') {
-           this.saveAssignment(this.assignmentData);
+          this.saveAssignment(this.assignmentData);
         }
       } else {
         args.cancel = true;
@@ -147,6 +162,7 @@ export class AssignmentComponent implements OnInit {
 
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+      args.dialog.width = '350px';
       args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
         'class',
         'hidden'
@@ -157,27 +173,29 @@ export class AssignmentComponent implements OnInit {
       );
     }
   }
-
+  onOpenDialog(event: any): void {
+    this.Dialog.show(true);
+}
   cancel(): void {
     this.grid.closeEdit();
   }
   onSubmit(): void {
     this.grid.endEdit();
   }
-  onSubjectChange(event): void {
-    console.log(event.itemData.id);
+  async onSubjectChange(event): Promise<any> {
     this.assignmentService
       .getTopicsBySubject(event.itemData.id)
       .subscribe(res => {
+        console.log(res);
         this.topicData = res;
       });
   }
-  // editAssignment(formData): void {
-  //   this.assignmentService.updateAssignment(formData).subscribe(res => {
-  //     this.toast.success(res.message);
-  //     this.reload();
-  //   });
-  // }
+  editAssignment(formData): void {
+    this.assignmentService.editAssignment(formData).subscribe(res => {
+      this.toast.success(res.message);
+      this.reload();
+    });
+  }
   saveAssignment(formData): void {
     this.assignmentService.saveAssignment(formData).subscribe(res => {
       this.toast.success(res.message);
@@ -200,14 +218,6 @@ export class AssignmentComponent implements OnInit {
   reload(): void {
     this.assignmentService.getAllAssignments().subscribe(res => {
       this.assignments = res;
-      // res.filter(data => {
-      //   if (data.deleted) {
-      //     data.status = 'Inactive';
-      //   } else {
-      //     data.status = 'Active';
-      //   }
-      //   return data;
-      // });
       this.showLoader = true;
     });
   }

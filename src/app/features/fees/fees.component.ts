@@ -69,8 +69,8 @@ export class FeesComponent implements OnInit {
     this.searchSettings = {};
     this.filterOptions = { type: 'Excel' };
     this.editSettings = {
-      allowEditing: true,
-      allowAdding: true,
+      allowEditing: false,
+      allowAdding: false,
       mode: 'Normal'
     };
     this.selectionOptions = { mode: 'Both' };
@@ -82,12 +82,19 @@ export class FeesComponent implements OnInit {
 
   }
   rowDataBound(args: RowDataBoundEventArgs): void {
+    console.log(args);
+
     // if (args.data['deleted']) {
     //   args.row.classList.add('deleted');
     // }
   }
+  dataBound(args: any): void {
+
+     console.log(args);
+
+   //  this.grid.setCellValue(this.grid.currentViewData[i]['CountryCode'], 'Net', parseFloat(num.toFixed(2)));
+  }
   getBillAmount(id): void {
-  //  console.log('ddd');
     // this.fees.filter(res => {
     //   console.log(res, id);
     //   if (res.id === id) {
@@ -106,40 +113,40 @@ export class FeesComponent implements OnInit {
   }
 
   actionBegin(args: SaveEventArgs): void {
-    if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      this.requestType = args.requestType;
-      this.userData = { ...args.rowData };
-    } else if (args.requestType === 'delete') {
-      if (confirm('Are you sure you want to delete ?')) {
-        this.deleteFees(args.data[0].id);
-      }
-    }
-    if (args.requestType === 'save') {
-      if (this.userForm.valid) {
-        args.data = this.userData;
-        args.data['schoolId'] = this.schoolId;
-        if (this.requestType === 'beginEdit') {
-          console.log(args.data);
-          this.editFees(args.data);
-        } else if (this.requestType === 'add') {
-          this.addFees(args.data);
-        }
-      } else {
-        args.cancel = true;
-      }
-    }
+    // if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+    //   this.requestType = args.requestType;
+    //   this.userData = { ...args.rowData };
+    // } else if (args.requestType === 'delete') {
+    //   if (confirm('Are you sure you want to delete ?')) {
+    //     this.deleteFees(args.data[0].id);
+    //   }
+    // }
+    // if (args.requestType === 'save') {
+    //   if (this.userForm.valid) {
+    //     args.data = this.userData;
+    //     args.data['schoolId'] = this.schoolId;
+    //     if (this.requestType === 'beginEdit') {
+    //       console.log(args.data);
+    //       this.editFees(args.data);
+    //     } else if (this.requestType === 'add') {
+    //       this.addFees(args.data);
+    //     }
+    //   } else {
+    //     args.cancel = true;
+    //   }
+    // }
   }
 
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
-        'class',
-        'hidden'
-      );
-      args.dialog.buttons[1]['controlParent'].btnObj[1].element.setAttribute(
-        'class',
-        'hidden'
-      );
+      // args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
+      //   'class',
+      //   'hidden'
+      // );
+      // args.dialog.buttons[1]['controlParent'].btnObj[1].element.setAttribute(
+      //   'class',
+      //   'hidden'
+      // );
       // if (args.requestType === 'beginEdit') {
       //   (args.form.elements.namedItem('firstName') as HTMLInputElement).focus();
       // } else if (args.requestType === 'add') {
