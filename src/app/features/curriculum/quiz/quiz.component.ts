@@ -54,6 +54,9 @@ export class QuizComponent implements OnInit {
   quizs = [];
   topics = [];
   quizData = {};
+  isValid: Boolean = true;
+  errorMsg: String = '';
+  successMsg: String = '';
   constructor(
     private curriculumService: CurriculumService,
     private toast: ToastService,
@@ -92,16 +95,41 @@ export class QuizComponent implements OnInit {
   removeQuestion(index): any {
     this.questions.splice(index, 1);
   }
-  onFileChange(event, id): void {
+  onFileChange(event, id): any {
+    this.errorMsg = '';
+    this.successMsg = '';
+    this.isValid = true;
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
-      this.mediaFormData.append('media', file, file.name);
-      console.log(id);
-      this.curriculumService.uploadMedia(id, this.mediaFormData).subscribe(res => {
-       // this.reload();
-        this.toast.success('Media file uploaded successfully!');
-      });
+      console.log(file);
+      if (
+        file.type === 'image/gif' ||
+        file.type === 'image/png' ||
+        file.type === 'image/jpeg'
+      ) {
+        if (file.size > 500000) {
+          this.isValid = false;
+          this.errorMsg = 'Media file size should be >500kb.';
+        } else {
+          this.isValid = true;
+        }
+      } else if (file.type === 'audio/mp3' || file.type === 'audio/wav') {
+        if (file.size > 2000000) {
+          this.isValid = false;
+          this.errorMsg = 'Media file size should be >2mb.';
+        } else {
+          this.isValid = true;
+        }
+      }
+      if (this.isValid) {
+        this.mediaFormData.append('media', file, file.name);
+        this.curriculumService
+          .uploadMedia(id, this.mediaFormData)
+          .subscribe(res => {
+            this.successMsg = 'Uploaded successfully!';
+          });
+      }
     }
   }
   actionBegin(args: SaveEventArgs): void {

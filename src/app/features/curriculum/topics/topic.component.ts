@@ -50,7 +50,7 @@ export class TopicComponent implements OnInit {
   @ViewChild('element') element;
   @ViewChild('subjectName') subjectName: DropDownListComponent;
   @ViewChild('categoryName') categoryName: MultiSelectComponent;
-
+  public mediaFormData: FormData = new FormData();
   @ViewChild('Dialog') Dialog: DialogComponent;
   @ViewChild('formUpload') public uploadObj: UploaderComponent;
   schoolId = '';
@@ -79,6 +79,9 @@ export class TopicComponent implements OnInit {
   showLoader = false;
   subjects: any;
   categories: any;
+  errorMsg: String = '';
+  successMsg: String = '';
+  isValid: Boolean =  true;
   constructor(
     private curriculumService: CurriculumService,
     private toast: ToastService,
@@ -119,6 +122,36 @@ export class TopicComponent implements OnInit {
   }
   onOpenDialog(event: any): void {
     this.Dialog.show();
+}
+onFileChange(event, id): any {
+  this.errorMsg = '';
+  this.successMsg = '';
+  this.isValid = true;
+  const fileList: FileList = event.target.files;
+  if (fileList.length > 0) {
+    const file: File = fileList[0];
+    console.log(file);
+    if (
+      file.type === 'image/gif' ||
+      file.type === 'image/png' ||
+      file.type === 'image/jpeg'
+    ) {
+      if (file.size > 500000) {
+        this.isValid = false;
+        this.errorMsg = 'Media file size should be >500kb.';
+      } else {
+        this.isValid = true;
+      }
+    }
+    if (this.isValid) {
+      this.mediaFormData.append('media', file, file.name);
+      this.curriculumService
+        .uploadWorksheet(id, this.mediaFormData)
+        .subscribe(res => {
+          this.successMsg = 'Uploaded successfully!';
+        });
+    }
+  }
 }
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {

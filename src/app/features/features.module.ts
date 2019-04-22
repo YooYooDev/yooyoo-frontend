@@ -19,7 +19,7 @@ import {
   RadioButtonModule,
   SwitchModule
 } from '@syncfusion/ej2-angular-buttons';
-import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { DatePickerModule, DateRangePickerModule } from '@syncfusion/ej2-angular-calendars';
 import {
   MaskedTextBoxModule,
   NumericTextBoxModule,
@@ -55,6 +55,8 @@ import { AssignmentSchoolComponent } from './assignment-school/assignment-school
 import { QuizComponent } from './curriculum/quiz/quiz.component';
 import { TopicComponent } from './curriculum/topics/topic.component';
 import { AttendanceReportComponent } from './reports/attendance-report/attendance-report.component';
+import { ListViewModule } from '@syncfusion/ej2-angular-lists';
+import { AccumulationChartAllModule } from '@syncfusion/ej2-angular-charts';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -103,9 +105,12 @@ import { AttendanceReportComponent } from './reports/attendance-report/attendanc
     NumericTextBoxModule,
     MaskedTextBoxModule,
     AutoCompleteModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ListViewModule,
+    AccumulationChartAllModule,
+    DateRangePickerModule
   ],
-  exports: [GridModule,DialogViewComponent],
+  exports: [GridModule, DialogViewComponent],
   providers: [PageService, SortService, FilterService, GroupService]
 })
 export class FeaturesModule {}

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
-
 import { ToastService } from './../../shared/services/toast.service';
 import { UtilService } from './../../shared/services/util.service';
 import { SchoolService } from './../school/school.service';
@@ -27,7 +26,6 @@ export class AttendanceComponent implements OnInit {
 
   ngOnInit() {
     const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-
     this._schoolService
       .getStudentsByClass(schoolId)
       .pipe(map(res => res))
@@ -47,7 +45,6 @@ export class AttendanceComponent implements OnInit {
 
     this._attendanceService.getAttendence().subscribe(res => {
       this.attendedSIds = res;
-console.log(this.attendedSIds )
     });
   }
 

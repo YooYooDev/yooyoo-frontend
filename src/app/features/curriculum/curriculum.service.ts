@@ -63,6 +63,11 @@ export class CurriculumService {
       .post(`${apiUrl}/media/questions/upload/${questionId}`, formData)
       .pipe(map(res => res));
   }
+  uploadWorksheet(topicId, formData): Observable<any> {
+    return this.httpClient
+      .post(`${apiUrl}/media/worksheet/upload/${topicId}`, formData)
+      .pipe(map(res => res));
+  }
   createQuiz(formData): Observable<any> {
     return this.httpClient
       .post(`${apiUrl}/quiz/save`, formData)
