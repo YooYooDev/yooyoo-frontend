@@ -7,6 +7,7 @@ import {
   FilterService,
   FilterSettingsModel,
   GridComponent,
+  IEditCell,
   PageService,
   PageSettingsModel,
   RowDataBoundEventArgs,
@@ -22,7 +23,6 @@ import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 // tslint:disable-next-line:no-implicit-dependencies
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { FeesService } from './fees.service';
-import { UserService } from '../users/user.service';
 
 @Component({
   selector: 'yoo-users',
@@ -58,18 +58,19 @@ export class FeesComponent implements OnInit {
   public showCloseIcon: Boolean = true;
   public width: String = '300px';
   public position: object = { X: 'center', Y: 'center' };
+  public numericParams: IEditCell;
   toolbar: Array<string>;
-  fees: any;
+  fees = [];
   formData: any;
-  allStudents: any;
-  constructor(private toast: ToastService, private feesService: FeesService, private userService: UserService) {}
+  constructor(private toast: ToastService, private feesService: FeesService) {}
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Edit', 'Search', 'ExcelExport'];
+    this.numericParams = { params: { decimals: 2 } };
+    this.toolbar = ['Edit', 'Update', 'Cancel', 'Search', 'ExcelExport'];
     this.searchSettings = {};
     this.filterOptions = { type: 'Excel' };
     this.editSettings = {
-      allowEditing: false,
+      allowEditing: true,
       allowAdding: false,
       mode: 'Normal'
     };
@@ -77,23 +78,9 @@ export class FeesComponent implements OnInit {
     this.editparams = { params: { popupHeight: '800px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
     this.feesService.viewFees().subscribe(res => (this.fees = res));
-    this.userService.getAllStudents().subscribe(res => (this.allStudents = res));
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-
   }
-  rowDataBound(args: RowDataBoundEventArgs): void {
-    console.log(args);
 
-    // if (args.data['deleted']) {
-    //   args.row.classList.add('deleted');
-    // }
-  }
-  dataBound(args: any): void {
-
-     console.log(args);
-
-   //  this.grid.setCellValue(this.grid.currentViewData[i]['CountryCode'], 'Net', parseFloat(num.toFixed(2)));
-  }
   getBillAmount(id): void {
     // this.fees.filter(res => {
     //   console.log(res, id);
@@ -113,28 +100,15 @@ export class FeesComponent implements OnInit {
   }
 
   actionBegin(args: SaveEventArgs): void {
-    // if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-    //   this.requestType = args.requestType;
-    //   this.userData = { ...args.rowData };
-    // } else if (args.requestType === 'delete') {
-    //   if (confirm('Are you sure you want to delete ?')) {
-    //     this.deleteFees(args.data[0].id);
-    //   }
-    // }
-    // if (args.requestType === 'save') {
-    //   if (this.userForm.valid) {
-    //     args.data = this.userData;
-    //     args.data['schoolId'] = this.schoolId;
-    //     if (this.requestType === 'beginEdit') {
-    //       console.log(args.data);
-    //       this.editFees(args.data);
-    //     } else if (this.requestType === 'add') {
-    //       this.addFees(args.data);
-    //     }
-    //   } else {
-    //     args.cancel = true;
-    //   }
-    // }
+    console.log(args.requestType);
+    if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+      this.requestType = args.requestType;
+      console.log(args.rowData);
+    }
+    if (args.requestType === 'save') {
+      // this.editFees(args.rowData);
+      this.addFees(args.rowData);
+    }
   }
 
   actionComplete(args: DialogEditEventArgs): void {

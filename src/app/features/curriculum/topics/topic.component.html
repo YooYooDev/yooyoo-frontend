@@ -40,23 +40,12 @@
         width="150"
       ></e-column>
       <e-column headerText="ACTION" textAlign="left" width="200">
-        <!-- {{ data.videoLink }} -->
         <ng-template #template let-data>
-          <!-- <div class="e-btn-group e-round-corner"> -->
-          <!-- <button
-              ejs-button
-              cssClass="e-custom"
-              id="targetButton"
-              (click)="onOpenDialog($event, data.videoLinks)"
-            >
-              Video
-            </button> -->
           <button
             type="button"
             class="btn btn-googleplus waves-effect waves-light"
             cssClass="e-custom"
             id="targetButton"
-            (click)="onOpenDialog($event, data.videoLinks)"
           >
             <i class="far fa-file-pdf m-r-5"></i>
           </button>
@@ -64,38 +53,15 @@
           <button
             type="button"
             class="btn btn-instagram waves-effect waves-light"
+            (click)="onOpenDialog(data.videoLink)"
           >
             <i class="fas fa-video m-r-5"></i>
           </button>
-
-          <button
-            type="button"
-            class="btn btn-googleplus waves-effect waves-light"
-          >
-            <i class="far fa-question-circle m-r-5"></i>
-          </button>
-          <!-- </div> -->
         </ng-template>
       </e-column>
     </e-columns>
-    <ejs-dialog
-      id="dialog"
-      #Dialog
-      header="Dialog"
-      height="auto"
-      width="100px"
-      [visible]="false"
-      showOnInit="false"
-      showCloseIcon="true"
-    >
-      <iframe
-        style="width:50%;height:50%;padding:20px; margin-left: 25%; margin-top: 15%;"
-        src="https://www.youtube.com/embed/mWZDcLoeMXw"
-        frameborder="0"
-        allow="autoplay; encrypted-media"
-        allowfullscreen=""
-      ></iframe>
-    </ejs-dialog>
+  
+    
     <ng-template #editSettingsTemplate let-data class="topic-dialog">
       <div ngForm #curriculumForm="ngForm" class="topic-dialog">
         <div class="form-row">
@@ -209,4 +175,16 @@
       </div>
     </ng-template>
   </ejs-grid>
+    <ejs-dialog
+      id="dialog"
+      isModal="true"
+      #Dialog
+      (close)="dialogClose()"
+      [visible]="false"
+      showOnInit="false"
+      showCloseIcon="false"
+      [content]="dialogContent"
+    >
+   
+    </ejs-dialog>
 </div>

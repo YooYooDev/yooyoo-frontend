@@ -10,8 +10,9 @@ export class FeesService {
 
   viewFees(): Observable<any> {
     const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+
     return this.httpClient
-      .get(`${apiUrl}/fees/getFeesbySchol/${schoolId}`)
+      .get(`${apiUrl}/fees/getAllStudents/${schoolId}`)
       .pipe(map(res => res));
   }
   addFees(formData): Observable<any> {

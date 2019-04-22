@@ -101,9 +101,13 @@ td.e-rowcell .statustxt.e-inactivecolor {
 
 }
 #dialog .e-dlg-content {
+  overflow: hidden;
+  background-color: #999 !important;
 
-  background-color: rgba(0, 0, 0, 0.87);
+}
+#dialog .e-dlg-header-content {
 
+  background: #999 !important;
 }
 .e-control.e-grid.e-default.e-bothlines .e-headercell,
 .e-control.e-grid.e-default.e-bothlines .e-detailheadercell {

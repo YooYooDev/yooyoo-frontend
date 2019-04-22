@@ -77,6 +77,7 @@ export class AssignmentComponent implements OnInit {
   gradeData = ['NURSERY', 'L.K.G', 'U.K.G'];
   subjects = [];
   topicData: any;
+  dialogContent: string;
   constructor(
     private assignmentService: AssignmentService,
     private toast: ToastService,
@@ -133,11 +134,11 @@ export class AssignmentComponent implements OnInit {
       this.assignmentData['grade'] = args.rowData['grade'].name;
       this.assignmentData['subjectId'] = args.rowData['subject'].id;
       await this.assignmentService
-      .getTopicsBySubject(args.rowData['subject'].id)
-      .subscribe(res => {
-        this.topicData = res;
-        this.assignmentData['topicId'] = args.rowData['topic'].id;
-      });
+        .getTopicsBySubject(args.rowData['subject'].id)
+        .subscribe(res => {
+          this.topicData = res;
+          this.assignmentData['topicId'] = args.rowData['topic'].id;
+        });
       console.log(this.assignmentData);
     } else if (args.requestType === 'delete') {
       if (confirm('Are you sure you want to delete ?')) {
@@ -173,9 +174,22 @@ export class AssignmentComponent implements OnInit {
       );
     }
   }
-  onOpenDialog(event: any): void {
+  dialogClose(): void {
+    this.dialogContent = '';
+  }
+  onOpenDialog(link): void {
     this.Dialog.show(true);
-}
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+  }
+ 
+  openWorksheet(link): void {
+    this.Dialog.show(true);
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:50%;height:50%;padding:20px; margin-left: 25%; margin-top: 15%;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+  }
   cancel(): void {
     this.grid.closeEdit();
   }

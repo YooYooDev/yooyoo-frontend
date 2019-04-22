@@ -52,6 +52,7 @@ export class TopicComponent implements OnInit {
   @ViewChild('categoryName') categoryName: MultiSelectComponent;
   public mediaFormData: FormData = new FormData();
   @ViewChild('Dialog') Dialog: DialogComponent;
+  @ViewChild('ejDialog') ejDialog: DialogComponent;
   @ViewChild('formUpload') public uploadObj: UploaderComponent;
   schoolId = '';
   requestType: string;
@@ -81,7 +82,8 @@ export class TopicComponent implements OnInit {
   categories: any;
   errorMsg: String = '';
   successMsg: String = '';
-  isValid: Boolean =  true;
+  isValid: Boolean = true;
+  dialogContent: string;
   constructor(
     private curriculumService: CurriculumService,
     private toast: ToastService,
@@ -120,57 +122,57 @@ export class TopicComponent implements OnInit {
       this.grid.excelExport(this.excelExportProperties);
     }
   }
-  onOpenDialog(event: any): void {
-    this.Dialog.show();
-}
-onFileChange(event, id): any {
-  this.errorMsg = '';
-  this.successMsg = '';
-  this.isValid = true;
-  const fileList: FileList = event.target.files;
-  if (fileList.length > 0) {
-    const file: File = fileList[0];
-    console.log(file);
-    if (
-      file.type === 'image/gif' ||
-      file.type === 'image/png' ||
-      file.type === 'image/jpeg'
-    ) {
-      if (file.size > 500000) {
-        this.isValid = false;
-        this.errorMsg = 'Media file size should be >500kb.';
-      } else {
-        this.isValid = true;
+  dialogClose(): void {
+    this.dialogContent = '';
+  }
+  onOpenDialog(link): void {
+    this.Dialog.show(true);
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+  }
+  onFileChange(event, id): any {
+    this.errorMsg = '';
+    this.successMsg = '';
+    this.isValid = true;
+    const fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      const file: File = fileList[0];
+      console.log(file);
+      if (
+        file.type === 'image/gif' ||
+        file.type === 'image/png' ||
+        file.type === 'image/jpeg'
+      ) {
+        if (file.size > 500000) {
+          this.isValid = false;
+          this.errorMsg = 'Media file size should be >500kb.';
+        } else {
+          this.isValid = true;
+        }
+      }
+      if (this.isValid) {
+        this.mediaFormData.append('media', file, file.name);
+        this.curriculumService
+          .uploadWorksheet(id, this.mediaFormData)
+          .subscribe(res => {
+            this.successMsg = 'Uploaded successfully!';
+          });
       }
     }
-    if (this.isValid) {
-      this.mediaFormData.append('media', file, file.name);
-      this.curriculumService
-        .uploadWorksheet(id, this.mediaFormData)
-        .subscribe(res => {
-          this.successMsg = 'Uploaded successfully!';
-        });
-    }
   }
-}
+
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.curriculumData = { ...args.rowData };
-
-    } else if (args.requestType === 'delete') {
-      if (confirm('Are you sure you want to delete ?')) {
-        // this.deleteStudent(args.data[0].id);
-      }
     }
     if (args.requestType === 'save') {
       if (this.curriculumForm.valid) {
         const cat = this.curriculumData['categoryName'];
-        const categories = this.categories.filter(obj => {
-          return cat.some(obj2 => {
-              return obj.name === obj2;
-          });
-      });
+        const categories = this.categories.filter(obj => cat.some(obj2 => {
+          return obj.name === obj2;
+        }));
         this.curriculumData['categories'] = categories;
         this.curriculumData['subjects'] = this.subjectName['itemData'];
         console.log(this.curriculumData);
@@ -235,13 +237,15 @@ onFileChange(event, id): any {
     this.curriculumService.getAllTopics().subscribe(res => {
       this.users = res;
       res.filter(data => {
-        data.categoryName = Array.prototype.map
-          .call(data.categories, s => s.name);
+        data.categoryName = Array.prototype.map.call(
+          data.categories,
+          s => s.name
+        );
         if (data.subjects !== null) {
-            data.subjectName = data.subjects.name;
-          } else {
-            data.subjectName = '';
-          }
+          data.subjectName = data.subjects.name;
+        } else {
+          data.subjectName = '';
+        }
         return data;
       });
       console.log(this.users);
