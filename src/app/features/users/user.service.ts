@@ -10,10 +10,22 @@ import { Observable, of as observableOf } from 'rxjs';
 export class UserService {
   constructor(private httpClient: HttpClient) {}
 
-  getAllStudents(): Observable<any> {
-    const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+  getAllStudents(schoolId): Observable<any> {
+    // const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
     return this.httpClient
       .get(`${apiUrl}/students/getAllStudents/${schoolId}`)
+      .pipe(map(res => res));
+  }
+
+  getReportBySchool(schoolId): Observable<any> {
+    // const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    return this.httpClient
+      .get(`${apiUrl}/report/getReportBySchool/${schoolId}`)
+      .pipe(map(res => res));
+  }
+  getReportByStudent(studentId): Observable<any> {
+    return this.httpClient
+      .get(`${apiUrl}/report/getReportByStudent/${studentId}`)
       .pipe(map(res => res));
   }
   getAllCredManager(): Observable<any> {

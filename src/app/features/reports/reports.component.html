@@ -1,2 +1,12 @@
-<yoo-attendance-report></yoo-attendance-report>
 
+<mat-tab-group *ngIf=" urole === 'SUPERADMIN' || urole === 'YOOYOOADMIN'">
+    <mat-tab>
+        <ng-template mat-tab-label>Student Reports</ng-template>
+        <yoo-student-report></yoo-student-report>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>School Reports</ng-template>
+        <yoo-school-report></yoo-school-report>
+    </mat-tab>
+</mat-tab-group>
+<yoo-school-report *ngIf="urole === 'SCHOOLOWNER'"></yoo-school-report>

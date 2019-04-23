@@ -54,9 +54,10 @@ import { SettingsComponent } from './curriculum/settings/settings.component';
 import { AssignmentSchoolComponent } from './assignment-school/assignment-school.component';
 import { QuizComponent } from './curriculum/quiz/quiz.component';
 import { TopicComponent } from './curriculum/topics/topic.component';
-import { AttendanceReportComponent } from './reports/attendance-report/attendance-report.component';
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
-import { AccumulationChartAllModule } from '@syncfusion/ej2-angular-charts';
+import { AccumulationChartAllModule, ChartAllModule } from '@syncfusion/ej2-angular-charts';
+import { StudentReportComponent } from './reports/student-report/student-report.component';
+import { SchoolReportComponent } from './reports/school-report/school-report.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -77,7 +78,8 @@ import { AccumulationChartAllModule } from '@syncfusion/ej2-angular-charts';
     QuizComponent,
     TopicComponent,
     DialogViewComponent,
-    AttendanceReportComponent
+    StudentReportComponent,
+    SchoolReportComponent
   ],
   imports: [
     CommonModule,
@@ -108,6 +110,7 @@ import { AccumulationChartAllModule } from '@syncfusion/ej2-angular-charts';
     MultiSelectModule,
     ListViewModule,
     AccumulationChartAllModule,
+    ChartAllModule,
     DateRangePickerModule
   ],
   exports: [GridModule, DialogViewComponent],

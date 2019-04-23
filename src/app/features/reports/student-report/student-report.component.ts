@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { employeeData } from './data';
 import {
-  DialogEditEventArgs,
   EditService,
   EditSettingsModel,
   ExcelExportService,
@@ -10,26 +8,20 @@ import {
   GridComponent,
   PageService,
   PageSettingsModel,
-  SaveEventArgs,
   SearchSettingsModel,
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
 import { UserService } from '../../users/user.service';
-import {
-  AccumulationChart,
-  AccumulationChartComponent,
-  AccumulationTheme,
-  IAccLoadedEventArgs
-} from '@syncfusion/ej2-angular-charts';
+import { SelectEventArgs } from '@syncfusion/ej2-angular-lists';
+import { SchoolService } from '../../school/school.service';
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
-  selector: 'yoo-attendance-report',
-  templateUrl: './attendance-report.component.html',
-  styleUrls: ['./attendance-report.component.css'],
+  selector: 'yoo-student-report',
+  templateUrl: './student-report.component.html',
+  styleUrls: ['./student-report.component.css'],
   providers: [
     ToolbarService,
     ExcelExportService,
@@ -40,16 +32,18 @@ import {
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class AttendanceReportComponent implements OnInit {
-  constructor(
-    private toast: ToastService,
-    private authService: AuthService,
-    private userService: UserService
-  ) {}
+export class StudentReportComponent implements OnInit {
+  student = [];
+  schoolData: any;
+  school: any;
+  urole: any;
+  schoolId: any;
+
+  constructor(private userService: UserService, private schoolService: SchoolService, private authService: AuthService) { }
   data: Array<Object>;
   @ViewChild('grid') public grid: GridComponent;
   editparams: { params: { popupHeight: string } };
-  users: any;
+  users = [];
   editSettings: EditSettingsModel;
   pageSettings: PageSettingsModel;
   initialSort: Object;
@@ -63,8 +57,8 @@ export class AttendanceReportComponent implements OnInit {
   FilterData = ['Attendance', 'Fees', 'Assignment'];
   public feesData: Array<Object> = [
     { x: 'L.K.G', y: 300000 },
-    { x: 'U.K.G', y: 250000},
-    { x: 'NURSERY', y: 600000}
+    { x: 'U.K.G', y: 250000 },
+    { x: 'NURSERY', y: 600000 }
   ];
   public attendanceData: Array<Object> = [
     { x: 'L.K.G', y: 120, r: '115' },
@@ -100,17 +94,12 @@ export class AttendanceReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search'];
-    this.searchSettings = {};
-    this.filterOptions = { type: 'CheckBox' };
-    this.editSettings = {
-      allowEditing: true,
-      allowAdding: true,
-      mode: 'Dialog'
-    };
-    this.editparams = { params: { popupHeight: '800px' } };
-    this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-    this.data = employeeData;
+    this.toolbar = [];
+    this.authService.getuRole().subscribe(res => (this.urole = res));
+    this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    this.schoolService.getSchools().subscribe(res => {
+      this.schoolData = res;
+    });
     this.reload();
   }
 
@@ -119,9 +108,25 @@ export class AttendanceReportComponent implements OnInit {
       this.grid.excelExport();
     }
   }
+    onChangeSchool(e): void {
+      this.userService.getReportBySchool(e.itemData.id).subscribe(res => {
+      // this.school.push(res);
+        console.log(res)
+      });
+      this.userService.getAllStudents(e.itemData.id).subscribe(res => {
+        res.filter(user => (user.color = this.randomColorChange()));
+        this.users = res;
+      });
+  }
 
-  actionBegin(args: SaveEventArgs): void {}
-  actionComplete(args: DialogEditEventArgs): void {}
+  onActionComplete(args: SelectEventArgs): void {
+    console.log(args);
+    this.student = [];
+    this.userService.getReportByStudent(args.data['id']).subscribe(res => {
+      this.student.push(res);
+    });
+  }
+
   getShortName(fullName): void {
     // tslint:disable-next-line:newline-per-chained-call
     return fullName
@@ -136,10 +141,11 @@ export class AttendanceReportComponent implements OnInit {
     while (s.length < 4) {
       s += allowed.splice(Math.floor(Math.random() * allowed.length), 1);
     }
+
     return s;
   }
   reload(): void {
-    this.userService.getAllStudents().subscribe(res => {
+    this.userService.getAllStudents(this.schoolId).subscribe(res => {
       res.filter(user => (user.color = this.randomColorChange()));
       this.users = res;
     });

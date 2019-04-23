@@ -201,7 +201,7 @@ export class UsersComponent implements OnInit {
     target.parentElement.classList.remove('e-input-focus');
   }
   reload(): void {
-    this.userService.getAllStudents().subscribe(res => {
+    this.userService.getAllStudents(this.schoolId).subscribe(res => {
       this.users = res;
       res.filter(data => {
         if (data.deleted) {
