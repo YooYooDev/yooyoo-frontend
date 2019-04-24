@@ -7,7 +7,7 @@
 <div class="col-md-6">
   <ejs-grid #grid1 [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line" [allowPaging]="false"  [toolbar]="toolbar"
     [allowSorting]="false" [allowFiltering]="false" [allowExcelExport]="true" [allowGrouping]="false"
-    [dataSource]="school"  (toolbarClick)="onToolbarClick($event)"class="mt-10">
+    [dataSource]="school"  (toolbarClick)="onToolbarClick($event)"class="mt-10 report">
     <e-columns>
       <e-column headerText="School Details">
         <ng-template #rowTemplate let-data>

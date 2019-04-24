@@ -189,7 +189,7 @@ export class TopicComponent implements OnInit {
 
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      args.dialog.width = '350px';
+      args.dialog.width = '600px';
       args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
         'class',
         'hidden'

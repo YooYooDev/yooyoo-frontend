@@ -29,6 +29,8 @@ export class AssignmentSchoolComponent implements OnInit {
   showLoader = false;
   assignments = [];
   gradeData = ['NURSERY', 'L.K.G', 'U.K.G'];
+  @ViewChild('Dialog') Dialog: DialogComponent;
+  dialogContent: string;
   constructor(
     private assignmentService: AssignmentService,
     private toast: ToastService,
@@ -69,6 +71,15 @@ export class AssignmentSchoolComponent implements OnInit {
         this.filterByDate();
         this.showLoader = true;
       });
+  }
+  dialogClose(): void {
+    this.dialogContent = '';
+  }
+  onOpenDialog(link): void {
+    this.Dialog.show(true);
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
   }
   onClickMethod(e): void {
     this.filteredBy = e;

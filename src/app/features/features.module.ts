@@ -1,5 +1,5 @@
+import { AttendanceComponent } from './attendance/attendance.component';
 import { DialogViewComponent } from './assignment/dialog-view.component';
-import { CommonModule } from '@angular/common';
 import {
   AutoCompleteModule,
   DropDownListModule,
@@ -37,7 +37,7 @@ import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
-import { AttendanceComponent } from './attendance/attendance.component';
+import { CommonModule } from '@angular/common';
 import { CurriculumComponent } from './curriculum/curriculum.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturesRoutingModule } from './features-routing.module';

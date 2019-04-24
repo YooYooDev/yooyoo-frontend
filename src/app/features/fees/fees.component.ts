@@ -10,7 +10,6 @@ import {
   IEditCell,
   PageService,
   PageSettingsModel,
-  RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
   SelectionSettingsModel,
@@ -62,13 +61,13 @@ export class FeesComponent implements OnInit {
   toolbar: Array<string>;
   fees = [];
   formData: any;
-  constructor(private toast: ToastService, private feesService: FeesService) {}
+  constructor(private toast: ToastService, private feesService: FeesService) { }
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
     this.numericParams = { params: { decimals: 2 } };
     this.toolbar = ['Edit', 'Update', 'Cancel', 'Search', 'ExcelExport'];
     this.searchSettings = {};
-    this.filterOptions = { type: 'Excel' };
+    this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: false,

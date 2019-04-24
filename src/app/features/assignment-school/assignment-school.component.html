@@ -1,55 +1,30 @@
 <div class="container">
-  <div
-    class="row"
-    style="margin-top:5px;"
-    [ngClass]="
+  <div class="row" style="margin-top:5px;" [ngClass]="
       urole !== 'SUPERADMIN' && urole !== 'YOOYOOADMIN' ? 'hidden' : ''
-    "
-  >
+    ">
     <div class="col-md-12 col-xs-12">
       <div class="col-md-2">
-        <ejs-dropdownlist
-          #schoolId
-          [dataSource]="schoolData"
-          [fields]="{ value: 'id', text: 'name' }"
-          placeholder="School"
-          name="schoolId"
-          (select)="onChangeSchool($event)"
-        ></ejs-dropdownlist>
+        <ejs-dropdownlist #schoolId [dataSource]="schoolData" [fields]="{ value: 'id', text: 'name' }"
+          placeholder="School" name="schoolId" (select)="onChangeSchool($event)"></ejs-dropdownlist>
       </div>
-      <!-- <div class="col-md-2">
-        <ejs-dropdownlist #grade [dataSource]="gradeData" [fields]="{ value: 'name', text: 'name' }" placeholder="Grade"
-          name="grade" (select)="onChangeGrade($event)"></ejs-dropdownlist>
-      </div> -->
+    
     </div>
   </div>
-
   <div id="calendar" class="fc fc-unthemed fc-ltr">
     <div class="fc-toolbar">
       <div class="fc-left">
         <div class="button-group">
-          <button
-            type="button"
-            class="fc-prev-button fc-button fc-state-default fc-corner-left"
-            (click)="onClickPrevious()"
-          >
+          <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left"
+            (click)="onClickPrevious()">
             <span class="fc-icon fc-icon-left-single-arrow"></span>
           </button>
-          <button
-            type="button"
-            class="fc-next-button fc-button fc-state-default fc-corner-right"
-            (click)="onClickNext()"
-          >
+          <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right"
+            (click)="onClickNext()">
             <span class="fc-icon fc-icon-right-single-arrow"></span>
           </button>
         </div>
-        <button
-          type="button"
-          class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right"
-          (click)="onClickToday()"
-        >
-          today
-        </button>
+        <button type="button" class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right"
+          (click)="onClickToday()"> today </button>
       </div>
       <div class="fc-right">
         <div class="fc-button-group">
@@ -58,13 +33,7 @@
             <label class="e-btn" for="radioleft">Month</label>
             <input type="radio" id="radiomiddle" name="font" value="week" />
             <label class="e-btn" for="radiomiddle">Week</label>
-            <input
-              type="radio"
-              id="radioright"
-              name="font"
-              value="day"
-              checked
-            />
+            <input type="radio" id="radioright" name="font" value="day" checked />
             <label class="e-btn" for="radioright">Day</label>
           </div>
           <!-- <button type="button" class="fc-month-button fc-button fc-state-default fc-corner-left" (click)="onClickMonth(firstday)">month</button>
@@ -78,48 +47,34 @@
       <div class="fc-clear"></div>
     </div>
   </div>
-
   <div class="row" style="margin-top:0px;">
     <div class="col-lg-6 col-md-6" *ngFor="let assignment of assignments">
       <div class="card-box widget-box-two widget-two-primary">
         <div class="checkbox-purple">
-          <label for="checkbox6a">
-            {{ assignment.subject.name }} : {{ assignment.topic.name }}
-          </label>
+          <label for="checkbox6a"> {{ assignment.subject.name }} : {{ assignment.topic.name }} </label>
           <span class="pull-right">
-            <label for="checkbox6a">
-              {{ assignment.grade.name }}
-            </label>
+            <label for="checkbox6a"> {{ assignment.grade.name }} </label>
           </span>
         </div>
-
-        <button
-          type="button"
-          class="btn btn-instagram waves-effect waves-light"
-          (click)="onShowDialog(assignment.topic.videoLink)"
-        >
+        <button type="button" class="btn btn-instagram waves-effect waves-light"
+          (click)="onOpenDialog(assignment.topic.videoLink)">
           <i class="fas fa-video m-r-5"></i>
         </button>
-        <button
-          type="button"
-          class="btn btn-googleplus waves-effect waves-light"
-          (click)="onShowDialog(assignment.topic.worksheetLink)"
-        >
+        <button type="button" class="btn btn-googleplus waves-effect waves-light"
+          (click)="onShowDialog(assignment.topic.worksheetLink)">
           <i class="far fa-file-pdf m-r-5"></i>
         </button>
-        <button
-          type="button"
-          class="btn btn-googleplus waves-effect waves-light"
-          (click)="sonSowDialog(assignment.topic.quizLink)"
-        >
+        <button type="button" class="btn btn-googleplus waves-effect waves-light"
+          (click)="sonSowDialog(assignment.topic.quizLink)">
           <i class="far fa-question-circle m-r-5"></i>
         </button>
         <span class="pull-right">
-          <label for="checkbox6a">
-            {{ assignment.date | date: "dd MMM yyyy" }}
-          </label>
+          <label for="checkbox6a"> {{ assignment.date | date: "dd MMM yyyy" }} </label>
         </span>
       </div>
     </div>
   </div>
+  <ejs-dialog id="dialog" isModal="true" #Dialog (close)="dialogClose()" [visible]="false" showOnInit="false"
+    showCloseIcon="false" [content]="dialogContent">
+  </ejs-dialog>
 </div>

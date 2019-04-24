@@ -1,51 +1,16 @@
 <div class="control-section">
-  <ejs-grid
-    #grid
-    [showColumnMenu]="false"
-    [allowReordering]="false"
-    [gridLines]="line"
-    [allowPaging]="true"
-    [allowSorting]="true"
-    [allowFiltering]="true"
-    [allowExcelExport]="true"
-    [allowGrouping]="false"
-    [searchSettings]="searchSettings"
-    [editSettings]="editSettings"
-    [filterSettings]="filterOptions"
-    [selectionSettings]="selectionOptions"
-    [pageSettings]="pageSettings"
-    [toolbar]="toolbar"
-    [dataSource]="fees"
-    (toolbarClick)="onToolbarClick($event)"
-    (actionBegin)="actionBegin($event)"
-    (actionComplete)="actionComplete($event)"
-  >
+  <ejs-grid #grid [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line" [allowPaging]="false"
+    [allowSorting]="true" [allowFiltering]="true" [allowExcelExport]="true" [allowGrouping]="false"
+    [searchSettings]="searchSettings" [editSettings]="editSettings" [filterSettings]="filterOptions"
+    [selectionSettings]="selectionOptions" [pageSettings]="pageSettings" [toolbar]="toolbar" [dataSource]="fees"
+    (toolbarClick)="onToolbarClick($event)" (actionBegin)="actionBegin($event)"
+    (actionComplete)="actionComplete($event)" height=400>
     <e-columns>
-      <!-- <e-column field='deleted' headerText='E/D' width='100' type='boolean' [displayAsCheckBox]='true'></e-column> -->
-      <e-column
-        field="firstName"
-        headerText="Student Name"
-        [isPrimaryKey]="true"
-        textAlign="left"
-        width="250"
-      ></e-column>
-      <e-column
-        field="gradeName"
-        headerText="Class"
-        textAlign="left"
-        width="100"
-        [allowEditing]="false"
-      ></e-column>
-      <e-column
-        #tuition
-        field="tutionFee"
-        headerText="Tuition Fees"
-        textAlign="left"
-        width="150"
-        editType="numericedit"
-        [edit]="numericParams"
-        format="C2"
-      >
+      <e-column field="firstName" headerText="Student Name" [isPrimaryKey]="true" textAlign="left" width="250">
+      </e-column>
+      <e-column field="gradeName" headerText="Class" textAlign="left" width="100" [allowEditing]="false"></e-column>
+      <e-column #tuition field="tutionFee" headerText="Tuition Fees" textAlign="left" width="150" editType="numericedit"
+        [edit]="numericParams" format="C2">
         <!-- <ng-template #template let-data let-value let-rowIndex>
           <input
             class="e-input e-field"
@@ -57,15 +22,8 @@
           />
         </ng-template> -->
       </e-column>
-      <e-column
-        field="transportationFee"
-        headerText="Transport Fees"
-        textAlign="left"
-        width="150"
-        editType="numericedit"
-        [edit]="numericParams"
-        format="C2"
-      >
+      <e-column field="transportationFee" headerText="Transport Fees" textAlign="left" width="150"
+        editType="numericedit" [edit]="numericParams" format="C2">
         <!-- <ng-template #template let-data let-value let-rowIndex>
           <input
             class="e-input e-field"
@@ -77,26 +35,13 @@
           />
         </ng-template> -->
       </e-column>
-      <e-column
-        headerText="Total Amount"
-        textAlign="left"
-        field="totalBillAmount"
-        width="150"
-        [allowEditing]="false"
-      >
+      <e-column headerText="Total Amount" textAlign="left" field="totalBillAmount" width="150" [allowEditing]="false">
         <!-- <ng-template #template let-data let-value let-rowIndex>
           {{ data.transportationFee + data.tutionFee }}
         </ng-template> -->
       </e-column>
-      <e-column
-        field="paidBillAmount"
-        headerText="Paid Amount"
-        textAlign="left"
-        width="150"
-        editType="numericedit"
-        [edit]="numericParams"
-        format="C2"
-      >
+      <e-column field="paidBillAmount" headerText="Paid Amount" textAlign="left" width="150" editType="numericedit"
+        [edit]="numericParams" format="C2">
         <!-- <ng-template #template let-data let-value let-rowIndex>
           <input
             class="e-input e-field"
@@ -108,13 +53,8 @@
           />
         </ng-template> -->
       </e-column>
-      <e-column
-        field="pendingAmount"
-        headerText="Pending Amount"
-        textAlign="left"
-        width="150"
-        [allowEditing]="false"
-      ></e-column>
+      <e-column field="pendingAmount" headerText="Pending Amount" textAlign="left" width="150" [allowEditing]="false">
+      </e-column>
     </e-columns>
   </ejs-grid>
 </div>

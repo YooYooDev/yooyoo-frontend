@@ -31,7 +31,7 @@
   <div class="control-section yooyoo text-center mt-10">
     <div class="control-section col-md-3 yooyoo text-center">
       <ejs-accumulationchart id="container" [legendSettings]="legendSettings" [tooltip]="tooltip" [title]="title"
-        height="350" [enableSmartLabels]="enableSmartLabels" [enableAnimation]="enableAnimation">
+        height="300" [enableSmartLabels]="enableSmartLabels" [enableAnimation]="enableAnimation">
         <e-accumulation-series-collection>
           <e-accumulation-series [dataSource]="attendanceData" xName="x" yName="y" [startAngle]="startAngle"
             [endAngle]="endAngle" innerRadius="30%" [dataLabel]="dataLabel">
@@ -69,7 +69,7 @@
   <button class="btn btn-default mt-10" (click)="student = []">Back</button>
   <ejs-grid #grid [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line" [allowPaging]="false"
     [allowSorting]="false" [allowFiltering]="false" [allowExcelExport]="true" [allowGrouping]="false"
-    [dataSource]="student" class="mt-10">
+    [dataSource]="student" class="mt-10 report">
     <e-columns>
       <e-column headerText="Student Details">
         <ng-template #rowTemplate let-data>

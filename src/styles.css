@@ -102,12 +102,15 @@ td.e-rowcell .statustxt.e-inactivecolor {
 }
 #dialog .e-dlg-content {
   overflow: hidden;
-  background-color: #999 !important;
+  background-color: #000 !important;
 
 }
 #dialog .e-dlg-header-content {
 
-  background: #999 !important;
+  background: #000 !important;
+}
+#dialog .e-dlg-closeicon-btn.e-control.e-btn.e-lib.e-flat.e-icon-btn{
+background: #ddd !important;
 }
 .e-control.e-grid.e-default.e-bothlines .e-headercell,
 .e-control.e-grid.e-default.e-bothlines .e-detailheadercell {

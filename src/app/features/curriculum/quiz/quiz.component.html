@@ -5,7 +5,7 @@
       [showColumnMenu]="false"
       [allowReordering]="false"
       [gridLines]="line"
-      [allowPaging]="true"
+      [allowPaging]="false"
       [allowSorting]="true"
       [allowFiltering]="true"
       [allowExcelExport]="true"
@@ -19,6 +19,7 @@
       (toolbarClick)="onToolbarClick($event)"
       (actionBegin)="actionBegin($event)"
       (actionComplete)="actionComplete($event)"
+      height=345
     >
       <e-columns>
         <e-column

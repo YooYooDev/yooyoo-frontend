@@ -100,7 +100,7 @@ export class AssignmentComponent implements OnInit {
     this.excelExportProperties = {
       fileName: 'Users.xlsx'
     };
-    this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
+    this.initialSort = {};
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
     this.authService.getuRole().subscribe(res => (this.urole = res));
     this.editparams = { params: { popupHeight: '600px' } };
@@ -148,7 +148,9 @@ export class AssignmentComponent implements OnInit {
     if (args.requestType === 'save') {
       if (this.assignmentForm.valid) {
         const date = this.utilService.getFormattedDate1(args.data['date']);
+        const toDate = this.utilService.getFormattedDate1(args.data['toDate']);
         this.assignmentData['date'] = date;
+        this.assignmentData['toDate'] = toDate;
         console.log(this.assignmentData);
         if (this.requestType === 'beginEdit') {
           this.editAssignment(this.assignmentData);
@@ -163,7 +165,7 @@ export class AssignmentComponent implements OnInit {
 
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      args.dialog.width = '350px';
+      args.dialog.width = '600px';
       args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
         'class',
         'hidden'
@@ -231,6 +233,15 @@ export class AssignmentComponent implements OnInit {
   }
   reload(): void {
     this.assignmentService.getAllAssignments().subscribe(res => {
+      res.filter(data => {
+        data.name = data.school.name;
+        if (data['date']) {
+          data.date = this.utilService.getFormattedDate1(data['date']);
+        }
+        if (data['toDate']) {
+          data.toDate = this.utilService.getFormattedDate1(data['toDate']);
+        }
+      });
       this.assignments = res;
       this.showLoader = true;
     });
