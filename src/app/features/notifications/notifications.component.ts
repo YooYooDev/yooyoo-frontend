@@ -52,16 +52,17 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     private _toastService: ToastService,
     private _authService: AuthService,
     private _schoolService: SchoolService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    // fetch  user role
-    this._authService.getuRole().subscribe(res => (this.urole = res));
+    this._authService.getuRole()
+      .subscribe(res => (this.urole = res));
     if (this.urole !== 'SUPERADMIN') {
       this.schoolId = JSON.parse(
         localStorage.getItem('userInfo')
       ).schoolInfo.id;
-      this.notificationForm.get('schoolId').setValue(this.schoolId);
+      this.notificationForm.get('schoolId')
+        .setValue(this.schoolId);
       this.schoolChange(this.schoolId);
     } else {
       this.disableClass();
@@ -82,7 +83,8 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     // student auto complete
     this.filteredStudents = this.notificationForm
       .get('studentName')
-      .valueChanges.pipe(
+      .valueChanges
+      .pipe(
         startWith(''),
         map(val => this.filterStudent(val))
       );
@@ -186,9 +188,9 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     // console.log(val);
     return val
       ? this.students.filter(
-          option =>
-            option.firstName.toLowerCase().indexOf(val.toLowerCase()) > -1
-        )
+        option =>
+          option.firstName.toLowerCase().indexOf(val.toLowerCase()) > -1
+      )
       : this.students;
   }
 
@@ -203,11 +205,11 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
           );
           if (this.urole === 'SUPERADMIN') {
             this.disableClass();
-          }else{
+          } else {
             this.notificationForm.get('schoolId').setValue(this.schoolId);
           }
           this.disableStudent();
-          
+
         },
         (err: HttpErrorResponse) => {
           this._toastService.error('Something went wrong!');

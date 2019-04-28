@@ -1,5 +1,4 @@
 import { AttendanceComponent } from './attendance/attendance.component';
-import { DialogViewComponent } from './assignment/dialog-view.component';
 import {
   AutoCompleteModule,
   DropDownListModule,
@@ -58,6 +57,7 @@ import { ListViewModule } from '@syncfusion/ej2-angular-lists';
 import { AccumulationChartAllModule, ChartAllModule } from '@syncfusion/ej2-angular-charts';
 import { StudentReportComponent } from './reports/student-report/student-report.component';
 import { SchoolReportComponent } from './reports/school-report/school-report.component';
+import { WorksheetComponent } from './curriculum/worksheet/worksheet.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -76,8 +76,8 @@ import { SchoolReportComponent } from './reports/school-report/school-report.com
     CredManagerComponent,
     SettingsComponent,
     QuizComponent,
+    WorksheetComponent,
     TopicComponent,
-    DialogViewComponent,
     StudentReportComponent,
     SchoolReportComponent
   ],
@@ -113,7 +113,7 @@ import { SchoolReportComponent } from './reports/school-report/school-report.com
     ChartAllModule,
     DateRangePickerModule
   ],
-  exports: [GridModule, DialogViewComponent],
+  exports: [GridModule],
   providers: [PageService, SortService, FilterService, GroupService]
 })
 export class FeaturesModule {}

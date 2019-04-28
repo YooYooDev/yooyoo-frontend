@@ -5,4 +5,11 @@ import { Component } from '@angular/core';
   templateUrl: './curriculum.component.html',
   styleUrls: ['./curriculum.component.css']
 })
-export class CurriculumComponent {}
+export class CurriculumComponent {
+
+  tabIndex = 0;
+
+  changeTab(event): any {
+    this.tabIndex = event.index;
+  }
+}

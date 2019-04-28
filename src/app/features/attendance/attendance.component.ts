@@ -22,7 +22,7 @@ export class AttendanceComponent implements OnInit {
     private _util: UtilService,
     private _attendanceService: AttendanceService,
     private _toast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
@@ -40,10 +40,11 @@ export class AttendanceComponent implements OnInit {
   }
   onChangeClass(value): void {
     this.attendedSIds = [];
-    this.students = this.data.filter(val => val.id == value)[0].students;
+    this.students = this.data.filter(val => val.id === value)[0].students;
     this.isChanged = true;
 
-    this._attendanceService.getAttendence().subscribe(res => {
+    this._attendanceService.getAttendence()
+      .subscribe(res => {
       this.attendedSIds = res;
     });
   }
@@ -55,7 +56,8 @@ export class AttendanceComponent implements OnInit {
     const date = this._util.getFormattedDate();
     const studentList = [];
 
-    Object.keys(students).map(key => {
+    Object.keys(students)
+      .map(key => {
       if (students[key] !== '') {
         studentList.push({
           studentId: Number(key),
@@ -70,7 +72,8 @@ export class AttendanceComponent implements OnInit {
       studentList
     };
 
-    this._attendanceService.submitAttendance(attendanceData).subscribe(res => {
+    this._attendanceService.submitAttendance(attendanceData)
+      .subscribe(res => {
       if (res) {
         this._toast.success('Attendance submitted successfully!');
       } else {

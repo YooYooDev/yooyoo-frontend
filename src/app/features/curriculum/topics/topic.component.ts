@@ -21,8 +21,7 @@ import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import {
   DropDownListComponent,
-  MultiSelectComponent,
-  SelectEventArgs
+  MultiSelectComponent
 } from '@syncfusion/ej2-angular-dropdowns';
 import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
 import { ToastService } from '../../../shared/services/toast.service';
@@ -89,7 +88,7 @@ export class TopicComponent implements OnInit {
     private toast: ToastService,
     private utilService: UtilService,
     private authService: AuthService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Edit', 'Search'];
@@ -102,13 +101,16 @@ export class TopicComponent implements OnInit {
     };
 
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-    this.authService.getuRole().subscribe(res => (this.urole = res));
-    this.curriculumService.getAllSubjects().subscribe(res => {
-      this.subjects = res;
-    });
-    this.curriculumService.getAllCategories().subscribe(res => {
-      this.categories = res;
-    });
+    this.authService.getuRole()
+      .subscribe(res => (this.urole = res));
+    this.curriculumService.getAllSubjects()
+      .subscribe(res => {
+        this.subjects = res;
+      });
+    this.curriculumService.getAllCategories()
+      .subscribe(res => {
+        this.categories = res;
+      });
     // this.Dialog.hide();
     this.reload();
   }
@@ -131,36 +133,42 @@ export class TopicComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
   }
-  onFileChange(event, id): any {
-    this.errorMsg = '';
-    this.successMsg = '';
-    this.isValid = true;
-    const fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      const file: File = fileList[0];
-      console.log(file);
-      if (
-        file.type === 'image/gif' ||
-        file.type === 'image/png' ||
-        file.type === 'image/jpeg'
-      ) {
-        if (file.size > 500000) {
-          this.isValid = false;
-          this.errorMsg = 'Media file size should be >500kb.';
-        } else {
-          this.isValid = true;
-        }
-      }
-      if (this.isValid) {
-        this.mediaFormData.append('media', file, file.name);
-        this.curriculumService
-          .uploadWorksheet(id, this.mediaFormData)
-          .subscribe(res => {
-            this.successMsg = 'Uploaded successfully!';
-          });
-      }
-    }
+  openWorksheet(link): void {
+    this.Dialog.show(true);
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
+  // onFileChange(event, id): any {
+  //   this.errorMsg = '';
+  //   this.successMsg = '';
+  //   this.isValid = true;
+  //   const fileList: FileList = event.target.files;
+  //   if (fileList.length > 0) {
+  //     const file: File = fileList[0];
+  //     console.log(file);
+  //     if (
+  //       file.type === 'image/gif' ||
+  //       file.type === 'image/png' ||
+  //       file.type === 'image/jpeg'
+  //     ) {
+  //       if (file.size > 500000) {
+  //         this.isValid = false;
+  //         this.errorMsg = 'Media file size should be >500kb.';
+  //       } else {
+  //         this.isValid = true;
+  //       }
+  //     }
+  //     if (this.isValid) {
+  //       this.mediaFormData.append('media', file, file.name);
+  //       this.curriculumService
+  //         .uploadWorksheet(id, this.mediaFormData)
+  //         .subscribe(res => {
+  //           this.successMsg = 'Uploaded successfully!';
+  //         });
+  //     }
+  //   }
+  // }
 
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
@@ -177,7 +185,7 @@ export class TopicComponent implements OnInit {
         this.curriculumData['subjects'] = this.subjectName['itemData'];
         console.log(this.curriculumData);
         if (this.requestType === 'beginEdit') {
-         this.updateTopic(this.curriculumData);
+          this.updateTopic(this.curriculumData);
         } else if (this.requestType === 'add') {
           this.createTopic(this.curriculumData);
         }
@@ -209,22 +217,25 @@ export class TopicComponent implements OnInit {
   }
 
   updateTopic(formData): void {
-    this.curriculumService.updateTopic(formData).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.curriculumService.updateTopic(formData)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   createTopic(formData): void {
-    this.curriculumService.createTopic(formData).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.curriculumService.createTopic(formData)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   deleteTopic(id): void {
-    this.curriculumService.deleteTopic(id).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.curriculumService.deleteTopic(id)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   focusIn(target: HTMLElement): void {
     target.parentElement.classList.add('e-input-focus');
@@ -233,23 +244,24 @@ export class TopicComponent implements OnInit {
   focusOut(target: HTMLElement): void {
     target.parentElement.classList.remove('e-input-focus');
   }
-  reload() {
-    this.curriculumService.getAllTopics().subscribe(res => {
-      this.users = res;
-      res.filter(data => {
-        data.categoryName = Array.prototype.map.call(
-          data.categories,
-          s => s.name
-        );
-        if (data.subjects !== null) {
-          data.subjectName = data.subjects.name;
-        } else {
-          data.subjectName = '';
-        }
-        return data;
+  reload(): any {
+    this.curriculumService.getAllTopics()
+      .subscribe(res => {
+        this.users = res;
+        res.filter(data => {
+          data.categoryName = Array.prototype.map.call(
+            data.categories,
+            s => s.name
+          );
+          if (data.subjects !== null) {
+            data.subjectName = data.subjects.name;
+          } else {
+            data.subjectName = '';
+          }
+          return data;
+        });
+        console.log(this.users);
+        this.showLoader = true;
       });
-      console.log(this.users);
-      this.showLoader = true;
-    });
   }
 }

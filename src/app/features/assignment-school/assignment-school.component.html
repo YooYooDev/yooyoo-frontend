@@ -36,9 +36,6 @@
             <input type="radio" id="radioright" name="font" value="day" checked />
             <label class="e-btn" for="radioright">Day</label>
           </div>
-          <!-- <button type="button" class="fc-month-button fc-button fc-state-default fc-corner-left" (click)="onClickMonth(firstday)">month</button>
-        <button type="button" class="fc-agendaWeek-button fc-button fc-state-default fc-state-active" (click)="onClickWeek(firstday)">week</button>
-        <button type="button" class="fc-agendaDay-button fc-button fc-state-default fc-corner-right" (click)="onClickDay(firstday)">day</button> -->
         </div>
       </div>
       <div class="fc-center">
@@ -61,11 +58,11 @@
           <i class="fas fa-video m-r-5"></i>
         </button>
         <button type="button" class="btn btn-googleplus waves-effect waves-light"
-          (click)="onShowDialog(assignment.topic.worksheetLink)">
+          (click)="openWorksheet(assignment.topic.worksheetLink)">
           <i class="far fa-file-pdf m-r-5"></i>
         </button>
         <button type="button" class="btn btn-googleplus waves-effect waves-light"
-          (click)="sonSowDialog(assignment.topic.quizLink)">
+          (click)="onOpenDialog(assignment.topic.quizLink)">
           <i class="far fa-question-circle m-r-5"></i>
         </button>
         <span class="pull-right">

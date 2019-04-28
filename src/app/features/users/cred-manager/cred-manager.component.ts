@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import {
-  AutoCompleteComponent,
-  DropDownListComponent
-} from '@syncfusion/ej2-angular-dropdowns';
+import { AutoCompleteComponent } from '@syncfusion/ej2-angular-dropdowns';
 import {
   DialogEditEventArgs,
   EditService,
@@ -13,7 +10,6 @@ import {
   GridComponent,
   PageService,
   PageSettingsModel,
-  RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
   SortService,
@@ -23,7 +19,7 @@ import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { UserService } from '../user.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { ToastService } from './../../../shared/services/toast.service';
 import { SchoolService } from '../../school/school.service';
 
 @Component({
@@ -69,7 +65,7 @@ export class CredManagerComponent implements OnInit {
     private userService: UserService,
     private toast: ToastService,
     private schoolService: SchoolService
-  ) {}
+  ) { }
   public roleData = [
     { roleName: 'YOOYOO ADMIN', id: '1' },
     { roleName: 'SUPER ADMIN', id: '2' },
@@ -93,7 +89,8 @@ export class CredManagerComponent implements OnInit {
     this.userService
       .getAllCredManager()
       .subscribe(res => (this.credManager = res));
-    this.schoolService.getSchools().subscribe(res => (this.schools = res));
+    this.schoolService.getSchools()
+      .subscribe(res => (this.schools = res));
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
   }
 
@@ -111,8 +108,6 @@ export class CredManagerComponent implements OnInit {
     if (args.requestType === 'save') {
       if (this.credManagerForm.valid) {
         args.data = this.credManagerData;
-        // console.log(args.data['roleId']);
-        // console.log(this.schoolObj['itemData']['id']);
         if (args.data['roleId'] !== '1' && args.data['roleId'] !== '2') {
           args.data['schoolId'] = this.schoolObj['itemData']['id'];
         } else {
@@ -139,11 +134,6 @@ export class CredManagerComponent implements OnInit {
         'class',
         'hidden'
       );
-      // if (args.requestType === 'beginEdit') {
-      //   (args.form.elements.namedItem('firstName') as HTMLInputElement).focus();
-      // } else if (args.requestType === 'add') {
-      //   (args.form.elements.namedItem('firstName') as HTMLInputElement).focus();
-      // }
     }
   }
 
@@ -156,12 +146,13 @@ export class CredManagerComponent implements OnInit {
 
   addCredManager(formData): void {
     console.log(formData);
-    this.userService.createCredManager(formData).subscribe(res => {
-      this.toast.success(res.message);
-      this.userService
-        .getAllCredManager()
-        .subscribe(res => (this.credManager = res));
-    });
+    this.userService.createCredManager(formData)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.userService
+          .getAllCredManager()
+          .subscribe(data => this.credManager = data);
+      });
   }
 
   focusIn(target: HTMLElement): void {

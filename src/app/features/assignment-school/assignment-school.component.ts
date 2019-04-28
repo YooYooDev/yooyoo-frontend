@@ -1,12 +1,9 @@
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { UtilService } from 'src/app/shared/services/util.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
-import { CurriculumService } from '../curriculum/curriculum.service';
+import { AuthService } from './../../core/auth/auth.service';
 import { SchoolService } from '../school/school.service';
 import { AssignmentService } from '../assignment/assignment.service';
-import { WeekDay } from '@angular/common';
+import { UtilService } from './../../shared/services/util.service';
 
 @Component({
   selector: 'yoo-assignment-school',
@@ -33,28 +30,27 @@ export class AssignmentSchoolComponent implements OnInit {
   dialogContent: string;
   constructor(
     private assignmentService: AssignmentService,
-    private toast: ToastService,
-    private curriculumService: CurriculumService,
     private authService: AuthService,
     private utilService: UtilService,
     private schoolService: SchoolService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.currentDate = new Date(); // get current date
     this.displayDate = this.onClickDay();
     this.filteredBy = 'day';
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-    this.authService.getuRole().subscribe(res => (this.urole = res));
-    this.schoolService.getSchools().subscribe(res => {
-      this.schoolData = res;
-    });
+    this.authService.getuRole()
+      .subscribe(res => (this.urole = res));
+    this.schoolService.getSchools()
+      .subscribe(res => {
+        this.schoolData = res;
+      });
     if (this.urole !== 'SUPERADMIN' && this.urole !== 'YOOYOOADMIN') {
       this.assignmentService
         .getAllSchoolAssignments(this.schoolId)
         .subscribe(res => {
           this.assignments = res;
           this.tempassignments = res;
-          console.log(res);
           this.filterByDate();
           this.showLoader = true;
         });
@@ -67,7 +63,6 @@ export class AssignmentSchoolComponent implements OnInit {
         this.assignments = res;
         this.tempassignments = res;
         this.assignmentsData = res;
-        console.log(res);
         this.filterByDate();
         this.showLoader = true;
       });
@@ -81,6 +76,13 @@ export class AssignmentSchoolComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
   }
+  openWorksheet(link): void {
+    this.Dialog.show(true);
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+  }
+
   onClickMethod(e): void {
     this.filteredBy = e;
     switch (e) {
@@ -107,7 +109,6 @@ export class AssignmentSchoolComponent implements OnInit {
   //   });
   //   this.assignments = this.tempassignments;
   // }
-  onShowDialog(link): void {}
 
   onClickPrevious(): void {
     switch (this.filteredBy) {
@@ -146,6 +147,7 @@ export class AssignmentSchoolComponent implements OnInit {
   onClickDay(): any {
     this.filterByDate();
     return `${this.utilService.getFormattedDate1(this.currentDate)}`;
+
   }
   onClickMonth(): any {
     this.filterByMonth();

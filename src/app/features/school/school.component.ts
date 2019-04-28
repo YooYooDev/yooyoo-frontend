@@ -62,12 +62,13 @@ export class SchoolComponent implements OnInit {
   excelExportProperties: ExcelExportProperties;
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport'];
+    this.toolbar = ['Add', 'Edit', 'Delete', 'Search', 'ExcelExport'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
+      allowDeleting: true,
       mode: 'Dialog'
     };
     this.editparams = { params: { popupHeight: '600px' } };
@@ -171,16 +172,10 @@ onChange(e): void {
   }
 
   reload(): any {
-    this.schoolService.getSchools().subscribe(res => {
+    this.schoolService.getSchools()
+      .subscribe(res => {
       this.schools = res;
-      res.filter(data => {
-        if (data.active) {
-          data.status = 'Inactive';
-        } else {
-          data.status = 'Active';
-        }
-        return data;
-      });
+      res.filter(data => data.deleted ? data.status = 'Inactive' : data.status = 'Active');
       this.showLoader = true;
     });
   }

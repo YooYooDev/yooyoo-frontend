@@ -1713,9 +1713,9 @@ File: Components
 
 .widget-box-one .widget-one-icon {
  position: absolute;
- right: 30px;
+ right: 20px;
  font-size: 72px !important;
- top: 0;
+ top: -20px;
  color: #f3f3f3;
  overflow: hidden;
  vertical-align: middle;

@@ -121,9 +121,7 @@ export class AssignmentComponent implements OnInit {
     console.log(args);
     if (args.item['properties'].text === 'Excel Export') {
       this.grid.excelExport(this.excelExportProperties);
-    } else if (args.item['properties'].text === 'Import') {
-      this.Dialog.show();
-    }
+    } 
   }
 
   async actionBegin(args: SaveEventArgs): Promise<any> {
@@ -190,7 +188,7 @@ export class AssignmentComponent implements OnInit {
     this.Dialog.show(true);
     this.dialogContent =
       // tslint:disable-next-line:max-line-length
-      `<iframe style=\'width:50%;height:50%;padding:20px; margin-left: 25%; margin-top: 15%;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
   cancel(): void {
     this.grid.closeEdit();

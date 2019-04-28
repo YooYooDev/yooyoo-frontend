@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+
 import {
   DialogEditEventArgs,
   EditService,
@@ -18,12 +19,12 @@ import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { ToastService } from './../../../shared/services/toast.service';
 import { CurriculumService } from '../curriculum.service';
-import { AuthService } from './../../../core/auth/auth.service';
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 
 @Component({
-  selector: 'yoo-quiz',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.css'],
+  selector: 'yoo-worksheet',
+  templateUrl: './worksheet.component.html',
+  styleUrls: ['./worksheet.component.css'],
   providers: [
     ToolbarService,
     ExcelExportService,
@@ -34,11 +35,12 @@ import { AuthService } from './../../../core/auth/auth.service';
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class QuizComponent implements OnInit {
-  @ViewChild('quizForm') public quizForm: FormGroup;
+export class WorksheetComponent implements OnInit {
+  @ViewChild('worksheetForm') public worksheetForm: FormGroup;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
-  public mediaFormData: FormData = new FormData();
+  @ViewChild('Dialog') Dialog: DialogComponent;
+  public worksheetFormData: FormData = new FormData();
   requestType: string;
   editparams: { params: { popupHeight: string } };
   users: any;
@@ -52,15 +54,15 @@ export class QuizComponent implements OnInit {
   toolbar: Array<string>;
   quizs = [];
   topics = [];
-  quizData = {};
+  worksheetData = {};
   isValid: Boolean = true;
+  dialogContent: string;
   errorMsg: String = '';
   successMsg: String = '';
   constructor(
     private curriculumService: CurriculumService,
-    private toast: ToastService,
-    private authService: AuthService
-  ) { }
+    private toast: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
@@ -83,16 +85,14 @@ export class QuizComponent implements OnInit {
       this.grid.excelExport();
     }
   }
-  onClickAddQuestion(): any {
-    this.questions.push({
-      question: '',
-      answer: '',
-      option1: '',
-      option2: ''
-    });
+  dialogClose(): void {
+    this.dialogContent = '';
   }
-  removeQuestion(index): any {
-    this.questions.splice(index, 1);
+  openWorksheet(link): void {
+    this.Dialog.show(true);
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
   onFileChange(event, id): any {
     this.errorMsg = '';
@@ -113,74 +113,29 @@ export class QuizComponent implements OnInit {
         } else {
           this.isValid = true;
         }
-      } else if (file.type === 'audio/mp3' || file.type === 'audio/wav') {
-        if (file.size > 2000000) {
-          this.isValid = false;
-          this.errorMsg = 'Media file size should be >2mb.';
-        } else {
-          this.isValid = true;
-        }
       }
-      if (this.isValid) {
-        this.mediaFormData.append('media', file, file.name);
-        this.curriculumService
-          .uploadMedia(id, this.mediaFormData)
-          .subscribe(res => {
-            this.successMsg = 'Uploaded successfully!';
-          });
-      }
+      this.worksheetFormData.append('media', file, file.name);
+      // if (this.isValid) {
+      //   this.worksheetFormData.append('media', file, file.name);
+      //   this.curriculumService
+      //     .uploadWorksheet(id, this.worksheetFormData)
+      //     .subscribe(res => {
+      //       this.successMsg = 'Uploaded successfully!';
+      //     });
+      // }
     }
   }
+
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
-      this.quizData = { ...args.rowData };
-      this.questions = this.quizData['questions'];
-      if (
-        this.quizData['questions'] !== undefined &&
-        this.quizData['questions'].length
-      ) {
-        this.quizData['questions'].filter((item, index) => {
-          this.quizData[`questionId${index}`] = item.id;
-          this.quizData[`question${index}`] = item.question;
-          this.quizData[`option0_${index}`] = item.option1;
-          this.quizData[`option1_${index}`] = item.option2;
-          this.quizData[`answer${index}`] =
-            item.answer === item.option1 ? '1' : '2';
-        });
-      } else {
-        this.questions = [
-          {
-            question: '',
-            answer: '',
-            option1: '',
-            option2: ''
-          }
-        ];
-      }
+      this.worksheetData = { ...args.rowData };
     }
+
     if (args.requestType === 'save') {
-      this.questions.filter((item, index) => {
-        item.question = this.quizData[`question${index}`];
-        item.option1 = this.quizData[`option0_${index}`];
-        item.option2 = this.quizData[`option1_${index}`];
-        const answer = this.quizData[`answer${index}`];
-        item.answer = item[`option${answer}`];
-      });
-      const data = {
-        topicId: this.quizData['topicId'],
-        quizName: this.quizData['quizName'],
-        questions: this.questions
-      };
-      if (this.requestType === 'add') {
-        console.log(data);
-        this.createQuizs(data);
-      } else if (this.requestType === 'beginEdit') {
-        data['id'] = args.data['id'];
-        this.createQuizs(data);
-        console.log(data);
-      } else {
-      }
+      console.log(args.data, this.worksheetData);
+      this.worksheetFormData.append('worksheetlink', this.worksheetData['worksheetLink']);
+      this.updateworksheet(this.worksheetData['id'], this.worksheetFormData);
       args.cancel = false;
     }
   }
@@ -205,21 +160,17 @@ export class QuizComponent implements OnInit {
     this.grid.endEdit();
   }
 
-  createQuizs(formData): void {
-    this.curriculumService.createQuiz(formData)
+  updateworksheet(id, formData): void {
+    this.curriculumService.updateworksheet(id, formData)
       .subscribe(res => {
-        this.toast.success(res.message);
-        this.reload();
-      });
+      this.toast.success(res.message);
+      this.reload();
+    });
   }
   reload(): void {
-    this.curriculumService.getAllQuizs()
-      .subscribe(res => {
-        this.quizs = res;
-      });
     this.curriculumService.getAllTopics()
       .subscribe(res => {
-        this.topics = res;
-      });
+      this.topics = res;
+    });
   }
 }
