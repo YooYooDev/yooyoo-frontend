@@ -22,9 +22,9 @@ import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
 import { AssignmentService } from './assignment.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { UtilService } from 'src/app/shared/services/util.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { ToastService } from './../../shared/services/toast.service';
+import { UtilService } from './../../shared/services/util.service';
+import { AuthService } from './../../core/auth/auth.service';
 import { CurriculumService } from '../curriculum/curriculum.service';
 import { SchoolService } from '../school/school.service';
 
@@ -85,7 +85,7 @@ export class AssignmentComponent implements OnInit {
     private authService: AuthService,
     private utilService: UtilService,
     private schoolService: SchoolService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Edit', 'Delete', 'Search'];
@@ -93,7 +93,7 @@ export class AssignmentComponent implements OnInit {
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
-      allowDeleting: true,
+      allowDeleting: false,
       allowAdding: true,
       mode: 'Dialog'
     };
@@ -102,15 +102,18 @@ export class AssignmentComponent implements OnInit {
     };
     this.initialSort = {};
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-    this.authService.getuRole().subscribe(res => (this.urole = res));
+    this.authService.getuRole()
+      .subscribe(res => (this.urole = res));
     this.editparams = { params: { popupHeight: '600px' } };
     this.reload();
-    this.curriculumService.getAllSubjects().subscribe(res => {
-      this.subjects = res;
-    });
-    this.schoolService.getSchools().subscribe(res => {
-      this.schoolData = res;
-    });
+    this.curriculumService.getAllSubjects()
+      .subscribe(res => {
+        this.subjects = res;
+      });
+    this.schoolService.getSchools()
+      .subscribe(res => {
+        this.schoolData = res;
+      });
   }
   rowDataBound(args: RowDataBoundEventArgs): void {
     if (args.data['deleted']) {
@@ -118,10 +121,9 @@ export class AssignmentComponent implements OnInit {
     }
   }
   onToolbarClick(args: ClickEventArgs): void {
-    console.log(args);
     if (args.item['properties'].text === 'Excel Export') {
       this.grid.excelExport(this.excelExportProperties);
-    } 
+    }
   }
 
   async actionBegin(args: SaveEventArgs): Promise<any> {
@@ -137,7 +139,6 @@ export class AssignmentComponent implements OnInit {
           this.topicData = res;
           this.assignmentData['topicId'] = args.rowData['topic'].id;
         });
-      console.log(this.assignmentData);
     } else if (args.requestType === 'delete') {
       if (confirm('Are you sure you want to delete ?')) {
         this.deleteAssignment(args.data[0].id);
@@ -149,7 +150,6 @@ export class AssignmentComponent implements OnInit {
         const toDate = this.utilService.getFormattedDate1(args.data['toDate']);
         this.assignmentData['date'] = date;
         this.assignmentData['toDate'] = toDate;
-        console.log(this.assignmentData);
         if (this.requestType === 'beginEdit') {
           this.editAssignment(this.assignmentData);
         } else if (this.requestType === 'add') {
@@ -183,7 +183,7 @@ export class AssignmentComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
   }
- 
+
   openWorksheet(link): void {
     this.Dialog.show(true);
     this.dialogContent =
@@ -200,27 +200,29 @@ export class AssignmentComponent implements OnInit {
     this.assignmentService
       .getTopicsBySubject(event.itemData.id)
       .subscribe(res => {
-        console.log(res);
         this.topicData = res;
       });
   }
   editAssignment(formData): void {
-    this.assignmentService.editAssignment(formData).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.assignmentService.editAssignment(formData)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   saveAssignment(formData): void {
-    this.assignmentService.saveAssignment(formData).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.assignmentService.saveAssignment(formData)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   deleteAssignment(id): void {
-    this.assignmentService.deleteAssignment(id).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.assignmentService.deleteAssignment(id)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   focusIn(target: HTMLElement): void {
     target.parentElement.classList.add('e-input-focus');
@@ -230,18 +232,19 @@ export class AssignmentComponent implements OnInit {
     target.parentElement.classList.remove('e-input-focus');
   }
   reload(): void {
-    this.assignmentService.getAllAssignments().subscribe(res => {
-      res.filter(data => {
-        data.name = data.school.name;
-        if (data['date']) {
-          data.date = this.utilService.getFormattedDate1(data['date']);
-        }
-        if (data['toDate']) {
-          data.toDate = this.utilService.getFormattedDate1(data['toDate']);
-        }
+    this.assignmentService.getAllAssignments()
+      .subscribe(res => {
+        res.filter(data => {
+          data.name = data.school.name;
+          if (data['date']) {
+            data.date = this.utilService.getFormattedDate1(data['date']);
+          }
+          if (data['toDate']) {
+            data.toDate = this.utilService.getFormattedDate1(data['toDate']);
+          }
+        });
+        this.assignments = res;
+        this.showLoader = true;
       });
-      this.assignments = res;
-      this.showLoader = true;
-    });
   }
 }

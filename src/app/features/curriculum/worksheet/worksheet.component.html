@@ -30,11 +30,14 @@
               </div>
             </div>
             <div class="form-group col-md-4">
-              <label class="" for="">Image File</label>
+              <label class="" for="fileupload">Image File</label>
               <input type="file" id="fileupload" name="fileupload" (change)="onFileChange($event, worksheetData['id'])"
-                placeholder="Upload file" accept=".png, .jpg, .gif" />
+                placeholder="Upload file" accept=".png, .jpg, .gif" required/>
               <span class="e-error" *ngIf="errorMsg != ''">{{errorMsg}}</span>
               <span class="e-success" *ngIf="successMsg != ''">{{successMsg}}</span>
+            </div>
+            <div class="form-group col-md-4">
+            <img class="worksheetImage" [src]="apiUrl + '/media/getworksheetlink/'+ worksheetData['id']" />
             </div>
           </div>
           <div class="col-md-12">

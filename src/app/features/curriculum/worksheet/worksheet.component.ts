@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-
+import { apiUrl } from '../../../core/api';
 import {
   DialogEditEventArgs,
   EditService,
@@ -59,19 +59,21 @@ export class WorksheetComponent implements OnInit {
   dialogContent: string;
   errorMsg: String = '';
   successMsg: String = '';
+  apiUrl: string;
   constructor(
     private curriculumService: CurriculumService,
     private toast: ToastService
   ) {}
 
   ngOnInit(): void {
+    this.apiUrl = apiUrl;
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search'];
+    this.toolbar = ['Edit', 'Search'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
-      allowAdding: true,
+      allowAdding: false,
       mode: 'Dialog'
     };
     this.editparams = { params: { popupHeight: '800px' } };
@@ -135,7 +137,9 @@ export class WorksheetComponent implements OnInit {
     if (args.requestType === 'save') {
       console.log(args.data, this.worksheetData);
       this.worksheetFormData.append('worksheetlink', this.worksheetData['worksheetLink']);
+      console.log(this.worksheetFormData);
       this.updateworksheet(this.worksheetData['id'], this.worksheetFormData);
+      this.worksheetFormData = new FormData();
       args.cancel = false;
     }
   }
@@ -163,6 +167,7 @@ export class WorksheetComponent implements OnInit {
   updateworksheet(id, formData): void {
     this.curriculumService.updateworksheet(id, formData)
       .subscribe(res => {
+     
       this.toast.success(res.message);
       this.reload();
     });

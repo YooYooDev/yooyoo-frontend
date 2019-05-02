@@ -68,6 +68,7 @@ export class SettingsComponent implements OnInit {
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
+      allowDeleting: true,
       mode: 'Normal'
     };
     this.editparams = { params: { popupHeight: '800px' } };
@@ -86,6 +87,10 @@ export class SettingsComponent implements OnInit {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.subjectData = { ...args.rowData };
+    } else if (args.requestType === 'delete') {
+      if (confirm('Are you sure you want to delete ?')) {
+        this.deleteSubjects(args.data[0].id);
+      }
     }
     if (args.requestType === 'save') {
       if (this.requestType === 'add') {
@@ -118,19 +123,19 @@ export class SettingsComponent implements OnInit {
 
   updateSubjects(formData): void {
     this.curriculumService.updateSubjects(formData).subscribe(res => {
-      this.toast.success('Successfuly Updated');
+      this.toast.success('Subject updated successfully!');
       this.reload();
     });
   }
   createSubjects(formData): void {
     this.curriculumService.createSubjects(formData).subscribe(res => {
-      this.toast.success(res);
+      this.toast.success('Subject created successfully!');
       this.reload();
     });
   }
   deleteSubjects(id): void {
     this.curriculumService.deleteSubjects(id).subscribe(res => {
-      this.toast.success(res.message);
+      this.toast.success('Subject deleted successfully!');
       this.reload();
     });
   }
