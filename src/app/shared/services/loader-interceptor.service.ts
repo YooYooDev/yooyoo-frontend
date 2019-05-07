@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -16,28 +16,22 @@ export class LoaderInterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.reqCount++;
     this.showLoader();
-    // console.log('show');
     return next.handle(req)
       .pipe(tap((event: HttpEvent<any>) => {
-        // console.log('loading');
         if (event instanceof HttpResponse) {
           this.completed++;
-          console.log(this.completed, this.reqCount);
-
           if (this.completed === this.reqCount) {
-            // console.log('completed');
-
             this.reqCount = 0;
             this.completed = 0;
             this.onEnd();
           }
-        } else {
+        }
+      },
+        (err: any) => {
+          this.reqCount = 0;
+          this.completed = 0;
           this.onEnd();
-      }
-    },
-      (err: any) => {
-        this.onEnd();
-      }));
+        }));
   }
 
   private onEnd(): void {

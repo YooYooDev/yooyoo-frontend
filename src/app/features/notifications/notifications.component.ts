@@ -17,6 +17,7 @@ import {
   startWith,
   switchMap
 } from 'rxjs/operators';
+import { GridComponent } from '@syncfusion/ej2-angular-grids';
 
 @Component({
   selector: 'yoo-notifications',
@@ -43,9 +44,10 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
 
   @ViewChild('f') notificationFormValues;
   @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
-
+  @ViewChild('grid') public grid: GridComponent;
   subscription: Subscription;
   schoolId = '';
+  notification: any;
 
   constructor(
     private _notificationService: NotificationService,
@@ -57,6 +59,8 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this._authService.getuRole()
       .subscribe(res => (this.urole = res));
+    this._notificationService.getAllNotification()
+      .subscribe(res => (this.notification = res));
     if (this.urole !== 'SUPERADMIN') {
       this.schoolId = JSON.parse(
         localStorage.getItem('userInfo')

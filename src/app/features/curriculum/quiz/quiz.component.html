@@ -43,7 +43,7 @@
         ></e-column>
       </e-columns>
       <ng-template #editSettingsTemplate let-data>
-        <div ngForm #quizForm="ngForm" class="quiz">
+        <div ngForm #quizForm="ngForm" class="quiz"  >
           <div class="form-row">
             <div class="form-group col-md-4">
               <div class="e-float-input e-control-wrapper">
@@ -54,6 +54,7 @@
                   name="quizName"
                   id="quizName"
                   type="text"
+                  (keydown.enter)="preventDefault($event)"
                 />
                 <span class="e-float-line"></span>
                 <label class="e-float-text e-label-top" for="quizName"
@@ -108,6 +109,7 @@
                       required
                       [(ngModel)]="quizData['question' + i]"
                       [name]="'question' + i"
+                      (keydown.enter)="preventDefault($event)"
                     />
                     <span class="e-float-line"></span>
                     <label
@@ -120,7 +122,6 @@
 
                 <div class="form-group col-md-4" *ngIf="!data.isAdd">
                   <label class="" for="">Media File</label>
-                  <!-- {{quizData['questionId'+i]}} -->
                   <input
                     type="file"
                     id="fileupload"
@@ -136,6 +137,7 @@
                   <span class="e-success" *ngIf="successMsg != ''">{{
                     successMsg
                   }}</span>
+                  <img class="quizmedia" [src]="apiUrl + '/media/getMedia/'+ quizData['questionId' + i]">
                 </div>
 
                 <div class="form-group col-md-4">
@@ -155,6 +157,7 @@
                         [name]="'option0_' + i"
                         [(ngModel)]="quizData['option0_' + i]"
                         type="text"
+                        (keydown.enter)="preventDefault($event)"
                       />
                       <label class="e-float-text e-label-top" for=""
                         >Option 1</label
@@ -179,6 +182,7 @@
                         [name]="'option1_' + i"
                         [(ngModel)]="quizData['option1_' + i]"
                         type="text"
+                        (keydown.enter)="preventDefault($event)"
                       />
                       <label class="e-float-text e-label-top" for=""
                         >Option 2</label
@@ -192,7 +196,7 @@
           <div class="col-md-12">
             <div class="e-control-wrapper pull-right">
               <button
-                type="submit"
+                type="button"
                 [disabled]="quizForm.invalid"
                 class="e-control e-btn e-primary e-flat"
                 (click)="onSubmit()"

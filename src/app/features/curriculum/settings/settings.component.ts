@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-
 import {
-  DialogEditEventArgs,
   EditService,
   EditSettingsModel,
   ExcelExportService,
@@ -17,9 +15,8 @@ import {
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { ToastService } from './../../../shared/services/toast.service';
 import { CurriculumService } from '../curriculum.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
   selector: 'yoo-settings',
@@ -56,9 +53,8 @@ export class SettingsComponent implements OnInit {
   subjectData: any;
   constructor(
     private curriculumService: CurriculumService,
-    private toast: ToastService,
-    private authService: AuthService
-  ) {}
+    private toast: ToastService
+  ) { }
 
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
@@ -114,55 +110,56 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  // cancel(): void {
-  //   this.grid.closeEdit();
-  // }
-  // onSubmit(): void {
-  //   this.grid.endEdit();
-  // }
-
   updateSubjects(formData): void {
-    this.curriculumService.updateSubjects(formData).subscribe(res => {
-      this.toast.success('Subject updated successfully!');
-      this.reload();
-    });
+    this.curriculumService.updateSubjects(formData)
+      .subscribe(res => {
+        this.toast.success('Subject updated successfully!');
+        this.reload();
+      });
   }
   createSubjects(formData): void {
-    this.curriculumService.createSubjects(formData).subscribe(res => {
-      this.toast.success('Subject created successfully!');
-      this.reload();
-    });
+    this.curriculumService.createSubjects(formData)
+      .subscribe(res => {
+        this.toast.success('Subject created successfully!');
+        this.reload();
+      });
   }
   deleteSubjects(id): void {
-    this.curriculumService.deleteSubjects(id).subscribe(res => {
-      this.toast.success('Subject deleted successfully!');
-      this.reload();
-    });
+    this.curriculumService.deleteSubjects(id)
+      .subscribe(res => {
+        this.toast.success('Subject deleted successfully!');
+        this.reload();
+      });
   }
   updateCategories(formData): void {
-    this.curriculumService.updateCategories(formData).subscribe(res => {
-      this.toast.success('Successfuly Updated');
-      this.reload();
-    });
+    this.curriculumService.updateCategories(formData)
+      .subscribe(res => {
+        this.toast.success('Successfuly Updated');
+        this.reload();
+      });
   }
   createCategories(formData): void {
-    this.curriculumService.createCategories(formData).subscribe(res => {
-      this.toast.success(res);
-      this.reload();
-    });
+    this.curriculumService.createCategories(formData)
+      .subscribe(res => {
+        this.toast.success(res);
+        this.reload();
+      });
   }
   deleteCategories(id): void {
-    this.curriculumService.deleteCategories(id).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.curriculumService.deleteCategories(id)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   reload(): void {
-    this.curriculumService.getAllSubjects().subscribe(res => {
-      this.subjects = res;
-    });
-    this.curriculumService.getAllCategories().subscribe(res => {
-      this.categories = res;
-    });
+    this.curriculumService.getAllSubjects()
+      .subscribe(res => {
+        this.subjects = res;
+      });
+    this.curriculumService.getAllCategories()
+      .subscribe(res => {
+        this.categories = res;
+      });
   }
 }

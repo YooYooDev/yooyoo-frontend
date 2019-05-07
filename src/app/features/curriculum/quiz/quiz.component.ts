@@ -18,7 +18,7 @@ import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { ToastService } from './../../../shared/services/toast.service';
 import { CurriculumService } from '../curriculum.service';
-import { AuthService } from './../../../core/auth/auth.service';
+import { apiUrl } from '../../../core/api';
 
 @Component({
   selector: 'yoo-quiz',
@@ -56,13 +56,16 @@ export class QuizComponent implements OnInit {
   isValid: Boolean = true;
   errorMsg: String = '';
   successMsg: String = '';
+  apiUrl: string;
+  enterPress: boolean;
   constructor(
     private curriculumService: CurriculumService,
-    private toast: ToastService,
-    private authService: AuthService
+    private toast: ToastService
   ) { }
 
   ngOnInit(): void {
+    this.grid.allowKeyboard = false;
+    this.apiUrl = apiUrl;
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Edit', 'Search'];
     this.searchSettings = {};
@@ -74,7 +77,10 @@ export class QuizComponent implements OnInit {
     };
     this.editparams = { params: { popupHeight: '800px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-
+    this.curriculumService.getAllTopics()
+      .subscribe(res => {
+        this.topics = res;
+      });
     this.reload();
   }
 
@@ -131,7 +137,12 @@ export class QuizComponent implements OnInit {
       }
     }
   }
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: SaveEventArgs): any {
+    if (this.enterPress) {
+      this.enterPress = false;
+      args.cancel = true;
+      return false;
+    }
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.quizData = { ...args.rowData };
@@ -173,18 +184,21 @@ export class QuizComponent implements OnInit {
         questions: this.questions
       };
       if (this.requestType === 'add') {
-        console.log(data);
         this.createQuizs(data);
       } else if (this.requestType === 'beginEdit') {
         data['id'] = args.data['id'];
         this.createQuizs(data);
-        console.log(data);
-      } else {
       }
+      this.errorMsg = '';
+      this.successMsg = '';
+      this.isValid = true;
       args.cancel = false;
     }
   }
   actionComplete(args: DialogEditEventArgs): void {
+    this.errorMsg = '';
+    this.successMsg = '';
+    this.isValid = true;
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       args.dialog.width = '600px';
       args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
@@ -197,12 +211,14 @@ export class QuizComponent implements OnInit {
       );
     }
   }
-
+  preventDefault(): void {
+    this.enterPress = true;
+  }
   cancel(): void {
     this.grid.closeEdit();
   }
   onSubmit(): void {
-    this.grid.endEdit();
+   this.grid.endEdit();
   }
 
   createQuizs(formData): void {
@@ -210,16 +226,13 @@ export class QuizComponent implements OnInit {
       .subscribe(res => {
         this.toast.success(res.message);
         this.reload();
+        this.grid.refresh();
       });
   }
   reload(): void {
     this.curriculumService.getAllQuizs()
       .subscribe(res => {
         this.quizs = res;
-      });
-    this.curriculumService.getAllTopics()
-      .subscribe(res => {
-        this.topics = res;
       });
   }
 }

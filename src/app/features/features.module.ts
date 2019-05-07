@@ -54,10 +54,24 @@ import { AssignmentSchoolComponent } from './assignment-school/assignment-school
 import { QuizComponent } from './curriculum/quiz/quiz.component';
 import { TopicComponent } from './curriculum/topics/topic.component';
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
-import { AccumulationChartAllModule, ChartAllModule } from '@syncfusion/ej2-angular-charts';
+import {
+  AccumulationAnnotationService,
+  AccumulationChartModule,
+  AccumulationDataLabelService,
+  AccumulationLegendService,
+  AccumulationTooltipService,
+  BarSeriesService,
+  CategoryService,
+  ChartModule,
+  DataLabelService,
+  LegendService,
+  PieSeriesService,
+  TooltipService
+} from '@syncfusion/ej2-angular-charts';
 import { StudentReportComponent } from './reports/student-report/student-report.component';
 import { SchoolReportComponent } from './reports/school-report/school-report.component';
 import { WorksheetComponent } from './curriculum/worksheet/worksheet.component';
+import { RecaptchaModule } from 'angular-google-recaptcha';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -109,11 +123,27 @@ import { WorksheetComponent } from './curriculum/worksheet/worksheet.component';
     AutoCompleteModule,
     MultiSelectModule,
     ListViewModule,
-    AccumulationChartAllModule,
-    ChartAllModule,
-    DateRangePickerModule
+    AccumulationChartModule,
+    ChartModule,
+    DateRangePickerModule,
+    RecaptchaModule.forRoot({
+      siteKey: '6LcxvaEUAAAAAOojJR5vEv5-0FETdKY8LNznIflR'
+    })
   ],
   exports: [GridModule],
-  providers: [PageService, SortService, FilterService, GroupService]
+  providers: [PageService,
+    SortService,
+    FilterService,
+    GroupService,
+    BarSeriesService,
+    CategoryService,
+    LegendService,
+    TooltipService,
+    PieSeriesService,
+    DataLabelService,
+    AccumulationLegendService,
+    AccumulationTooltipService,
+    AccumulationDataLabelService,
+    AccumulationAnnotationService]
 })
-export class FeaturesModule {}
+export class FeaturesModule { }

@@ -1,7 +1,13 @@
 .quiz .form-group.col-md-4 {
   width: 500px;
 }
-
+.quizmedia {
+  height: 60px;
+    position: absolute;
+    left: 260px;
+    top: 0px;
+    border: 1px solid #dbdbdb;
+}
 .e-style {
   margin-top: 20px !important;
 }

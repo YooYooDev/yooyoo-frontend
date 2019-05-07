@@ -1,97 +1,32 @@
-<!-- <div id="navigation"> -->
 <ul class="nav navbar-nav navigation-menu">
   <li class="has-submenu" routerLinkActive="active">
-    <a [routerLink]="['/dashboard']"
-      ><i class="mdi mdi-view-dashboard"></i>Dashboard</a
-    >
+    <a [routerLink]="['/dashboard']"><i class="mdi mdi-view-dashboard"></i>Dashboard</a>
   </li>
-  <li
-    class="has-submenu"
-    routerLinkActive="active"
-    *ngIf="urole == 'SUPERADMIN' || urole == 'YOOYOOADMIN'"
-  >
+  <li class="has-submenu" routerLinkActive="active" *ngIf="urole == 'SUPERADMIN' || urole == 'YOOYOOADMIN'">
     <a [routerLink]="['/school']"><i class="fas fa-school"></i>School</a>
   </li>
-  <li
-    class="has-submenu"
-    routerLinkActive="active"
-    a
-    *ngIf="urole != 'TEACHER'"
-  >
+  <li class="has-submenu" routerLinkActive="active" a *ngIf="urole != 'TEACHER'">
     <a [routerLink]="['/users']"><i class="fas fa-users"></i>Users</a>
   </li>
-  <li
-    class="has-submenu"
-    routerLinkActive="active"
-    *ngIf="urole == 'SUPERADMIN' || urole == 'YOOYOOADMIN'"
-  >
-    <a [routerLink]="['/curriculum']"
-      ><i class="fas fa-podcast"></i>Curriculum</a
-    >
+  <li class="has-submenu" routerLinkActive="active" *ngIf="urole == 'SUPERADMIN' || urole == 'YOOYOOADMIN'">
+    <a [routerLink]="['/curriculum']"><i class="fas fa-podcast"></i>Curriculum</a>
   </li>
   <li class="has-submenu" routerLinkActive="active">
-    <a [routerLink]="['/assignment']"
-      ><i class="fas fa-tasks "></i>Assignment</a
-    >
+    <a [routerLink]="['/assignment']"><i class="fas fa-tasks "></i>Assignment</a>
   </li>
   <li class="has-submenu" routerLinkActive="active">
-    <a [routerLink]="['/reports']"
-      ><i class="mdi mdi-comment-text"></i>Reports</a
-    >
+    <a [routerLink]="['/reports']"><i class="mdi mdi-comment-text"></i>Reports</a>
   </li>
-  <li
-    class="has-submenu"
-    routerLinkActive="active"
-    *ngIf="urole == 'SCHOOLOWNER' || urole == 'TEACHER'"
-  >
-    <a [routerLink]="['/attendance']"
-      ><i class="mdi mdi-book-multiple"></i>Attendance</a
-    >
+  <li class="has-submenu" routerLinkActive="active" *ngIf="urole == 'SCHOOLOWNER' || urole == 'TEACHER'">
+    <a [routerLink]="['/attendance']"><i class="mdi mdi-book-multiple"></i>Attendance</a>
   </li>
-  <li
-    class="has-submenu"
-    routerLinkActive="active"
-    *ngIf="urole == 'SCHOOLOWNER' || urole == 'SUPERADMIN'"
-  >
+  <li class="has-submenu" routerLinkActive="active" *ngIf="urole == 'SCHOOLOWNER' || urole == 'SUPERADMIN'">
     <a [routerLink]="['/fees']"><i class="fas fa-money-bill"></i>Fees</a>
   </li>
   <li class="has-submenu" routerLinkActive="active">
-    <a [routerLink]="['/notifications']"
-      ><i class="fas fa-bell"></i>Notifications</a
-    >
+    <a [routerLink]="['/notifications']"><i class="fas fa-bell"></i>Notifications</a>
   </li>
-  <li
-    class="has-submenu"
-    routerLinkActive="active"
-    *ngIf="urole == 'SCHOOLOWNER'"
-  >
-    <a [routerLink]="['/raise-a-ticket']"
-      ><i class="fas fa-ticket-alt"></i>Raise a Ticket</a
-    >
+  <li class="has-submenu" routerLinkActive="active" *ngIf="urole == 'SCHOOLOWNER'">
+    <a [routerLink]="['/raise-a-ticket']"><i class="fas fa-ticket-alt"></i>Raise a Ticket</a>
   </li>
 </ul>
-<!-- </div> -->
-
-<!-- <ul class="nav navbar-nav">
-  <li class="active"><a href="#">Home</a></li>
-  <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#"
-      >Page 1 <span class="caret"></span
-    ></a>
-    <ul class="dropdown-menu">
-      <li><a href="#">Page 1-1</a></li>
-      <li><a href="#">Page 1-2</a></li>
-      <li><a href="#">Page 1-3</a></li>
-    </ul>
-  </li>
-  <li><a href="#">Page 2</a></li>
-  <li><a href="#">Page 3</a></li>
-</ul>
-<ul class="nav navbar-nav navbar-right">
-  <li>
-    <a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
-  </li>
-  <li>
-    <a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-  </li>
-</ul> -->

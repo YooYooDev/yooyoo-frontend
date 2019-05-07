@@ -11,14 +11,21 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  myRecaptcha: boolean;
   constructor(
     private _loginService: LoginService,
     private _router: Router,
     private _toast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit() {}
+  onScriptLoad(): void {
+    console.log('Google reCAPTCHA loaded and is ready for use!')
+  }
 
+  onScriptError(): void {
+    console.log('Something went long when loading the Google reCAPTCHA')
+  }
   onSubmit(f): void {
     // console.log(f.value);
     this._loginService.userAuth(f.value).subscribe(

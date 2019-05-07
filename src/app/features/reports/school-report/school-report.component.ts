@@ -15,7 +15,7 @@ import {
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { UserService } from '../../users/user.service';
 import { SchoolService } from '../../school/school.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'yoo-school-report',
