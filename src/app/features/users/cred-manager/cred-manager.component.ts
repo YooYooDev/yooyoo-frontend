@@ -12,6 +12,7 @@ import {
   PageSettingsModel,
   SaveEventArgs,
   SearchSettingsModel,
+  SelectionSettingsModel,
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
@@ -53,6 +54,7 @@ export class CredManagerComponent implements OnInit {
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
+  selectionOptions: SelectionSettingsModel;
   line = 'Both';
   public formData: FormData = new FormData();
   public header: String = 'Upload Student';
@@ -61,6 +63,7 @@ export class CredManagerComponent implements OnInit {
   public position: object = { X: 'center', Y: 'center' };
   toolbar: Array<string>;
   schools: any;
+  enterPress: any;
   constructor(
     private userService: UserService,
     private toast: ToastService,
@@ -78,7 +81,8 @@ export class CredManagerComponent implements OnInit {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Search', 'ExcelExport'];
     this.searchSettings = {};
-    this.filterOptions = { type: 'Excel' };
+    this.selectionOptions = { type: 'Single' };
+    this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: false,
       allowAdding: true,
@@ -100,7 +104,12 @@ export class CredManagerComponent implements OnInit {
     }
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: SaveEventArgs): any {
+    if (this.enterPress) {
+      this.enterPress = false;
+      args.cancel = true;
+      return false;
+    }
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.credManagerData = { ...args.rowData };
@@ -136,7 +145,9 @@ export class CredManagerComponent implements OnInit {
       );
     }
   }
-
+  preventDefault(): void {
+    this.enterPress = true;
+  }
   cancel(): void {
     this.grid.closeEdit();
   }

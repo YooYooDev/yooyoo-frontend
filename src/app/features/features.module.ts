@@ -1,9 +1,5 @@
+import { CurriculumComponent } from './curriculum/curriculum.component';
 import { AttendanceComponent } from './attendance/attendance.component';
-import {
-  AutoCompleteModule,
-  DropDownListModule,
-  MultiSelectModule
-} from '@syncfusion/ej2-angular-dropdowns';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,7 +22,9 @@ import {
   UploaderModule
 } from '@syncfusion/ej2-angular-inputs';
 import {
+  EditService,
   FilterService,
+  GridAllModule,
   GridModule,
   GroupService,
   PageService,
@@ -37,7 +35,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { CommonModule } from '@angular/common';
-import { CurriculumComponent } from './curriculum/curriculum.component';
+import {
+  AutoCompleteModule,
+  DropDownListModule,
+  MultiSelectModule
+} from '@syncfusion/ej2-angular-dropdowns';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturesRoutingModule } from './features-routing.module';
 import { FeesComponent } from './fees/fees.component';
@@ -126,14 +128,17 @@ import { RecaptchaModule } from 'angular-google-recaptcha';
     AccumulationChartModule,
     ChartModule,
     DateRangePickerModule,
+    GridAllModule,
     RecaptchaModule.forRoot({
       siteKey: '6LcxvaEUAAAAAOojJR5vEv5-0FETdKY8LNznIflR'
     })
   ],
   exports: [GridModule],
-  providers: [PageService,
+  providers: [
+    PageService,
     SortService,
     FilterService,
+    EditService,
     GroupService,
     BarSeriesService,
     CategoryService,

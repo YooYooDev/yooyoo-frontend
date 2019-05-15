@@ -60,10 +60,12 @@ export class WorksheetComponent implements OnInit {
   errorMsg: String = '';
   successMsg: String = '';
   apiUrl: string;
+  imagePath: any;
+  imgURL: string | ArrayBuffer;
   constructor(
     private curriculumService: CurriculumService,
     private toast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.apiUrl = apiUrl;
@@ -101,9 +103,18 @@ export class WorksheetComponent implements OnInit {
     this.successMsg = '';
     this.isValid = true;
     const fileList: FileList = event.target.files;
+    if (fileList.length === 0) {
+      return;
+    }
+
+    const mimeType = fileList[0].type;
+    if (mimeType.match(/image\/*/) === undefined) {
+      // this.message = 'Only images are supported.';
+      return;
+    }
+
     if (fileList.length > 0) {
       const file: File = fileList[0];
-      console.log(file);
       if (
         file.type === 'image/gif' ||
         file.type === 'image/png' ||
@@ -116,6 +127,12 @@ export class WorksheetComponent implements OnInit {
           this.isValid = true;
         }
       }
+      const reader = new FileReader();
+      this.imagePath = fileList;
+      reader.readAsDataURL(fileList[0]);
+      reader.onload = _event => {
+        this.imgURL = reader.result;
+      };
       this.worksheetFormData.append('media', file, file.name);
       // if (this.isValid) {
       //   this.worksheetFormData.append('media', file, file.name);
@@ -133,11 +150,12 @@ export class WorksheetComponent implements OnInit {
       this.requestType = args.requestType;
       this.worksheetData = { ...args.rowData };
     }
-
+    if (args.requestType === 'beginEdit') {
+      console.log('lll')
+      this.imgURL = `${apiUrl}/media/getworksheetlink/${this.worksheetData['id']}`;
+    }
     if (args.requestType === 'save') {
-      console.log(args.data, this.worksheetData);
       this.worksheetFormData.append('worksheetlink', this.worksheetData['worksheetLink']);
-      console.log(this.worksheetFormData);
       this.updateworksheet(this.worksheetData['id'], this.worksheetFormData);
       this.worksheetFormData = new FormData();
       args.cancel = false;
@@ -167,15 +185,14 @@ export class WorksheetComponent implements OnInit {
   updateworksheet(id, formData): void {
     this.curriculumService.updateworksheet(id, formData)
       .subscribe(res => {
-     
-      this.toast.success(res.message);
-      this.reload();
-    });
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   reload(): void {
     this.curriculumService.getAllTopics()
       .subscribe(res => {
-      this.topics = res;
-    });
+        this.topics = res;
+      });
   }
 }

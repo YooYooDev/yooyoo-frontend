@@ -58,6 +58,7 @@ export class QuizComponent implements OnInit {
   successMsg: String = '';
   apiUrl: string;
   enterPress: boolean;
+  imgURL: any;
   constructor(
     private curriculumService: CurriculumService,
     private toast: ToastService
@@ -100,7 +101,7 @@ export class QuizComponent implements OnInit {
   removeQuestion(index): any {
     this.questions.splice(index, 1);
   }
-  onFileChange(event, id): any {
+  onFileChange(event, id, i): any {
     this.errorMsg = '';
     this.successMsg = '';
     this.isValid = true;
@@ -128,11 +129,18 @@ export class QuizComponent implements OnInit {
         }
       }
       if (this.isValid) {
+        const reader = new FileReader();
+        reader.readAsDataURL(fileList[0]);
+        reader.onload = _event => {
+          this.quizData[`imageUrl${i}`] = reader.result;
+        };
         this.mediaFormData.append('media', file, file.name);
         this.curriculumService
           .uploadMedia(id, this.mediaFormData)
           .subscribe(res => {
             this.successMsg = 'Uploaded successfully!';
+            this.mediaFormData = new FormData();
+
           });
       }
     }
@@ -152,6 +160,7 @@ export class QuizComponent implements OnInit {
         this.quizData['questions'].length
       ) {
         this.quizData['questions'].filter((item, index) => {
+          this.quizData[`imageUrl${index}`] = `${apiUrl}/media/getMedia/${item.id}`;
           this.quizData[`questionId${index}`] = item.id;
           this.quizData[`question${index}`] = item.question;
           this.quizData[`option0_${index}`] = item.option1;
@@ -172,6 +181,7 @@ export class QuizComponent implements OnInit {
     }
     if (args.requestType === 'save') {
       this.questions.filter((item, index) => {
+       
         item.question = this.quizData[`question${index}`];
         item.option1 = this.quizData[`option0_${index}`];
         item.option2 = this.quizData[`option1_${index}`];

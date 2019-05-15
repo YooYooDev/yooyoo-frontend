@@ -76,12 +76,12 @@
           </div>
         </div>
         <div class="form-group">
-          <recaptcha ngModel #myRecaptcha name="myRecaptcha" (scriptLoad)="onScriptLoad()"
+          <recaptcha  [(ngModel)]="myRecaptcha" name="myRecaptcha" (scriptLoad)="onScriptLoad()"
             (scriptError)="onScriptError()"></recaptcha>
         </div>
         <div class="text-center form-group">
           <!-- <p class="alert">Invalid Credentials..!!</p> -->
-          <button class="btn">Login </button>
+          <button class="btn" [disabled]="loginForm.invalid">Login </button>
         </div>
       </form>
     </div>

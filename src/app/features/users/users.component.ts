@@ -15,7 +15,8 @@ import {
   SaveEventArgs,
   SearchSettingsModel,
   SortService,
-  ToolbarService
+  ToolbarService,
+  SelectionSettingsModel
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
@@ -61,6 +62,7 @@ export class UsersComponent implements OnInit {
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
+  public selectionOptions: SelectionSettingsModel;
   line = 'Both';
   public formData: FormData = new FormData();
   public header: String = 'Upload Student';
@@ -74,6 +76,7 @@ export class UsersComponent implements OnInit {
   urole: any;
   showLoader = false;
   schoolData = [];
+  enterPress: any;
   constructor(
     private userService: UserService,
     private toast: ToastService,
@@ -86,6 +89,7 @@ export class UsersComponent implements OnInit {
     this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport', 'Import'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
+    this.selectionOptions = { type: 'Single' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
@@ -122,7 +126,12 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: SaveEventArgs): any {
+    if (this.enterPress) {
+      this.enterPress = false;
+      args.cancel = true;
+      return false;
+    }
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.userData = { ...args.rowData };
@@ -173,6 +182,9 @@ export class UsersComponent implements OnInit {
       const file: File = fileList[0];
       this.formData.append('file', file, file.name);
     }
+  }
+  preventDefault(): void {
+    this.enterPress = true;
   }
   cancel(): void {
     this.grid.closeEdit();
