@@ -69,22 +69,17 @@ export class CredManagerComponent implements OnInit {
     private toast: ToastService,
     private schoolService: SchoolService
   ) { }
-  public roleData = [
-    { roleName: 'YOOYOO ADMIN', id: '1' },
-    { roleName: 'SUPER ADMIN', id: '2' },
-    { roleName: 'SCHOOL OWNER', id: '3' },
-    { roleName: 'TEACHER', id: '4' }
-  ];
-  public roleFields: Object = { text: 'roleName', value: 'id' };
+  public roleData = ['SUPERADMIN', 'YOOYOOADMIN', 'SCHOOLOWNER', 'TEACHER'];
+  public roleFields: Object = { text: 'name', value: 'id' };
   public schoolFields: Object = { value: 'name', text: 'name' };
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Search', 'ExcelExport'];
+    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport'];
     this.searchSettings = {};
     this.selectionOptions = { type: 'Single' };
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
-      allowEditing: false,
+      allowEditing: true,
       allowAdding: true,
       mode: 'Dialog'
     };
@@ -113,10 +108,14 @@ export class CredManagerComponent implements OnInit {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.credManagerData = { ...args.rowData };
+      console.log(this.credManagerData);
     }
     if (args.requestType === 'save') {
+      console.log(this.requestType);
       if (this.credManagerForm.valid) {
         args.data = this.credManagerData;
+        console.log(args.data['role']);
+        args.data['roleId'] = this.roleData.indexOf(args.data['role']) + 1;
         if (args.data['roleId'] !== '1' && args.data['roleId'] !== '2') {
           args.data['schoolId'] = this.schoolObj['itemData']['id'];
         } else {
@@ -125,6 +124,8 @@ export class CredManagerComponent implements OnInit {
 
         if (this.requestType === 'add') {
           this.addCredManager(args.data);
+        } else if (this.requestType === 'beginEdit') {
+          this.updateCredManager(args.data);
         }
       } else {
         args.cancel = true;
@@ -134,7 +135,7 @@ export class CredManagerComponent implements OnInit {
 
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      args.dialog.width = '800px';
+      args.dialog.width = '600px';
       args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
         'class',
         'hidden'
@@ -158,6 +159,16 @@ export class CredManagerComponent implements OnInit {
   addCredManager(formData): void {
     console.log(formData);
     this.userService.createCredManager(formData)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.userService
+          .getAllCredManager()
+          .subscribe(data => this.credManager = data);
+      });
+  }
+  updateCredManager(formData): void {
+    console.log(formData);
+    this.userService.updateCredManager(formData)
       .subscribe(res => {
         this.toast.success(res.message);
         this.userService

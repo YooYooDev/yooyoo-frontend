@@ -45,4 +45,12 @@ export class LoginComponent implements OnInit {
       this._toast.error('Form is not valid!');
     }
   }
+  resetPassword(email: HTMLInputElement): void {
+    if(email.value){
+      this._loginService.resetPassword(email.value)
+        .subscribe(res => this._toast.success('Password send to Email!'));
+    } else {
+      this._toast.error('Incorrect Email ID');
+    }
+  }
 }

@@ -13,9 +13,10 @@ import {
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { UserService } from '../../users/user.service';
 import { SchoolService } from '../../school/school.service';
 import { AuthService } from '../../../core/auth/auth.service';
+import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
+import { ReportService } from '../report.service';
 
 @Component({
   selector: 'yoo-school-report',
@@ -36,7 +37,8 @@ export class SchoolReportComponent implements OnInit {
   school = [];
   urole: any;
   schoolId: any;
-  constructor(private userService: UserService, private schoolService: SchoolService, private authService: AuthService) { }
+  @ViewChild('range') DateRange: DateRangePickerComponent;
+  value: any;
   @ViewChild('grid1') public grid1: GridComponent;
   editparams: { params: { popupHeight: string } };
   users = [];
@@ -124,16 +126,21 @@ export class SchoolReportComponent implements OnInit {
       color: 'transparent'
     }
   };
- 
+  formDate: any;
+  toDate: any;
+  constructor(private reportServices: ReportService, private schoolService: SchoolService, private authService: AuthService) { }
   ngOnInit(): void {
 
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['ExcelExport'];
-    this.authService.getuRole().subscribe(res => (this.urole = res));
+    this.authService.getuRole()
+    .subscribe(res => (this.urole = res));
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-    this.schoolService.getSchools().subscribe(res => {
+    this.schoolService.getSchools()
+    .subscribe(res => {
       this.schoolData = res;
     });
+    this.value = [new Date('1/1/2019'), new Date('2/1/2020')];
   }
 
   onToolbarClick(args: ClickEventArgs): void {
@@ -144,13 +151,14 @@ export class SchoolReportComponent implements OnInit {
     }
   }
   onChangeSchool(e): void {
+    this.schoolId = e.itemData.id;
     this.school = [];
-    this.userService.getReportBySchool(e.itemData.id).subscribe(res => {
+    this.reportServices.getReportBySchool(e.itemData.id)
+    .subscribe(res => {
       this.school.push(res);
       this.grid1.refresh();
-      console.log(this.school)
+      console.log(this.school);
     });
 
   }
-
 }

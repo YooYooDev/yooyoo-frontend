@@ -1,10 +1,11 @@
 <div class="pull-right" style="display: inline-flex;">
   <ejs-dropdownlist #schoolId [ngClass]="urole !== 'SUPERADMIN' && urole !== 'YOOYOOADMIN' ? 'hidden' : ''
     " [dataSource]="schoolData" [fields]="{ value: 'id', text: 'name' }" placeholder="School" name="schoolId"
-    (select)="onChangeSchool($event)" class="mr-10"></ejs-dropdownlist>
+    (select)="onChangeSchool($event)" [(value)]="schoolValue" class="mr-10"></ejs-dropdownlist>
   <ejs-dropdownlist #filterId [dataSource]="FilterData" [fields]="{ value: 'id', text: 'name' }" placeholder="Filter"
-    class="mr-10"></ejs-dropdownlist>
-  <ejs-daterangepicker class="ml-10"></ejs-daterangepicker>
+    (select)="onFilterType($event)" class="mr-10"></ejs-dropdownlist>
+<ejs-daterangepicker class="ml-10" id="daterangepicker" #range (change)="onChangeDate()" [value]="rangeValue">
+</ejs-daterangepicker>
 </div>
 <div class="col-md-12" *ngIf="!student.length">
   <div class="control-section col-md-6 yooyoo">

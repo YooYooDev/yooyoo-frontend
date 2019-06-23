@@ -14,6 +14,7 @@ import {
   SearchSettingsModel,
   SelectionSettingsModel,
   SortService,
+  TextWrapSettingsModel,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
@@ -53,6 +54,7 @@ export class FeesComponent implements OnInit {
   filterOptions: FilterSettingsModel;
   selectionOptions: SelectionSettingsModel;
   line = 'Both';
+  public wrapSettings: TextWrapSettingsModel;
   public header: String = 'Upload Student';
   public showCloseIcon: Boolean = true;
   public width: String = '300px';
@@ -63,6 +65,7 @@ export class FeesComponent implements OnInit {
   formData: any;
   constructor(private toast: ToastService, private feesService: FeesService) { }
   ngOnInit(): void {
+    this.wrapSettings = { wrapMode: 'Both' };
     this.pageSettings = { pageSize: 15 };
     this.numericParams = { params: { decimals: 2 } };
     this.toolbar = ['Edit', 'Update', 'Cancel', 'Search', 'ExcelExport'];

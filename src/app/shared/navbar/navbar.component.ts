@@ -7,7 +7,7 @@ import { AuthService } from '../../core/auth/auth.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  urole: string;
+  urole = '';
 
   constructor(private _authService: AuthService) {}
 

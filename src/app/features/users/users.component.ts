@@ -1,5 +1,5 @@
+import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
   DialogEditEventArgs,
   EditService,
@@ -14,14 +14,14 @@ import {
   RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
+  SelectionSettingsModel,
   SortService,
-  ToolbarService,
-  SelectionSettingsModel
+  ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
-import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UserService } from './user.service';
 import { SchoolService } from '../school/school.service';
 import { ToastService } from './../../shared/services/toast.service';
@@ -86,13 +86,14 @@ export class UsersComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport', 'Import'];
+    this.toolbar = ['Add', 'Edit', 'Delete', 'Search', 'ExcelExport', 'Import'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
     this.selectionOptions = { type: 'Single' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
+      allowDeleting: true,
       mode: 'Dialog'
     };
     this.excelExportProperties = {

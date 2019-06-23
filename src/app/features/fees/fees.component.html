@@ -1,59 +1,27 @@
 <div class="control-section">
   <ejs-grid #grid [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line" [allowPaging]="false"
     [allowSorting]="true" [allowFiltering]="true" [allowExcelExport]="true" [allowGrouping]="false"
-    [searchSettings]="searchSettings" [editSettings]="editSettings" [filterSettings]="filterOptions"
-    [selectionSettings]="selectionOptions" [pageSettings]="pageSettings" [toolbar]="toolbar" [dataSource]="fees"
+    [searchSettings]="searchSettings" [editSettings]="editSettings" [filterSettings]="filterOptions" allowTextWrap='true' [textWrapSettings]='wrapSettings' [selectionSettings]="selectionOptions" [pageSettings]="pageSettings" [toolbar]="toolbar" [dataSource]="fees"
     (toolbarClick)="onToolbarClick($event)" (actionBegin)="actionBegin($event)"
     (actionComplete)="actionComplete($event)" height=400>
     <e-columns>
-      <e-column field="firstName" headerText="Student Name" [isPrimaryKey]="true" textAlign="left" width="250">
+      <e-column field="firstName" headerText="Student Name" [isPrimaryKey]="true" textAlign="left" width="200">
       </e-column>
-      <e-column field="gradeName" headerText="Class" textAlign="left" width="100" [allowEditing]="false"></e-column>
-      <e-column #tuition field="tutionFee" headerText="Tuition Fees" textAlign="left" width="150" editType="numericedit"
+      <e-column field="gradeName" headerText="Class" textAlign="left" width="120" [allowEditing]="false"></e-column>
+      <e-column #tuition field="tutionFee" headerText="Tuition Fees" textAlign="left" width="170" editType="numericedit"
         [edit]="numericParams" format="C2">
-        <!-- <ng-template #template let-data let-value let-rowIndex>
-          <input
-            class="e-input e-field"
-            [value]="data.tutionFee"
-            required
-            name="name"
-            type="text"
-            autocomplete="off"
-          />
-        </ng-template> -->
       </e-column>
-      <e-column field="transportationFee" headerText="Transport Fees" textAlign="left" width="150"
-        editType="numericedit" [edit]="numericParams" format="C2">
-        <!-- <ng-template #template let-data let-value let-rowIndex>
-          <input
-            class="e-input e-field"
-            [value]="data.transportationFee"
-            required
-            name="name"
-            type="text"
-            autocomplete="off"
-          />
-        </ng-template> -->
-      </e-column>
-      <e-column headerText="Total Amount" textAlign="left" field="totalBillAmount" width="150" [allowEditing]="false">
-        <!-- <ng-template #template let-data let-value let-rowIndex>
-          {{ data.transportationFee + data.tutionFee }}
-        </ng-template> -->
-      </e-column>
-      <e-column field="paidBillAmount" headerText="Paid Amount" textAlign="left" width="150" editType="numericedit"
-        [edit]="numericParams" format="C2">
-        <!-- <ng-template #template let-data let-value let-rowIndex>
-          <input
-            class="e-input e-field"
-            [value]="data.paidBillAmount"
-            required
-            name="name"
-            type="text"
-            autocomplete="off"
-          />
-        </ng-template> -->
-      </e-column>
-      <e-column field="pendingAmount" headerText="Pending Amount" textAlign="left" width="150" [allowEditing]="false">
+      <e-column field="paidBillAmount" headerText="Tuition Fees Paid" textAlign="left" width="170" editType="numericedit"
+      [edit]="numericParams" format="C2">
+    </e-column>
+    <e-column field="pendingAmount" headerText="Tuition Fees Pending" textAlign="left" width="170" [allowEditing]="false">
+    </e-column>
+    <e-column field="transportationFee" headerText="Transport Fees" textAlign="left" width="170"
+      editType="numericedit" [edit]="numericParams" format="C2">
+    </e-column>
+    <e-column headerText="Transport Fees Paid" textAlign="left" field="totalBillAmount" width="170">
+    </e-column>
+      <e-column field="pendingAmount" headerText="Transport Fees Pending" textAlign="left" width="170" [allowEditing]="false">
       </e-column>
     </e-columns>
   </ejs-grid>

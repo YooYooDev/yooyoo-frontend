@@ -27,6 +27,8 @@ import { UtilService } from './../../shared/services/util.service';
 import { AuthService } from './../../core/auth/auth.service';
 import { CurriculumService } from '../curriculum/curriculum.service';
 import { SchoolService } from '../school/school.service';
+// tslint:disable-next-line:no-implicit-dependencies
+import { apiUrl } from 'src/app/core/api';
 
 @Component({
   selector: 'yoo-assignment',
@@ -49,6 +51,7 @@ export class AssignmentComponent implements OnInit {
   @ViewChild('element') element;
   @ViewChild('gender') gender: DropDownListComponent;
   @ViewChild('class') class: DropDownListComponent;
+  @ViewChild('QuizDialog') QuizDialog: DialogComponent;
   @ViewChild('Dialog') Dialog: DialogComponent;
   @ViewChild('formUpload') public uploadObj: UploaderComponent;
   schoolId = '';
@@ -78,6 +81,9 @@ export class AssignmentComponent implements OnInit {
   subjects = [];
   topicData: any;
   dialogContent: string;
+  quizData = {};
+  apiUrl: string;
+  questions = [];
   constructor(
     private assignmentService: AssignmentService,
     private toast: ToastService,
@@ -100,6 +106,7 @@ export class AssignmentComponent implements OnInit {
     this.excelExportProperties = {
       fileName: 'Users.xlsx'
     };
+    this.apiUrl = apiUrl;
     this.initialSort = {};
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
     this.authService.getuRole()
@@ -189,6 +196,33 @@ export class AssignmentComponent implements OnInit {
     this.dialogContent =
       // tslint:disable-next-line:max-line-length
       `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+  }
+  openQuiz(data): void {
+    this.QuizDialog.show(true);
+    this.questions = this.quizData['questions'];
+    if (
+      this.quizData['questions'] !== undefined &&
+      this.quizData['questions'].length
+    ) {
+      this.quizData['questions'].filter((item, index) => {
+        this.quizData[`imageUrl${index}`] = `${apiUrl}/media/getMedia/${item.id}`;
+        this.quizData[`questionId${index}`] = item.id;
+        this.quizData[`question${index}`] = item.question;
+        this.quizData[`option0_${index}`] = item.option1;
+        this.quizData[`option1_${index}`] = item.option2;
+        this.quizData[`answer${index}`] =
+          item.answer === item.option1 ? '1' : '2';
+      });
+    } else {
+      this.questions = [
+        {
+          question: '',
+          answer: '',
+          option1: '',
+          option2: ''
+        }
+      ];
+    }
   }
   cancel(): void {
     this.grid.closeEdit();

@@ -18,10 +18,10 @@
 .framebody form {
   top: 250px;
   display: none;
-  max-width: 350px;
+  max-width: 370px;
   padding: 20px 40px;
   background: #fff;
-  height: 350px;
+  height: 370px;
   margin: auto;
   display: block;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);

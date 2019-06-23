@@ -17,6 +17,9 @@ import { UserService } from '../../users/user.service';
 import { SelectEventArgs } from '@syncfusion/ej2-angular-lists';
 import { SchoolService } from '../../school/school.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { ReportService } from '../report.service';
+import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
+import { UtilService } from 'src/app/shared/services/util.service';
 
 @Component({
   selector: 'yoo-student-report',
@@ -38,9 +41,18 @@ export class StudentReportComponent implements OnInit {
   school: any;
   urole: any;
   schoolId: any;
-
-  constructor(private userService: UserService, private schoolService: SchoolService, private authService: AuthService) { }
+  fromDate: any;
+  toDate: any;
+  schoolValue: any;
+  constructor(
+    private userService: UserService,
+    private reportService: ReportService,
+    private schoolService: SchoolService,
+    private utilService: UtilService,
+    private authService: AuthService) { }
   data: Array<Object>;
+  @ViewChild('range') DateRange: DateRangePickerComponent;
+  rangeValue: any;
   @ViewChild('grid') public grid: GridComponent;
   editparams: { params: { popupHeight: string } };
   users = [];
@@ -95,10 +107,18 @@ export class StudentReportComponent implements OnInit {
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = [];
-    this.authService.getuRole().subscribe(res => (this.urole = res));
+    const startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.fromDate = this.utilService.getFormattedDate1(startDate);
+    this.toDate = this.utilService.getFormattedDate();
+    this.rangeValue = [new Date(startDate), new Date()];
+    this.authService.getuRole()
+    .subscribe(res => (this.urole = res));
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-    this.schoolService.getSchools().subscribe(res => {
+    this.schoolService.getSchools()
+    .subscribe(res => {
       this.schoolData = res;
+      this.schoolValue = res.filter(data => data.id === this.schoolId)[0]['name'];
+      console.log(this.schoolValue);
     });
     this.reload();
   }
@@ -108,21 +128,56 @@ export class StudentReportComponent implements OnInit {
       this.grid.excelExport();
     }
   }
-    onChangeSchool(e): void {
-      this.userService.getReportBySchool(e.itemData.id).subscribe(res => {
+  onChangeSchool(e): void {
+    this.userService.getReportBySchool(e.itemData.id)
+    .subscribe(res => {
       // this.school.push(res);
-        console.log(res)
-      });
-      this.userService.getAllStudents(e.itemData.id).subscribe(res => {
-        res.filter(user => (user.color = this.randomColorChange()));
-        this.users = res;
-      });
+      console.log(res)
+    });
+    this.userService.getAllStudents(e.itemData.id)
+    .subscribe(res => {
+      res.filter(user => (user.color = this.randomColorChange()));
+      this.users = res;
+    });
+  }
+  onChangeDate(e): void {
+    this.rangeValue = this.DateRange.value;
+    this.fromDate = this.utilService.getFormattedDate1(this.rangeValue[0]);
+    this.toDate = this.utilService.getFormattedDate1(this.rangeValue[1]);
+    console.log(this.fromDate, this.toDate);
+  }
+
+  onFilterType(e): void {
+    const type = e.itemData.value;
+    switch (type) {
+      case 'Assignment':
+        this.reportService.getassignmentreportbyschool(this.schoolId, this.fromDate, this.toDate)
+        .subscribe(res => {
+            console.log(res);
+          });
+        break;
+      case 'Fees':
+        this.reportService.getfeereportbyschool(this.schoolId, this.fromDate, this.toDate)
+        .subscribe(res => {
+            console.log(res);
+          });
+        break;
+      case 'Attendance':
+        this.reportService.getattnreportbyschool(this.schoolId, this.fromDate, this.toDate)
+        .subscribe(res => {
+            console.log(res);
+          });
+        break;
+      default:
+      // code block
+    }
   }
 
   onActionComplete(args: SelectEventArgs): void {
     console.log(args);
     this.student = [];
-    this.userService.getReportByStudent(args.data['id']).subscribe(res => {
+    this.userService.getReportByStudent(args.data['id'])
+    .subscribe(res => {
       this.student.push(res);
     });
   }
@@ -145,7 +200,8 @@ export class StudentReportComponent implements OnInit {
     return s;
   }
   reload(): void {
-    this.userService.getAllStudents(this.schoolId).subscribe(res => {
+    this.userService.getAllStudents(this.schoolId)
+    .subscribe(res => {
       res.filter(user => (user.color = this.randomColorChange()));
       this.users = res;
     });

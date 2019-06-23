@@ -4,6 +4,7 @@ import { ToastService } from './../../shared/services/toast.service';
 import { UtilService } from './../../shared/services/util.service';
 import { SchoolService } from './../school/school.service';
 import { AttendanceService } from './attendence.service';
+import { valueAccessor } from '@syncfusion/ej2-grids';
 
 @Component({
   selector: 'yoo-attendence',
@@ -40,7 +41,8 @@ export class AttendanceComponent implements OnInit {
   }
   onChangeClass(value): void {
     this.attendedSIds = [];
-    this.students = this.data.filter(val => val.id === value)[0].students;
+    this.students = this.data.filter(val => val.id === Number(value))[0].students;
+    console.log(this.students);
     this.isChanged = true;
 
     this._attendanceService.getAttendence()

@@ -98,13 +98,13 @@
                             : ''
                         " name="gradeId" #gradeId />
                       <ejs-radiobutton label="NURSERY" value="NURSERY" cssClass="e-style" #gradeName
-                        [(ngModel)]="userData.gradeName" name="gradeName" required
+                        [(ngModel)]="userData.gradeName" name="gradeName" required [attr.disabled]="!data.isAdd ? '' : null"
                         (keydown.enter)="preventDefault($event)"></ejs-radiobutton>
                       <ejs-radiobutton label="L.K.G" value="L.K.G" cssClass="e-style" #gradeName
-                        [(ngModel)]="userData.gradeName" name="gradeName" required
+                        [(ngModel)]="userData.gradeName" name="gradeName" required [attr.disabled]="!data.isAdd ? '' : null"
                         (keydown.enter)="preventDefault($event)"></ejs-radiobutton>
                       <ejs-radiobutton label="U.K.G" value="U.K.G" cssClass="e-style" #gradeName
-                        [(ngModel)]="userData.gradeName" name="gradeName" required
+                        [(ngModel)]="userData.gradeName" name="gradeName" required [attr.disabled]="!data.isAdd ? '' : null"
                         (keydown.enter)="preventDefault($event)"></ejs-radiobutton>
                       <span class="e-float-line"></span>
                       <label class="e-float-text e-label-top" for="gradeId">Grade</label>
@@ -154,7 +154,7 @@
                 <div class="form-group col-md-4">
                   <div class="e-float-input e-control-wrapper">
                     <input class="e-input e-field" [(ngModel)]="userData.primaryEmail" #primaryEmail name="primaryEmail"
-                      id="primaryEmail" type="email" required (focus)="focusIn($event.target)"
+                      id="primaryEmail" type="email" required (focus)="focusIn($event.target)"  [attr.disabled]="!data.isAdd ? '' : null"
                       (blur)="focusOut($event.target)" (keydown.enter)="preventDefault($event)" autocomplete="off" />
                     <span class="e-float-line"></span>
                     <label class="e-float-text e-label-top" for="primaryEmail">Primary Email</label>
@@ -257,6 +257,15 @@
                 </div>
               </div>
               <div class="form-group col-md-4">
+                <div class="e-float-input e-control-wrapper">
+                  <input class="e-input e-field" [(ngModel)]="userData.password" #password required name="password"
+                    type="password" (focus)="focusIn($event.target)" (blur)="focusOut($event.target)"
+                    (keydown.enter)="preventDefault($event)" autocomplete="off" />
+                  <span class="e-float-line"></span>
+                  <label class="e-float-text e-label-top" for="password">Password</label>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
                 <div class="e-float-input e-control-wrappe">
                   <ejs-switch [ngModel]="
                       userData.deleted === 1
@@ -271,6 +280,7 @@
                   <label class="e-float-text e-label-top switch-label" for="deleted"> Active/InActive </label>
                 </div>
               </div>
+              
             </div>
             <div class="col-md-12">
               <div class="e-control-wrapper pull-right">

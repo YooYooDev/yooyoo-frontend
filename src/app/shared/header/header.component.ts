@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   fullName: string;
   notifications: [];
   notificationCount: number;
-  urole: string;
+  urole = '';
   constructor(
     private _router: Router,
     private _toast: ToastService,

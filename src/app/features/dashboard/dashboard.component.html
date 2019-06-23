@@ -1,6 +1,6 @@
 <!-- end page title end breadcrumb -->
 <div class="row dasshboard">
-  <div class="col-lg-2 col-md-4 col-sm-6">
+  <div class="col-lg-2 col-md-4 col-sm-6" >
     <div class="card-box widget-box-one"
       style="border:1px solid rgb(235, 236, 236) !important; cursor: pointer; width: 200px;" [routerLink]="['/users']"
       routerLinkActive="router-link-active">
@@ -38,7 +38,7 @@
     </div>
   </div>
   <!-- end col -->
-  <div class="col-lg-2 col-md-4 col-sm-6">
+  <div class="col-lg-2 col-md-4 col-sm-6" *ngIf="urole == 'SCHOOLOWNER' || urole == 'TEACHER'">
     <div class="card-box widget-box-one"
       style="border:1px solid rgb(235, 236, 236) !important; cursor: pointer; width: 200px;"
       [routerLink]="['/attendance']" routerLinkActive="router-link-active">
@@ -53,7 +53,7 @@
   </div>
   <!-- end col
     --><b></b>
-  <div class="col-lg-2 col-md-4 col-sm-6">
+  <div class="col-lg-2 col-md-4 col-sm-6" *ngIf="urole == 'SCHOOLOWNER' || urole == 'SUPERADMIN'">
     <div class="card-box widget-box-one"
       style="border:1px solid rgb(235, 236, 236) !important; cursor: pointer; width: 200px;" [routerLink]="['/fees']"
       routerLinkActive="router-link-active">

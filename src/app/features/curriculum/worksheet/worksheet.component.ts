@@ -151,7 +151,6 @@ export class WorksheetComponent implements OnInit {
       this.worksheetData = { ...args.rowData };
     }
     if (args.requestType === 'beginEdit') {
-      console.log('lll')
       this.imgURL = `${apiUrl}/media/getworksheetlink/${this.worksheetData['id']}`;
     }
     if (args.requestType === 'save') {

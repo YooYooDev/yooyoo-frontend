@@ -1,5 +1,9 @@
+import {
+  AutoCompleteModule,
+  DropDownListModule,
+  MultiSelectModule
+} from '@syncfusion/ej2-angular-dropdowns';
 import { CurriculumComponent } from './curriculum/curriculum.component';
-import { AttendanceComponent } from './attendance/attendance.component';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,7 +18,7 @@ import {
   RadioButtonModule,
   SwitchModule
 } from '@syncfusion/ej2-angular-buttons';
-import { DatePickerModule, DateRangePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { DatePickerModule, DateRangePickerModule, CalendarModule } from '@syncfusion/ej2-angular-calendars';
 import {
   MaskedTextBoxModule,
   NumericTextBoxModule,
@@ -24,22 +28,17 @@ import {
 import {
   EditService,
   FilterService,
-  GridAllModule,
   GridModule,
   GroupService,
   PageService,
-  SortService
-} from '@syncfusion/ej2-angular-grids';
+  SelectionService,
+  SortService} from '@syncfusion/ej2-angular-grids';
 import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { CommonModule } from '@angular/common';
-import {
-  AutoCompleteModule,
-  DropDownListModule,
-  MultiSelectModule
-} from '@syncfusion/ej2-angular-dropdowns';
+import { AttendanceComponent } from './attendance/attendance.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturesRoutingModule } from './features-routing.module';
 import { FeesComponent } from './fees/fees.component';
@@ -128,7 +127,7 @@ import { RecaptchaModule } from 'angular-google-recaptcha';
     AccumulationChartModule,
     ChartModule,
     DateRangePickerModule,
-    GridAllModule,
+    CalendarModule,
     RecaptchaModule.forRoot({
       siteKey: '6LcxvaEUAAAAAOojJR5vEv5-0FETdKY8LNznIflR'
     })
@@ -139,6 +138,7 @@ import { RecaptchaModule } from 'angular-google-recaptcha';
     SortService,
     FilterService,
     EditService,
+    SelectionService,
     GroupService,
     BarSeriesService,
     CategoryService,

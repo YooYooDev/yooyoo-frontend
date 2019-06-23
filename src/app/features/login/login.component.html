@@ -74,6 +74,7 @@
             <span class="e-float-line"></span>
             <label class="e-float-text" for="password">Password</label>
           </div>
+          <a href="#" (click)="resetPassword(email)">Forget Password?</a>
         </div>
         <div class="form-group">
           <recaptcha  [(ngModel)]="myRecaptcha" name="myRecaptcha" (scriptLoad)="onScriptLoad()"
@@ -82,6 +83,7 @@
         <div class="text-center form-group">
           <!-- <p class="alert">Invalid Credentials..!!</p> -->
           <button class="btn" [disabled]="loginForm.invalid">Login </button>
+          
         </div>
       </form>
     </div>

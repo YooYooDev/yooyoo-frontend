@@ -2,7 +2,7 @@
   <ejs-dropdownlist #schoolId [ngClass]="urole !== 'SUPERADMIN' && urole !== 'YOOYOOADMIN' ? 'hidden' : ''
     " [dataSource]="schoolData" [fields]="{ value: 'id', text: 'name' }" placeholder="School" name="schoolId"
     (select)="onChangeSchool($event)" class="mr-10"></ejs-dropdownlist>
-  <ejs-daterangepicker class="ml-10"></ejs-daterangepicker>
+  <ejs-daterangepicker class="ml-10" id="daterangepicker" #range  [value]="value"></ejs-daterangepicker>
 </div>
 <div class="col-md-6">
   <ejs-grid #grid1 [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line" [allowPaging]="false"  [toolbar]="toolbar"
@@ -71,7 +71,7 @@
 
 <div class="col-md-6">
     <ejs-chart style='display:block;' [chartArea]='chartArea' align='center' id='chartcontainer'
-      [primaryXAxis]='primaryXAxis' [primaryYAxis]='primaryYAxis' [title]='' [tooltip]='tooltip'>
+      [primaryXAxis]='primaryXAxis' [primaryYAxis]='primaryYAxis' [title]='' [tooltip]='tooltip' *ngIf="">
       <e-series-collection>
         <e-series [dataSource]='data' type='Bar' xName='x' yName='y' name='' [marker]='marker'> </e-series>
       </e-series-collection>

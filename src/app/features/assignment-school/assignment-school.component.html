@@ -27,16 +27,7 @@
           (click)="onClickToday()"> today </button>
       </div>
       <div class="fc-right">
-        <div class="fc-button-group">
-          <div class="e-btn-group" (click)="onClickMethod($event.target.value)">
-            <input type="radio" id="radioleft" name="font" value="month" />
-            <label class="e-btn" for="radioleft">Month</label>
-            <input type="radio" id="radiomiddle" name="font" value="week" />
-            <label class="e-btn" for="radiomiddle">Week</label>
-            <input type="radio" id="radioright" name="font" value="day" checked />
-            <label class="e-btn" for="radioright">Day</label>
-          </div>
-        </div>
+        <ejs-daterangepicker #range class="ml-10" (change)="deposit()"></ejs-daterangepicker>
       </div>
       <div class="fc-center">
         <h2>{{ this.displayDate }}</h2>
@@ -65,8 +56,16 @@
           (click)="onOpenDialog(assignment.topic.quizLink)">
           <i class="far fa-question-circle m-r-5"></i>
         </button>
-        <span class="pull-right">
-          <label for="checkbox6a"> {{ assignment.date | date: "dd MMM yyyy" }} </label>
+        <span class="pull-right" style="display: inline-flex">
+          <!-- <label for="checkbox6a"> {{ assignment.date | date: "dd MMM yyyy" }} - {{ assignment.toDate | date: "dd MMM yyyy" }} </label> -->
+          <!-- <span (click)="onChangeDate(assignment.topic)">
+            <i class="far fa-edit m-l-5"></i>
+          </span> -->
+        <ejs-datepicker [enabled]="false" [showClearButton]="false" [allowEdit]="false" [value]="assignment.date | date:'MM/dd/yyyy'" strictMode="true" 
+          name="date"></ejs-datepicker>
+         <span class="m-l-10 m-t-5 m-r-10">To</span>
+        <ejs-datepicker [value]="assignment.toDate | date:'MM/dd/yyyy'" placeholder='Enter date' strictMode="true" #date
+          name="date" [showClearButton]="false" [allowEdit]="false" (change)="onSelectDate($event, assignment)"></ejs-datepicker>
         </span>
       </div>
     </div>
