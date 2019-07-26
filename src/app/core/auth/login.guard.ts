@@ -6,7 +6,7 @@ import { ToastService } from '../../shared/services/toast.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class LoginGuard implements CanActivate {
   constructor(
     private _router: Router,
     private _authService: AuthService,
@@ -14,12 +14,11 @@ export class AuthGuard implements CanActivate {
   ) {}
   canActivate(): boolean {
     console.log(this._authService.isLoggedIn());
-    if (this._authService.isLoggedIn()) {
+    // this._toast.error('Unauthorised Access !');
+    if (!this._authService.isLoggedIn()) {
       return true;
     } else {
-      this._router.navigate(['/login']);
-      this._toast.error('Unauthorised Access !');
-
+      this._router.navigate(['/dashboard']);
       return false;
     }
   }

@@ -1,5 +1,8 @@
+import {
+  DropDownListComponent,
+  MultiSelectComponent
+} from '@syncfusion/ej2-angular-dropdowns';
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
   DialogEditEventArgs,
   EditService,
@@ -9,6 +12,7 @@ import {
   FilterService,
   FilterSettingsModel,
   GridComponent,
+  IFilter,
   PageService,
   PageSettingsModel,
   RowDataBoundEventArgs,
@@ -19,10 +23,7 @@ import {
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import {
-  DropDownListComponent,
-  MultiSelectComponent
-} from '@syncfusion/ej2-angular-dropdowns';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
 import { ToastService } from '../../../shared/services/toast.service';
 import { UtilService } from '../../../shared/services/util.service';
@@ -65,6 +66,7 @@ export class TopicComponent implements OnInit {
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
+  filter: IFilter;
   line = 'Both';
   public formData: FormData = new FormData();
   public header: String = 'Upload Student';
@@ -90,10 +92,13 @@ export class TopicComponent implements OnInit {
     private authService: AuthService
   ) { }
   ngOnInit(): void {
-    this.pageSettings = { pageSize: 15 };
+    this.pageSettings = { pageSize: 10 };
     this.toolbar = ['Add', 'Edit', 'Search'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
+    this.filter = {
+      type: 'CheckBox'
+    };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
@@ -252,7 +257,7 @@ export class TopicComponent implements OnInit {
           data.categoryName = Array.prototype.map.call(
             data.categories,
             s => s.name
-          );
+          )[0];
           if (data.subjects !== null) {
             data.subjectName = data.subjects.name;
           } else {

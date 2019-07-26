@@ -145,6 +145,10 @@ export class SettingsComponent implements OnInit {
           .uploadSubjectMedia(id, this.subjectFormData)
           .subscribe(res => {
             this.toast.success('Image Uploaded successfully!');
+            this.subjectFormData = new FormData();
+            this.grid.endEdit();
+            this.reload();
+
           });
       }
     }

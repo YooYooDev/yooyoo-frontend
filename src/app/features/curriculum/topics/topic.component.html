@@ -1,14 +1,14 @@
 <div class="control-section yooyoo">
-  <ejs-grid #grid [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line" [allowPaging]="false"
+  <ejs-grid #grid [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line" [allowPaging]="true"
     [allowSorting]="true" [allowFiltering]="true" [allowExcelExport]="true" [allowGrouping]="false"
     [searchSettings]="searchSettings" [editSettings]="editSettings" [filterSettings]="filterOptions"
     [pageSettings]="pageSettings" [toolbar]="toolbar" [dataSource]="users" (toolbarClick)="onToolbarClick($event)"
     (actionBegin)="actionBegin($event)" (actionComplete)="actionComplete($event)" height=345>
     <e-columns>
-      <e-column field="name" [isPrimaryKey]="true" headerText="TOPICS" textAlign="left" width="150"></e-column>
-      <e-column field="subjects.name" headerText="SUBJECT" textAlign="left" width="150"></e-column>
-      <e-column field="categoryName" headerText="CATAGORY" textAlign="left" width="150"></e-column>
-      <e-column field="videoLink" headerText="VIDEO LINK" textAlign="left" width="150"></e-column>
+      <e-column field="name" [isPrimaryKey]="true" [filter] = 'filter' headerText="TOPICS" textAlign="left" width="150"></e-column>
+      <e-column field="subjects.name" [filter] = 'filter'  headerText="SUBJECT" textAlign="left" width="150"></e-column>
+      <e-column field="categoryName" [filter] = 'filter'  headerText="CATAGORY" textAlign="left" width="150"></e-column>
+      <e-column field="videoLink" [filter] = 'filter'  headerText="VIDEO LINK" textAlign="left" width="150"></e-column>
       <e-column headerText="VIEW" textAlign="left" width="200">
         <ng-template #template let-data>
           <!-- <button type="button" class="btn btn-googleplus waves-effect waves-light" (click)="openWorksheet(data.worksheetLink)">
@@ -38,7 +38,7 @@
           </div>
           <div class="form-group col-md-12">
             <ejs-multiselect #categoryName [dataSource]="categories" [(ngModel)]="curriculumData.categoryName"
-              [fields]="{ text: 'name', value: 'name' }" placeholder="Categorie" floatLabelType="Always"
+              [fields]="{ text: 'name', value: 'id' }" placeholder="Categorie" floatLabelType="Always"
               name="categoryName" required></ejs-multiselect>
           </div>
           <div class="form-group col-md-12">

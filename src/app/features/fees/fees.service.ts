@@ -8,14 +8,13 @@ import { Observable, of as observableOf } from 'rxjs';
 export class FeesService {
   constructor(private httpClient: HttpClient) {}
 
-  viewFees(): Observable<any> {
-    const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-
+  viewFees(schoolId): Observable<any> {
     return this.httpClient
       .get(`${apiUrl}/fees/getAllStudents/${schoolId}`)
       .pipe(map(res => res));
   }
   addFees(formData): Observable<any> {
+    console.log(formData);
     return this.httpClient
       .post(`${apiUrl}/fees/save`, formData)
       .pipe(map(res => res));

@@ -12,7 +12,7 @@ import { valueAccessor } from '@syncfusion/ej2-grids';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
-  @ViewChild('class') selectedClass;
+ selectedClass = '';
   classes = [];
   students = [];
   data = [];
@@ -39,22 +39,23 @@ export class AttendanceComponent implements OnInit {
         console.log(this.classes);
       });
   }
-  onChangeClass(value): void {
+  onChangeClass(option): void {
+    console.log(option);
     this.attendedSIds = [];
-    this.students = this.data.filter(val => val.id === Number(value))[0].students;
-    console.log(this.students);
+    this.selectedClass = option.value.id;
     this.isChanged = true;
-
-    this._attendanceService.getAttendence()
-      .subscribe(res => {
-      this.attendedSIds = res;
+    this._attendanceService.getAttendence(option.value.name)
+    .subscribe(res => {
+      this.students = res['studentList'];
+      console.log(this.students);
     });
   }
 
   onFormSubmit(f): void {
     const students = f.value;
     const schoolId = this._util.getSchoolId();
-    const grade = parseInt(this.selectedClass.value, 10);
+    console.log(this.selectedClass);
+    const grade = this.selectedClass;
     const date = this._util.getFormattedDate();
     const studentList = [];
 

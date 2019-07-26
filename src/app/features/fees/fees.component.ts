@@ -23,6 +23,8 @@ import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 // tslint:disable-next-line:no-implicit-dependencies
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { FeesService } from './fees.service';
+import { SchoolService } from '../school/school.service';
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
   selector: 'yoo-users',
@@ -39,6 +41,10 @@ import { FeesService } from './fees.service';
   encapsulation: ViewEncapsulation.None
 })
 export class FeesComponent implements OnInit {
+  urole: any;
+  schoolData: any;
+  feesObj = {};
+  [x: string]: any;
   @ViewChild('userForm') public userForm: FormGroup;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
@@ -62,8 +68,12 @@ export class FeesComponent implements OnInit {
   public numericParams: IEditCell;
   toolbar: Array<string>;
   fees = [];
-  formData: any;
-  constructor(private toast: ToastService, private feesService: FeesService) { }
+  constructor(
+    private toast: ToastService,
+    private feesService: FeesService,
+    private authService: AuthService,
+    private schoolService: SchoolService
+  ) { }
   ngOnInit(): void {
     this.wrapSettings = { wrapMode: 'Both' };
     this.pageSettings = { pageSize: 15 };
@@ -79,17 +89,19 @@ export class FeesComponent implements OnInit {
     this.selectionOptions = { mode: 'Both' };
     this.editparams = { params: { popupHeight: '800px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-    this.feesService.viewFees().subscribe(res => (this.fees = res));
+   
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    this.authService.getuRole()
+      .subscribe(res => (this.urole = res));
+    this.schoolService.getSchools()
+      .subscribe(res => {
+        this.schoolData = res;
+      });
+    this.reload();
   }
-
-  getBillAmount(id): void {
-    // this.fees.filter(res => {
-    //   console.log(res, id);
-    //   if (res.id === id) {
-    //     return res.totalBillAmount;
-    //   }
-    // });
+  onChangeSchool(e): void {
+    this.schoolId = e.itemData.id;
+    this.reload();
   }
   onToolbarClick(args: ClickEventArgs): void {
     if (args.item['properties'].text === 'PDF Export') {
@@ -101,77 +113,40 @@ export class FeesComponent implements OnInit {
     }
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: any): void {
     console.log(args.requestType);
+  }
+
+  actionComplete(args: any): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
-      console.log(args.rowData);
     }
     if (args.requestType === 'save') {
-      // this.editFees(args.rowData);
-      this.addFees(args.rowData);
+      console.log(args.rowData);
+      this.feesObj = {
+        id: args.rowData['id'],
+        studentName: args.rowData['studentName'],
+        studentId: args.rowData['studentId'],
+        tutionFee: args.rowData['tutionFee'],
+        transportationFee: args.rowData['transportationFee'],
+        paidTutionFee: args.rowData['paidTutionFee'],
+        paidTransportFee: args.rowData['paidTransportFee'],
+        schoolId: args.rowData['schoolId'],
+        gradeName: args.rowData['gradeName']
+      };
+      this.addFees();
     }
   }
 
-  actionComplete(args: DialogEditEventArgs): void {
-    if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      // args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
-      //   'class',
-      //   'hidden'
-      // );
-      // args.dialog.buttons[1]['controlParent'].btnObj[1].element.setAttribute(
-      //   'class',
-      //   'hidden'
-      // );
-      // if (args.requestType === 'beginEdit') {
-      //   (args.form.elements.namedItem('firstName') as HTMLInputElement).focus();
-      // } else if (args.requestType === 'add') {
-      //   (args.form.elements.namedItem('firstName') as HTMLInputElement).focus();
-      // }
-    }
+  addFees(): void {
+    console.log(this.feesObj);
+    this.feesService.addFees(this.feesObj)
+      .subscribe(res => {
+      this.toast.success(res.message);
+      this.reload();
+    });
   }
 
-  onUploadSuccess(args: any): void {
-    if (args.operation === 'upload') {
-      console.log('File uploaded successfully');
-    }
-  }
-  onFileChange(event): void {
-    const fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      const file: File = fileList[0];
-      this.formData.append('file', file, file.name);
-    }
-  }
-  cancel(): void {
-    this.grid.closeEdit();
-  }
-  onSubmit(): void {
-    this.grid.endEdit();
-  }
-  uploadSubmit(): void {
-    // this.feesService.uploadFees(this.formData).subscribe(res => {
-    //   this.Dialog.hide();
-    //   this.feesService.viewFees().subscribe(res => (this.users = res));
-    //   this.toast.success(res.message);
-    // });
-  }
-  editFees(formData): void {
-    console.log(formData);
-    this.feesService.updateFees(formData).subscribe(res => {
-      this.toast.success(res.message);
-    });
-  }
-  addFees(formData): void {
-    this.feesService.addFees(formData).subscribe(res => {
-      this.toast.success(res.message);
-    });
-  }
-  deleteFees(id): void {
-    this.feesService.deleteFees(id).subscribe(res => {
-      this.toast.success(res.message);
-    });
-  }
   focusIn(target: HTMLElement): void {
     target.parentElement.classList.add('e-input-focus');
   }
@@ -179,4 +154,8 @@ export class FeesComponent implements OnInit {
   focusOut(target: HTMLElement): void {
     target.parentElement.classList.remove('e-input-focus');
   }
+  reload(): void {
+      this.feesService.viewFees(this.schoolId)
+        .subscribe(res => (this.fees = res));
+    }
 }

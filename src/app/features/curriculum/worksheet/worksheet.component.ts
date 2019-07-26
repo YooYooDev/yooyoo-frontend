@@ -69,7 +69,7 @@ export class WorksheetComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiUrl = apiUrl;
-    this.pageSettings = { pageSize: 15 };
+    this.pageSettings = { pageSize: 10 };
     this.toolbar = ['Edit', 'Search'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };

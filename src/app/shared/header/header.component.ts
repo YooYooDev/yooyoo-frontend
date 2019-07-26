@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
       .subscribe(
         res => this.urole = res
       );
-    this._notificationService.getAllNotification()
+    this._notificationService.getSchoolNotification()
     .subscribe(
       (data: any) => {
         this.notifications = data;

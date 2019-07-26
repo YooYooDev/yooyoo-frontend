@@ -62,9 +62,10 @@
   </div>
 </div>
 <div class="col-md-6">
-  <ejs-grid #grid [showColumnMenu]="false" [allowReordering]="false" [allowPaging]="false"
-    [allowSorting]="true" [allowFiltering]="false" [allowExcelExport]="false" [allowGrouping]="false"
-    [dataSource]="notification" height=345>
+  <ejs-grid #grid [showColumnMenu]="false" [allowReordering]="false"
+    [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [allowExcelExport]="true"
+    [allowGrouping]="false" [searchSettings]="searchSettings" [editSettings]="editSettings"
+    [dataSource]="notification" [toolbar]="toolbar" [dataSource]="schools" height=345  (actionBegin)="actionBegin($event)">
     <e-columns>
       <e-column headerText="ALL NOTIFICATION" textAlign="left" width="150">
         <ng-template #template let-data>

@@ -9,4 +9,4 @@
         <yoo-school-report></yoo-school-report>
     </mat-tab>
 </mat-tab-group>
-<yoo-student-report *ngIf="urole === 'SCHOOLOWNER'"></yoo-student-report>
+<yoo-student-report *ngIf="urole === 'SCHOOLOWNER' || urole === 'TEACHER'"></yoo-student-report>

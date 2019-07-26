@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('token', data.accessToken); // pass api access token parameter name here
             localStorage.setItem('userInfo', JSON.stringify(data.userInfo)); // store user info object here
             this._router.navigate(['/dashboard']);
-            this._toast.success('Logged in successfully!');
+            // this._toast.success('Logged in successfully!');
           },
           (err: HttpErrorResponse) => {
             this._toast.error('Incorrect Email ID or Password');
@@ -46,9 +46,16 @@ export class LoginComponent implements OnInit {
     }
   }
   resetPassword(email: HTMLInputElement): void {
-    if(email.value){
+    if (email.value) {
       this._loginService.resetPassword(email.value)
-        .subscribe(res => this._toast.success('Password send to Email!'));
+        .subscribe(
+          (data: any) => {
+            this._toast.success('Password send successfully to Email!');
+          },
+          (err: HttpErrorResponse) => {
+            this._toast.error(err);
+          }
+        );
     } else {
       this._toast.error('Incorrect Email ID');
     }

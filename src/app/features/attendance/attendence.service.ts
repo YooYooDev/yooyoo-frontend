@@ -19,10 +19,10 @@ export class AttendanceService {
             .pipe(map(res => res));
   }
 
- getAttendence(): Observable<any> {
+ getAttendence(grade): Observable<any> {
    const schoolId = this._util.getSchoolId();
 
-   return this._http.get(`${apiUrl}/attendance/load/${schoolId}`)
+   return this._http.get(`${apiUrl}/attendance/load/${schoolId}/${grade}`)
              .pipe(map(res => res));
  }
 }

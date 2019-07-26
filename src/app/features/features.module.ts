@@ -1,9 +1,9 @@
+import { AttendanceComponent } from './attendance/attendance.component';
 import {
   AutoCompleteModule,
   DropDownListModule,
   MultiSelectModule
 } from '@syncfusion/ej2-angular-dropdowns';
-import { CurriculumComponent } from './curriculum/curriculum.component';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +18,7 @@ import {
   RadioButtonModule,
   SwitchModule
 } from '@syncfusion/ej2-angular-buttons';
-import { DatePickerModule, DateRangePickerModule, CalendarModule } from '@syncfusion/ej2-angular-calendars';
+import { CalendarModule, DatePickerModule, DateRangePickerModule } from '@syncfusion/ej2-angular-calendars';
 import {
   MaskedTextBoxModule,
   NumericTextBoxModule,
@@ -38,7 +38,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { CommonModule } from '@angular/common';
-import { AttendanceComponent } from './attendance/attendance.component';
+import { CurriculumComponent } from './curriculum/curriculum.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturesRoutingModule } from './features-routing.module';
 import { FeesComponent } from './fees/fees.component';
@@ -63,8 +63,14 @@ import {
   AccumulationTooltipService,
   BarSeriesService,
   CategoryService,
+  ChartAnnotationService,
   ChartModule,
+  ColumnSeriesService,
   DataLabelService,
+  // StackingAreaSeriesService,
+  // StackingBarSeriesService,
+  // StackingColumnSeriesService,
+  // StackingLineSeriesService,
   LegendService,
   PieSeriesService,
   TooltipService
@@ -149,6 +155,13 @@ import { RecaptchaModule } from 'angular-google-recaptcha';
     AccumulationLegendService,
     AccumulationTooltipService,
     AccumulationDataLabelService,
-    AccumulationAnnotationService]
+    AccumulationAnnotationService,
+  //   StackingColumnSeriesService,
+  // StackingLineSeriesService,
+  // StackingAreaSeriesService,
+  //   StackingBarSeriesService,
+    ColumnSeriesService,
+    ChartAnnotationService
+  ]
 })
 export class FeaturesModule { }

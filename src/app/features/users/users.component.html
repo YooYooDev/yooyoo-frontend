@@ -11,7 +11,7 @@
     </div>
     <div class="control-section yooyoo">
       <ejs-grid #grid *ngIf="showLoader" [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line"
-        [allowPaging]="false" [allowSorting]="true" [allowFiltering]="true" [allowExcelExport]="true"
+        [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [allowExcelExport]="true"
         [allowGrouping]="false" [searchSettings]="searchSettings" [editSettings]="editSettings"
         [selectionSettings]='selectionOptions' [filterSettings]="filterOptions" [pageSettings]="pageSettings"
         [toolbar]="toolbar" [dataSource]="users" (toolbarClick)="onToolbarClick($event)"
@@ -30,15 +30,23 @@
               </ng-template>
             </ng-template>
           </e-column>
-          <e-column field="firstName" headerText="STUDENT NAME" [isPrimaryKey]="true" textAlign="left" width="250">
+          <e-column field="firstName" headerText="STUDENT NAME" [isPrimaryKey]="true" [filter]='filter' textAlign="left" width="250">
           </e-column>
-          <e-column field="gradeName" headerText="CLASS" textAlign="left" width="150"></e-column>
-          <e-column field="fatherName" headerText="FATHER'S NAME" textAlign="left" width="250"></e-column>
-          <e-column field="motherName" headerText="MOTHER'S NAME" textAlign="left" width="250"></e-column>
-          <e-column field="parentMobile1" headerText="PRIMARY MOBILE" textAlign="left" width="250"></e-column>
-          <e-column field="parentMobile2" headerText="ALTERNATE MOBILE" textAlign="left" width="250"></e-column>
-          <e-column field="primaryEmail" headerText="PRIMARY EMAIL" textAlign="left" width="250"></e-column>
-          <e-column field="secondaryEmail" headerText="ALTERNATE EMAIL" textAlign="left" width="250"></e-column>
+          <e-column field="gradeName" headerText="CLASS" [filter]='filter' textAlign="left" width="150"></e-column>
+          <e-column field="dob" headerText="DOB" [filter]='filter' textAlign="left" width="150"></e-column>
+          <e-column field="gender" headerText="GENDER" [filter]='filter' textAlign="left" width="120"></e-column>
+          <e-column field="fatherName" headerText="FATHER'S NAME" [filter]='filter' textAlign="left" width="250"></e-column>
+          <e-column field="motherName" headerText="MOTHER'S NAME" [filter]='filter' textAlign="left" width="250"></e-column>
+          <e-column field="parentMobile1" headerText="PRIMARY MOBILE" [filter]='filter' textAlign="left" width="250"></e-column>
+          <e-column field="parentMobile2" headerText="ALTERNATE MOBILE" [filter]='filter' textAlign="left" width="250"></e-column>
+          <e-column field="primaryEmail" headerText="PRIMARY EMAIL" [filter]='filter' textAlign="left" width="250"></e-column>
+          <e-column field="secondaryEmail" headerText="ALTERNATE EMAIL" [filter]='filter' textAlign="left" width="250"></e-column>
+          <e-column field="fatherProfession" headerText="FATHER PROFESSION" [filter]='filter' textAlign="left" width="150"></e-column>
+          <e-column field="motherProfession" headerText="MOTHER PROFESSION" [filter]='filter' textAlign="left" width="150"></e-column>
+          <e-column field="address" headerText="ADDRESS" [filter]='filter' textAlign="left" width="150"></e-column>
+          <e-column field="city" headerText="CITY" [filter]='filter' textAlign="left" width="150"></e-column>
+          <e-column field="state" headerText="STATE" [filter]='filter' textAlign="left" width="150"></e-column>
+          <e-column field="pinCode" headerText="PINCODE" [filter]='filter' textAlign="left" width="150"></e-column>
         </e-columns>
         <ng-template #editSettingsTemplate let-data>
           <div ngForm #userForm="ngForm">

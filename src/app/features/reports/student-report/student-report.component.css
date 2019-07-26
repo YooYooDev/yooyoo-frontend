@@ -17,7 +17,7 @@
 }
 
 #element .e-list-item {
- width: 298px;
+ width: 50%;
  float: left;
  margin: auto;
  border: 1px solid #dddddd;
@@ -33,6 +33,7 @@
  height: 220px;
  margin: 0 auto;
  display: table;
+ width: 100%
 }
 
 #textbox {

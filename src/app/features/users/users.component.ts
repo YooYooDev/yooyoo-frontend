@@ -1,5 +1,5 @@
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import {
   DialogEditEventArgs,
   EditService,
@@ -9,6 +9,7 @@ import {
   FilterService,
   FilterSettingsModel,
   GridComponent,
+  IFilter,
   PageService,
   PageSettingsModel,
   RowDataBoundEventArgs,
@@ -21,7 +22,7 @@ import {
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { UserService } from './user.service';
 import { SchoolService } from '../school/school.service';
 import { ToastService } from './../../shared/services/toast.service';
@@ -62,6 +63,7 @@ export class UsersComponent implements OnInit {
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
+  filter: IFilter;
   public selectionOptions: SelectionSettingsModel;
   line = 'Both';
   public formData: FormData = new FormData();
@@ -89,6 +91,9 @@ export class UsersComponent implements OnInit {
     this.toolbar = ['Add', 'Edit', 'Delete', 'Search', 'ExcelExport', 'Import'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
+    this.filter = {
+      type: 'CheckBox'
+    };
     this.selectionOptions = { type: 'Single' };
     this.editSettings = {
       allowEditing: true,

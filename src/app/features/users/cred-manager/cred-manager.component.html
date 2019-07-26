@@ -6,12 +6,12 @@
     (toolbarClick)="onToolbarClick($event)" (actionBegin)="actionBegin($event)"
     (actionComplete)="actionComplete($event)" height=350>
     <e-columns>
-      <e-column field="userName" headerText="USER NAME" [isPrimaryKey]="true" textAlign="left" width="150"></e-column>
-      <e-column field="email" headerText="EMAIL" textAlign="left" width="120"></e-column>
+      <e-column field="userName" headerText="USER NAME" [isPrimaryKey]="true" textAlign="left" width="120"></e-column>
+      <e-column field="email" headerText="EMAIL" textAlign="left" width="170"></e-column>
       <e-column field="schoolName" headerText="SCHOOL NAME" textAlign="left" width="120"></e-column>
-      <e-column field="role" headerText="ROLE" textAlign="left" width="150"></e-column>
-      <e-column field="fullName" headerText="FULL NAME" textAlign="left" width="150"></e-column>
-      <e-column field="mobile" headerText="MOBILE" textAlign="left" width="120"></e-column>
+      <e-column field="role" headerText="ROLE" textAlign="left" width="120"></e-column>
+      <e-column field="fullName" headerText="FULL NAME" textAlign="left" width="120"></e-column>
+      <e-column field="mobile" headerText="MOBILE" textAlign="left" width="100"></e-column>
       <e-column field="city" headerText="CITY" textAlign="left" width="100"></e-column>
     </e-columns>
     <ng-template #editSettingsTemplate let-data>
