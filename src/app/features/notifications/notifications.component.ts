@@ -1,9 +1,9 @@
+import { SchoolService } from '../school/school.service';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { NotificationService } from '../../shared/services/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastService } from '../../shared/services/toast.service';
 import { AuthService } from '../../core/auth/auth.service';
-import { SchoolService } from '../school/school.service';
+import { NotificationService } from '../../shared/services/notification.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import {
@@ -17,11 +17,19 @@ import {
   startWith,
   switchMap
 } from 'rxjs/operators';
+// tslint:disable-next-line:max-line-length
+import { EditService, EditSettingsModel, FilterService, FilterSettingsModel, GridComponent, PageService, SaveEventArgs, SearchSettingsModel, ToolbarService } from '@syncfusion/ej2-angular-grids';
 
 @Component({
   selector: 'yoo-notifications',
   templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.css']
+  styleUrls: ['./notifications.component.css'],
+  providers: [
+    ToolbarService,
+    PageService,
+    FilterService,
+    EditService
+  ]
 })
 export class NotificationsComponent implements AfterViewInit, OnInit {
   urole: string;
@@ -36,32 +44,45 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   });
   filteredSchools: Observable<any>;
   filteredStudents: Observable<any>;
+  toolbar: Array<string>;
 
   classes = [];
   students = [];
   data = [];
-
+  public editSettings: EditSettingsModel;
+  searchSettings: SearchSettingsModel;
+  filterOptions: FilterSettingsModel;
   @ViewChild('f') notificationFormValues;
   @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
-
+  @ViewChild('grid') public grid: GridComponent;
   subscription: Subscription;
   schoolId = '';
+  notification: any;
 
   constructor(
     private _notificationService: NotificationService,
     private _toastService: ToastService,
     private _authService: AuthService,
     private _schoolService: SchoolService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    // fetch  user role
-    this._authService.getuRole().subscribe(res => (this.urole = res));
+    this.toolbar = ['Delete'];
+    this.editSettings = {
+      allowEditing: false,
+      allowAdding: false,
+      allowDeleting: true,
+      mode: 'Normal'
+    };
+    this._authService.getuRole()
+      .subscribe(res => (this.urole = res));
+    this.reload();
     if (this.urole !== 'SUPERADMIN') {
       this.schoolId = JSON.parse(
         localStorage.getItem('userInfo')
       ).schoolInfo.id;
-      this.notificationForm.get('schoolId').setValue(this.schoolId);
+      this.notificationForm.get('schoolId')
+        .setValue(this.schoolId);
       this.schoolChange(this.schoolId);
     } else {
       this.disableClass();
@@ -70,7 +91,8 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     // school auto complete
     this.filteredSchools = this.notificationForm
       .get('schoolName')
-      .valueChanges.pipe(
+      .valueChanges
+      .pipe(
         startWith(undefined),
         debounceTime(200),
         distinctUntilChanged(),
@@ -82,7 +104,8 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     // student auto complete
     this.filteredStudents = this.notificationForm
       .get('studentName')
-      .valueChanges.pipe(
+      .valueChanges
+      .pipe(
         startWith(''),
         map(val => this.filterStudent(val))
       );
@@ -100,11 +123,16 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     this.subscription = this.trigger.panelClosingActions.subscribe(
       e => {
         if (!e || !e.source) {
-          this.notificationForm.get('schoolId').setValue(undefined);
-          this.notificationForm.get('schoolName').setValue(undefined);
-          this.notificationForm.get('gradeId').setValue(undefined);
-          this.notificationForm.get('studentId').setValue(undefined);
-          this.notificationForm.get('studentName').setValue(undefined);
+          this.notificationForm.get('schoolId')
+          .setValue(undefined);
+          this.notificationForm.get('schoolName')
+          .setValue(undefined);
+          this.notificationForm.get('gradeId')
+          .setValue(undefined);
+          this.notificationForm.get('studentId')
+          .setValue(undefined);
+          this.notificationForm.get('studentName')
+          .setValue(undefined);
           if (this.urole === 'SUPERADMIN') {
             this.disableClass();
           }
@@ -115,15 +143,23 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
       () => this._subscribeToClosingActions()
     );
   }
-
+  actionBegin(args: SaveEventArgs): any {
+      if (args.requestType === 'delete') {
+        this.deleteNotification(args.data[0].id);
+    }
+  }
   // get selected school value and load classes based on school id
   onChangeSchool(event: MatAutocompleteSelectedEvent): void {
-    this.notificationForm.get('gradeId').setValue(undefined);
+    this.notificationForm.get('gradeId')
+    .setValue(undefined);
     this.classes = [];
-    this.notificationForm.get('studentId').setValue(undefined);
-    this.notificationForm.get('studentName').setValue(undefined);
+    this.notificationForm.get('studentId')
+    .setValue(undefined);
+    this.notificationForm.get('studentName')
+    .setValue(undefined);
     this.students = [];
-    this.notificationForm.get('schoolName').setValue(event.option.value);
+    this.notificationForm.get('schoolName')
+    .setValue(event.option.value);
     const schoolId = event.option.id;
     // const schoolId = 1 ;
     this.schoolChange(schoolId);
@@ -180,15 +216,25 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
       )
     );
   }
-
+  deleteNotification(id): void {
+    this._notificationService.deleteNotification(id)
+      .subscribe(res => {
+        this._toastService.success(res.message);
+        this.reload();
+      });
+  }
+  reload() {
+    this._notificationService.getAllNotification()
+      .subscribe(res => (this.notification = res));
+  }
   // student filter
   filterStudent(val: string): any {
     // console.log(val);
     return val
       ? this.students.filter(
-          option =>
-            option.firstName.toLowerCase().indexOf(val.toLowerCase()) > -1
-        )
+        option =>
+          option.firstName.toLowerCase().indexOf(val.toLowerCase()) > -1
+      )
       : this.students;
   }
 
@@ -203,11 +249,11 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
           );
           if (this.urole === 'SUPERADMIN') {
             this.disableClass();
-          }else{
+          } else {
             this.notificationForm.get('schoolId').setValue(this.schoolId);
           }
           this.disableStudent();
-          
+
         },
         (err: HttpErrorResponse) => {
           this._toastService.error('Something went wrong!');

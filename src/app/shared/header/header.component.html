@@ -3,29 +3,22 @@
     <div class="container">
       <!-- Logo container-->
       <div class="logo">
-        <img src="assets/images/logo.png" alt="" height="30" />
+        <img src="assets/images/logo.png" alt="" height="50" />
       </div>
       <!-- End Logo container-->
       <div class="menu-extras">
         <ul class="nav navbar-nav navbar-right pull-right ">
           <li class="dropdown navbar-c-items">
-            <a
-              href="#"
-              class="right-menu-item dropdown-toggle"
-              data-toggle="dropdown"
-            >
+            <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
               <i class="mdi mdi-bell"></i>
-              <span class="badge up bg-success">{{ notificationCount }}</span>
+              <span class="badge up bg-danger">{{ notificationCount }}</span>
             </a>
             <ul
-              class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right dropdown-lg user-list notify-list custom-height"
-            >
-              <li
-                *ngFor="
+              class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right dropdown-lg user-list notify-list custom-height">
+              <li *ngFor="
                   let notification of (notifications | slice: 0:5);
                   let i = index
-                "
-              >
+                ">
                 <div class="user-list-item">
                   <div class="user-desc">
                     <span class="name">{{ notification.header }}</span>
@@ -35,55 +28,32 @@
               </li>
               <li class="all-msgs text-center">
                 <p class="m-0">
-                  <a
-                    [routerLink]="['/notification']"
-                    routerLinkActive="router-link-active"
-                    >See all Notification</a
-                  >
+                  <a [routerLink]="['/notification']" routerLinkActive="router-link-active">See all Notification</a>
                 </p>
               </li>
             </ul>
           </li>
           <li class="dropdown navbar-c-items">
-            <a
-              href=""
-              class="dropdown-toggle waves-effect waves-light profile"
-              data-toggle="dropdown"
-              aria-expanded="true"
-              ><img
-                src="assets/images/avatar.jpg"
-                alt="user-img"
-                class="img-circle"
-              />
+            <a href="" class="dropdown-toggle waves-effect waves-light profile" data-toggle="dropdown"
+              aria-expanded="true"><img src="assets/images/avatar.jpg" alt="user-img" class="img-circle" />
             </a>
-            <ul
-              class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list"
-            >
+            <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
               <li class="text-center">
                 <h5>Hi, {{ fullName }}</h5>
               </li>
               <li>
-                <a
-                  [routerLink]="['/profile']"
-                  routerLinkActive="router-link-active"
-                  ><i class="ti-user m-r-5"></i> Profile</a
-                >
+                <a [routerLink]="['/profile']" routerLinkActive="router-link-active"><i class="ti-user m-r-5"></i>
+                  Profile</a>
               </li>
               <li>
-                <a href="javascript:void(0)" (click)="logOut()"
-                  ><i class="ti-power-off m-r-5"></i> Logout
-                </a>
+                <a href="javascript:void(0)" (click)="logOut()"><i class="ti-power-off m-r-5"></i> Logout </a>
               </li>
             </ul>
           </li>
         </ul>
         <div class="menu-item">
           <!-- Mobile menu toggle-->
-          <a
-            class="navbar-toggle"
-            data-toggle="collapse"
-            data-target="#myNavbar"
-          >
+          <a class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar">
             <div class="lines"><span></span> <span></span> <span></span></div>
           </a>
           <!-- End mobile menu toggle-->
@@ -95,12 +65,42 @@
   </div>
   <!-- end topbar-main -->
   <!-- end topbar-main -->
-
-  <div class="collapse navbar-collapse navbar-custom" id="myNavbar">
+  <div class="collapse navbar-collapse navbar-custom" id="myNavbar" >
     <div class="container">
-      <yoo-navbar></yoo-navbar>
+      <!-- <yoo-navbar></yoo-navbar> -->
+      <ul class="nav navbar-nav navigation-menu">
+        <li class="has-submenu" routerLinkActive="active">
+          <a [routerLink]="['/dashboard']" (click)="onMenuClick()"><i class="mdi mdi-view-dashboard"></i>Dashboard</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SUPERADMIN' || urole === 'YOOYOOADMIN'">
+          <a [routerLink]="['/school']" (click)="onMenuClick()"><i class="fas fa-school"></i>School</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active">
+          <a [routerLink]="['/users']" (click)="onMenuClick()"><i class="fas fa-users"></i>Users</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SUPERADMIN' || urole === 'YOOYOOADMIN'">
+          <a [routerLink]="['/curriculum']" (click)="onMenuClick()"><i class="fas fa-podcast"></i>Curriculum</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active">
+          <a [routerLink]="['/assignment']" (click)="onMenuClick()"><i class="fas fa-tasks "></i>Assignment</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active">
+          <a [routerLink]="['/reports']" (click)="onMenuClick()"><i class="mdi mdi-comment-text"></i>Reports</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active" *ngIf="(urole === 'SCHOOLOWNER' || urole === 'TEACHER') && enableAttendance">
+          <a [routerLink]="['/attendance']" (click)="onMenuClick()"><i class="mdi mdi-book-multiple"></i>Attendance</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active" *ngIf="(urole === 'SCHOOLOWNER' || urole === 'SUPERADMIN') && enableFees">
+          <a [routerLink]="['/fees']" (click)="onMenuClick()"><i class="fas fa-money-bill"></i>Fees</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active">
+          <a [routerLink]="['/notifications']" (click)="onMenuClick()"><i class="fas fa-bell"></i>Notifications</a>
+        </li>
+        <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER'">
+          <a [routerLink]="['/raise-a-ticket']" (click)="onMenuClick()"><i class="fas fa-ticket-alt"></i>Raise a Ticket</a>
+        </li>
+      </ul>
     </div>
-
     <!-- end container -->
   </div>
   <!-- end navbar-custom -->

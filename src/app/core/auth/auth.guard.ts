@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
     private _toast: ToastService
   ) {}
   canActivate(): boolean {
+    console.log(this._authService.isLoggedIn());
     if (this._authService.isLoggedIn()) {
       return true;
     } else {

@@ -11,15 +11,16 @@
                 <div class="col-md-12">
                   <mat-form-field>
                     <mat-select
-                      ngModel
                       name="class"
                       #class
                       placeholder="Select Class"
                       required
-                      (selectionChange)="onChangeClass($event.value)"
+                      (selectionChange)="onChangeClass($event)"
                     >
                       <mat-option
-                        value="{{ class.id }}"
+                      #grade
+
+                        [value]="class"
                         *ngFor="let class of classes"
                         >{{ class.name }}</mat-option
                       >
@@ -42,10 +43,10 @@
                       >
                         <mat-checkbox
                           color="primary"
-                          [ngModel]="attendedSIds.indexOf(student.id) !== -1"
-                          id="{{ student.id }}"
-                          name="{{ student.id }}"
-                          >{{ student.firstName }}</mat-checkbox
+                          [ngModel]="student.attendanceStatus"
+                          id="{{ student.studentId }}"
+                          name="{{ student.studentId }}"
+                          >{{ student.studentName }}</mat-checkbox
                         >
                       </li>
                     </ul>

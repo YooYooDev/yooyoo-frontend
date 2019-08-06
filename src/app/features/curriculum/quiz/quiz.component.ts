@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-
 import {
   DialogEditEventArgs,
   EditService,
@@ -17,9 +16,9 @@ import {
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { ToastService } from './../../../shared/services/toast.service';
 import { CurriculumService } from '../curriculum.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { apiUrl } from '../../../core/api';
 
 @Component({
   selector: 'yoo-quiz',
@@ -54,13 +53,20 @@ export class QuizComponent implements OnInit {
   quizs = [];
   topics = [];
   quizData = {};
+  isValid: Boolean = true;
+  errorMsg: String = '';
+  successMsg: String = '';
+  apiUrl: string;
+  enterPress: boolean;
+  imgURL: any;
   constructor(
     private curriculumService: CurriculumService,
-    private toast: ToastService,
-    private authService: AuthService
-  ) {}
+    private toast: ToastService
+  ) { }
 
   ngOnInit(): void {
+    this.grid.allowKeyboard = false;
+    this.apiUrl = apiUrl;
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Edit', 'Search'];
     this.searchSettings = {};
@@ -72,7 +78,10 @@ export class QuizComponent implements OnInit {
     };
     this.editparams = { params: { popupHeight: '800px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-
+    this.curriculumService.getAllTopics()
+      .subscribe(res => {
+        this.topics = res;
+      });
     this.reload();
   }
 
@@ -92,19 +101,56 @@ export class QuizComponent implements OnInit {
   removeQuestion(index): any {
     this.questions.splice(index, 1);
   }
-  onFileChange(event, id): void {
+  onFileChange(event, id, i): any {
+    this.errorMsg = '';
+    this.successMsg = '';
+    this.isValid = true;
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
-      this.mediaFormData.append('media', file, file.name);
-      console.log(id);
-      this.curriculumService.uploadMedia(id, this.mediaFormData).subscribe(res => {
-       // this.reload();
-        this.toast.success('Media file uploaded successfully!');
-      });
+      console.log(file);
+      if (
+        file.type === 'image/gif' ||
+        file.type === 'image/png' ||
+        file.type === 'image/jpeg'
+      ) {
+        if (file.size > 500000) {
+          this.isValid = false;
+          this.errorMsg = 'Media file size should be >500kb.';
+        } else {
+          this.isValid = true;
+        }
+      } else if (file.type === 'audio/mp3' || file.type === 'audio/wav') {
+        if (file.size > 2000000) {
+          this.isValid = false;
+          this.errorMsg = 'Media file size should be >2mb.';
+        } else {
+          this.isValid = true;
+        }
+      }
+      if (this.isValid) {
+        const reader = new FileReader();
+        reader.readAsDataURL(fileList[0]);
+        reader.onload = _event => {
+          this.quizData[`imageUrl${i}`] = reader.result;
+        };
+        this.mediaFormData.append('media', file, file.name);
+        this.curriculumService
+          .uploadMedia(id, this.mediaFormData)
+          .subscribe(res => {
+            this.successMsg = 'Uploaded successfully!';
+            this.mediaFormData = new FormData();
+
+          });
+      }
     }
   }
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: SaveEventArgs): any {
+    if (this.enterPress) {
+      this.enterPress = false;
+      args.cancel = true;
+      return false;
+    }
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.quizData = { ...args.rowData };
@@ -114,6 +160,7 @@ export class QuizComponent implements OnInit {
         this.quizData['questions'].length
       ) {
         this.quizData['questions'].filter((item, index) => {
+          this.quizData[`imageUrl${index}`] = `${apiUrl}/media/getMedia/${item.id}`;
           this.quizData[`questionId${index}`] = item.id;
           this.quizData[`question${index}`] = item.question;
           this.quizData[`option0_${index}`] = item.option1;
@@ -134,6 +181,7 @@ export class QuizComponent implements OnInit {
     }
     if (args.requestType === 'save') {
       this.questions.filter((item, index) => {
+       
         item.question = this.quizData[`question${index}`];
         item.option1 = this.quizData[`option0_${index}`];
         item.option2 = this.quizData[`option1_${index}`];
@@ -146,18 +194,21 @@ export class QuizComponent implements OnInit {
         questions: this.questions
       };
       if (this.requestType === 'add') {
-        console.log(data);
         this.createQuizs(data);
       } else if (this.requestType === 'beginEdit') {
         data['id'] = args.data['id'];
         this.createQuizs(data);
-        console.log(data);
-      } else {
       }
+      this.errorMsg = '';
+      this.successMsg = '';
+      this.isValid = true;
       args.cancel = false;
     }
   }
   actionComplete(args: DialogEditEventArgs): void {
+    this.errorMsg = '';
+    this.successMsg = '';
+    this.isValid = true;
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       args.dialog.width = '600px';
       args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
@@ -170,26 +221,28 @@ export class QuizComponent implements OnInit {
       );
     }
   }
-
+  preventDefault(): void {
+    this.enterPress = true;
+  }
   cancel(): void {
     this.grid.closeEdit();
   }
   onSubmit(): void {
-    this.grid.endEdit();
+   this.grid.endEdit();
   }
 
   createQuizs(formData): void {
-    this.curriculumService.createQuiz(formData).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.curriculumService.createQuiz(formData)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+        this.grid.refresh();
+      });
   }
   reload(): void {
-    this.curriculumService.getAllQuizs().subscribe(res => {
-      this.quizs = res;
-    });
-    this.curriculumService.getAllTopics().subscribe(res => {
-      this.topics = res;
-    });
+    this.curriculumService.getAllQuizs()
+      .subscribe(res => {
+        this.quizs = res;
+      });
   }
 }

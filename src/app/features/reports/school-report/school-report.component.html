@@ -1,0 +1,79 @@
+<div class="pull-right" style="display: inline-flex;">
+  <ejs-dropdownlist #schoolId [ngClass]="urole !== 'SUPERADMIN' && urole !== 'YOOYOOADMIN' ? 'hidden' : ''
+    " [dataSource]="schoolData" [fields]="{ value: 'id', text: 'name' }" placeholder="School" name="schoolId"
+    (select)="onChangeSchool($event)" class="mr-10"></ejs-dropdownlist>
+  <ejs-daterangepicker class="ml-10" id="daterangepicker" #range  [value]="value"></ejs-daterangepicker>
+</div>
+<div class="col-md-6">
+  <ejs-grid #grid1 [showColumnMenu]="false" [allowReordering]="false" [gridLines]="line" [allowPaging]="false"  [toolbar]="toolbar"
+    [allowSorting]="false" [allowFiltering]="false" [allowExcelExport]="true" [allowGrouping]="false"
+    [dataSource]="school"  (toolbarClick)="onToolbarClick($event)"class="mt-10 report">
+    <e-columns>
+      <e-column headerText="School Details">
+        <ng-template #rowTemplate let-data>
+          <tr>
+            <td class="details">
+              <table class="CardTable" cellpadding="5" cellspacing="2">
+                <colgroup>
+                  <col width="50%">
+                  <col width="50%">
+                </colgroup>
+                <tbody>
+                  <tr>
+                    <td class="CardHeader e-rowcell">School Name </td>
+                    <td class="e-rowcell">{{data.schoolName}} </td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">Owner Name</td>
+                    <td class="e-rowcell">{{data.ownerName}} </td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">School Code</td>
+                    <td class="e-rowcell">{{data.schoolCode}}</td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">Student Strength</td>
+                    <td class="e-rowcell">{{data.strength}}</td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">No of Topics Assigned</td>
+                    <td class="e-rowcell">{{data.assigned}}</td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">No of Topic Viewed</td>
+                    <td class="e-rowcell">{{data.viewed}}</td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">No of Question Faced</td>
+                    <td class="e-rowcell">{{data.noOfQuestionFaced}}</td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">No of Correct Answers</td>
+                    <td class="e-rowcell">{{data.noOfCorrectAnswers}}</td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">No of Videos Watched</td>
+                    <td class="e-rowcell">{{data.noOfVideosWatched}}</td>
+                  </tr>
+                  <tr>
+                    <td class="CardHeader e-rowcell">No of Worksheet Appeared</td>
+                    <td class="e-rowcell">{{data.noOfWorksheetAppeared}}</td>`
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-template>
+      </e-column>
+    </e-columns>
+  </ejs-grid>
+</div>
+
+<div class="col-md-6">
+    <ejs-chart style='display:block;' [chartArea]='chartArea' align='center' id='chartcontainer'
+      [primaryXAxis]='primaryXAxis' [primaryYAxis]='primaryYAxis' [title]='' [tooltip]='tooltip' *ngIf="">
+      <e-series-collection>
+        <e-series [dataSource]='data' type='Bar' xName='x' yName='y' name='' [marker]='marker'> </e-series>
+      </e-series-collection>
+    </ejs-chart>
+</div>

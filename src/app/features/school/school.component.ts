@@ -15,6 +15,7 @@ import {
   RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
+  SelectionSettingsModel,
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
@@ -37,10 +38,11 @@ import { SchoolService } from './school.service';
   encapsulation: ViewEncapsulation.None
 })
 export class SchoolComponent implements OnInit {
+  enterPress: any;
   constructor(
     private schoolService: SchoolService,
     private toast: ToastService
-  ) {}
+  ) { }
   requestType: string;
   schoolData = {};
   @ViewChild('schoolForm') public schoolForm: FormGroup;
@@ -50,6 +52,7 @@ export class SchoolComponent implements OnInit {
   pageSettings: PageSettingsModel;
   toolbar: Array<string>;
   initialSort: Object;
+  public selectionOptions: SelectionSettingsModel;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
   showLoader = false;
@@ -62,19 +65,21 @@ export class SchoolComponent implements OnInit {
   excelExportProperties: ExcelExportProperties;
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport'];
+    this.toolbar = ['Add', 'Edit', 'Delete', 'Search', 'ExcelExport'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
+    this.selectionOptions = { type: 'Single' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
+      allowDeleting: true,
       mode: 'Dialog'
     };
     this.editparams = { params: { popupHeight: '600px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-    this.excelExportProperties  = {
+    this.excelExportProperties = {
       fileName: 'School.xlsx'
-   };
+    };
     this.reload();
   }
 
@@ -91,9 +96,6 @@ export class SchoolComponent implements OnInit {
       this.grid.excelExport();
     }
   }
-onChange(e): void {
-  console.log(this.schoolForm['form'].controls.pin.valid);
-}
   onRowSelected(e): void {
     const rowData = '';
     this.key = {
@@ -102,7 +104,12 @@ onChange(e): void {
     };
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: SaveEventArgs): any {
+    if (this.enterPress) {
+      this.enterPress = false;
+      args.cancel = true;
+      return false;
+    }
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.schoolData = { ...args.rowData };
@@ -138,6 +145,9 @@ onChange(e): void {
       );
     }
   }
+  preventDefault(): void {
+    this.enterPress = true;
+  }
   cancel(): void {
     this.grid.closeEdit();
   }
@@ -145,22 +155,25 @@ onChange(e): void {
     this.grid.endEdit();
   }
   editSchoolData(data): void {
-    this.schoolService.updateSchool(data).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.schoolService.updateSchool(data)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   addSchoolData(data): void {
-    this.schoolService.addSchool(data).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.schoolService.addSchool(data)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   deletSchoolData(id): void {
-    this.schoolService.deleteSchool(id).subscribe(res => {
-      this.toast.success(res.message);
-      this.reload();
-    });
+    this.schoolService.deleteSchool(id)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+      });
   }
   focusIn(target: HTMLElement): void {
     target.parentElement.classList.add('e-input-focus');
@@ -171,17 +184,11 @@ onChange(e): void {
   }
 
   reload(): any {
-    this.schoolService.getSchools().subscribe(res => {
-      this.schools = res;
-      res.filter(data => {
-        if (data.active) {
-          data.status = 'Inactive';
-        } else {
-          data.status = 'Active';
-        }
-        return data;
+    this.schoolService.getSchools()
+      .subscribe(res => {
+        this.schools = res;
+        res.filter(data => data.deleted === '0' ? data.status = 'Active' : data.status = 'Inactive');
+        this.showLoader = true;
       });
-      this.showLoader = true;
-    });
   }
 }

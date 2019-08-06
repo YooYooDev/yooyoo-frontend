@@ -101,9 +101,16 @@ td.e-rowcell .statustxt.e-inactivecolor {
 
 }
 #dialog .e-dlg-content {
+  overflow: hidden;
+  background-color: #000 !important;
 
-  background-color: rgba(0, 0, 0, 0.87);
+}
+#dialog .e-dlg-header-content {
 
+  background: #000 !important;
+}
+#dialog .e-dlg-closeicon-btn.e-control.e-btn.e-lib.e-flat.e-icon-btn{
+background: #ddd !important;
 }
 .e-control.e-grid.e-default.e-bothlines .e-headercell,
 .e-control.e-grid.e-default.e-bothlines .e-detailheadercell {
@@ -197,7 +204,10 @@ body {
 textarea.mat-input-element {
   height: 80px;
 }
-
+.mat-tab-body-content {
+    overflow: hidden !important;
+    /* height: 100vh !important; */
+}
 .mat-fab.mat-accent,
 .mat-flat-button.mat-accent,
 .mat-mini-fab.mat-accent,

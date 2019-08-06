@@ -1,12 +1,11 @@
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { UtilService } from 'src/app/shared/services/util.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
-import { CurriculumService } from '../curriculum/curriculum.service';
+import { AuthService } from './../../core/auth/auth.service';
 import { SchoolService } from '../school/school.service';
 import { AssignmentService } from '../assignment/assignment.service';
-import { WeekDay } from '@angular/common';
+import { UtilService } from './../../shared/services/util.service';
+import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'yoo-assignment-school',
@@ -26,33 +25,40 @@ export class AssignmentSchoolComponent implements OnInit {
   schoolId = '';
   schools: any;
   urole: any;
+  showDate = false;
   showLoader = false;
   assignments = [];
   gradeData = ['NURSERY', 'L.K.G', 'U.K.G'];
+  @ViewChild('Dialog') Dialog: DialogComponent;
+  @ViewChild('range') DateRange: DateRangePickerComponent;
+  dialogContent: string;
   constructor(
     private assignmentService: AssignmentService,
-    private toast: ToastService,
-    private curriculumService: CurriculumService,
     private authService: AuthService,
     private utilService: UtilService,
-    private schoolService: SchoolService
-  ) {}
+    private schoolService: SchoolService,
+    private toast: ToastService
+  ) { }
   ngOnInit(): void {
     this.currentDate = new Date(); // get current date
     this.displayDate = this.onClickDay();
     this.filteredBy = 'day';
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-    this.authService.getuRole().subscribe(res => (this.urole = res));
-    this.schoolService.getSchools().subscribe(res => {
-      this.schoolData = res;
-    });
-    if (this.urole !== 'SUPERADMIN' && this.urole !== 'YOOYOOADMIN') {
+    this.authService.getuRole()
+      .subscribe(res => (this.urole = res));
+    this.schoolService.getSchools()
+      .subscribe(res => {
+        this.schoolData = res;
+      });
+    this.reload();
+  }
+  reload(): void {
+     if (this.urole !== 'SUPERADMIN' && this.urole !== 'YOOYOOADMIN') {
       this.assignmentService
         .getAllSchoolAssignments(this.schoolId)
         .subscribe(res => {
           this.assignments = res;
           this.tempassignments = res;
-          console.log(res);
           this.filterByDate();
           this.showLoader = true;
         });
@@ -65,142 +71,86 @@ export class AssignmentSchoolComponent implements OnInit {
         this.assignments = res;
         this.tempassignments = res;
         this.assignmentsData = res;
-        console.log(res);
         this.filterByDate();
         this.showLoader = true;
       });
   }
-  onClickMethod(e): void {
-    this.filteredBy = e;
-    switch (e) {
-      case 'week':
-        this.displayDate = this.onClickWeek();
-        break;
-      case 'month':
-        this.displayDate = this.onClickMonth();
-        break;
-      case 'day':
-        this.displayDate = this.onClickDay();
-        break;
-      default:
-    }
+  onSelectDate(e, formData): void {
+    const toDate = this.utilService.getFormattedDate1(e.value);
+    const data = {
+      toDate,
+      id: formData.id
+   };
+    this.assignmentService.editAssignment(data)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
+    });
   }
-  // onChangeGrade(e): void {
-  //   this.tempassignments = this.assignmentsData.filter(data => {
-  //     console.log(e.itemData.value, data.grade.name);
-  //     if (
-  //       e.itemData.value === data.grade.name
-  //     ) {
-  //       return data;
-  //     }
-  //   });
-  //   this.assignments = this.tempassignments;
-  // }
-  onShowDialog(link): void {}
-
+  dialogClose(): void {
+    this.dialogContent = '';
+  }
+  onOpenDialog(link): void {
+    this.Dialog.show(true);
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+  }
+  openWorksheet(link): void {
+    this.Dialog.show(true);
+    this.dialogContent =
+      // tslint:disable-next-line:max-line-length
+      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+  }
   onClickPrevious(): void {
-    switch (this.filteredBy) {
-      case 'week':
-        this.currentDate = new Date(this.currentDate.valueOf() - 518400000);
-        this.displayDate = this.onClickWeek();
-        break;
-      case 'month':
-        this.currentDate.setMonth(this.currentDate.getMonth() - 1);
-        this.displayDate = this.onClickMonth();
-        break;
-      case 'day':
-        this.currentDate = new Date(this.currentDate.valueOf() - 86400000);
-        this.displayDate = this.onClickDay();
-        break;
-      default:
-    }
+    this.currentDate = new Date(this.currentDate.valueOf() - 86400000);
+    this.DateRange.value = [];
+    this.displayDate = this.onClickDay();
   }
   onClickNext(): void {
-    switch (this.filteredBy) {
-      case 'week':
-        this.currentDate = new Date(this.currentDate.valueOf() + 518400000);
-        this.displayDate = this.onClickWeek();
-        break;
-      case 'month':
-        this.currentDate.setMonth(this.currentDate.getMonth() + 1);
-        this.displayDate = this.onClickMonth();
-        break;
-      case 'day':
-        this.currentDate = new Date(this.currentDate.valueOf() + 86400000);
-        this.displayDate = this.onClickDay();
-        break;
-      default:
-    }
+    this.currentDate = new Date(this.currentDate.valueOf() + 86400000);
+    this.DateRange.value = [];
+    this.displayDate = this.onClickDay();
   }
   onClickDay(): any {
     this.filterByDate();
     return `${this.utilService.getFormattedDate1(this.currentDate)}`;
   }
-  onClickMonth(): any {
-    this.filterByMonth();
-    return `${this.utilService.getFormattedMonth(this.currentDate)}`;
-  }
-  onClickWeek(): any {
-    this.filterByWeek();
-    const curr = new Date(this.currentDate);
-    const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-    const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
-    return `${this.utilService.getFormattedDate1(
-      firstday
-    )} to ${this.utilService.getFormattedDate1(lastday)}`;
-  }
+  
   onClickToday(): void {
+    this.DateRange.value = [];
     this.currentDate = new Date();
-    switch (this.filteredBy) {
-      case 'week':
-        this.displayDate = this.onClickWeek();
-        break;
-      case 'month':
-        this.displayDate = this.onClickMonth();
-        break;
-      case 'day':
-        this.displayDate = this.onClickDay();
-        break;
-      default:
-    }
+    this.displayDate = this.onClickDay();
   }
 
   filterByDate(): void {
     this.assignments = this.tempassignments.filter(data => {
+      const current = new Date(this.utilService.getFormattedDate1(this.currentDate));
+      const start = new Date(this.utilService.getFormattedDate1(data.date));
+      const end = new Date(this.utilService.getFormattedDate1(data.toDate));
       if (
-        this.utilService.getFormattedDate1(this.currentDate) ===
-        this.utilService.getFormattedDate1(data.date)
+       current >= start && current <= end
       ) {
         return data;
       }
     });
   }
-  filterByMonth(): void {
-    this.assignments = this.tempassignments.filter(data => {
-      console.log(
-        this.utilService.getFormattedMonth(this.currentDate),
-        this.utilService.getFormattedMonth(data.date)
-      );
-      if (
-        this.utilService.getFormattedMonth(this.currentDate) ===
-        this.utilService.getFormattedMonth(data.date)
-      ) {
-        return data;
-      }
-    });
-  }
-  filterByWeek(): void {
-    const curr = new Date(this.currentDate);
-    let firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-    let lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
-    this.assignments = this.tempassignments.filter(item => {
-      const _currDate = this.utilService.weekCompareDates(item.date);
-      firstday = this.utilService.weekCompareDates(firstday);
-      lastday = this.utilService.weekCompareDates(lastday);
-      // console.log(_currDate, '>=' , firstday , '&&' , _currDate , '<=' , lastday);
-      // console.log(_currDate >= firstday);
-      // console.log(_currDate <= lastday);
-      return _currDate >= firstday && _currDate <= lastday;
-    });
+    deposit(): void {
+    const start = new Date(this.utilService.getFormattedDate1(this.DateRange.startDate));
+    const end = new Date(this.utilService.getFormattedDate1(this.DateRange.endDate));
+    if (this.DateRange.startDate != null) {
+      // tslint:disable-next-line:max-line-length
+      this.displayDate = `${this.utilService.getFormattedDate1(this.DateRange.startDate)} to ${this.utilService.getFormattedDate1(this.DateRange.endDate)}`;
+      this.assignments = this.tempassignments.filter(data => {
+        const from = new Date(this.utilService.getFormattedDate1(data.date));
+        const to = new Date(this.utilService.getFormattedDate1(data.toDate));
+        // console.log(from, start, to, end);
+        // tslint:disable-next-line:max-line-length
+        // console.log(start >= from, start >= to, end >= from, end >= to, start <= from, start <= to, end <= from, end <= to);
+        if (end >= from && start <= from && start <= to) {
+          return data;
+        }
+      });
+    }
   }
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
-
 import { ToastService } from './../../shared/services/toast.service';
 import { UtilService } from './../../shared/services/util.service';
 import { SchoolService } from './../school/school.service';
 import { AttendanceService } from './attendence.service';
+import { valueAccessor } from '@syncfusion/ej2-grids';
 
 @Component({
   selector: 'yoo-attendence',
@@ -12,7 +12,7 @@ import { AttendanceService } from './attendence.service';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
-  @ViewChild('class') selectedClass;
+ selectedClass = '';
   classes = [];
   students = [];
   data = [];
@@ -23,11 +23,10 @@ export class AttendanceComponent implements OnInit {
     private _util: UtilService,
     private _attendanceService: AttendanceService,
     private _toast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-
     this._schoolService
       .getStudentsByClass(schoolId)
       .pipe(map(res => res))
@@ -40,25 +39,29 @@ export class AttendanceComponent implements OnInit {
         console.log(this.classes);
       });
   }
-  onChangeClass(value): void {
+  onChangeClass(option): void {
+    console.log(option);
     this.attendedSIds = [];
-    this.students = this.data.filter(val => val.id == value)[0].students;
+    this.selectedClass = option.value.id;
     this.isChanged = true;
-
-    this._attendanceService.getAttendence().subscribe(res => {
-      this.attendedSIds = res;
-console.log(this.attendedSIds )
+    this._attendanceService.getAttendence(option.value.name)
+    .subscribe(res => {
+      this.students = res['studentList'];
+      this.attendedSIds = res['studentList'];
+      console.log(this.students);
     });
   }
 
   onFormSubmit(f): void {
     const students = f.value;
     const schoolId = this._util.getSchoolId();
-    const grade = parseInt(this.selectedClass.value, 10);
+    console.log(this.selectedClass);
+    const grade = this.selectedClass;
     const date = this._util.getFormattedDate();
     const studentList = [];
 
-    Object.keys(students).map(key => {
+    Object.keys(students)
+      .map(key => {
       if (students[key] !== '') {
         studentList.push({
           studentId: Number(key),
@@ -73,7 +76,8 @@ console.log(this.attendedSIds )
       studentList
     };
 
-    this._attendanceService.submitAttendance(attendanceData).subscribe(res => {
+    this._attendanceService.submitAttendance(attendanceData)
+      .subscribe(res => {
       if (res) {
         this._toast.success('Attendance submitted successfully!');
       } else {

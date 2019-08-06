@@ -1,5 +1,5 @@
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
 import {
   DialogEditEventArgs,
   EditService,
@@ -9,22 +9,25 @@ import {
   FilterService,
   FilterSettingsModel,
   GridComponent,
+  IFilter,
   PageService,
   PageSettingsModel,
   RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
+  SelectionSettingsModel,
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
-import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { UserService } from './user.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
-import { UtilService } from 'src/app/shared/services/util.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { SchoolService } from '../school/school.service';
+import { ToastService } from './../../shared/services/toast.service';
+import { UtilService } from './../../shared/services/util.service';
+import { AuthService } from './../../core/auth/auth.service';
 
 @Component({
   selector: 'yoo-users',
@@ -60,47 +63,66 @@ export class UsersComponent implements OnInit {
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
+  filter: IFilter;
+  public selectionOptions: SelectionSettingsModel;
   line = 'Both';
   public formData: FormData = new FormData();
   public header: String = 'Upload Student';
   public showCloseIcon: Boolean = true;
   public width: String = '300px';
   public position: object = { X: 'center', Y: 'center' };
-  public maxDate: Date = new Date ();
+  public maxDate: Date = new Date();
   toolbar: Array<string>;
   schools: any;
   excelExportProperties: ExcelExportProperties;
   urole: any;
   showLoader = false;
+  schoolData = [];
+  enterPress: any;
   constructor(
     private userService: UserService,
     private toast: ToastService,
     private utilService: UtilService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private schoolService: SchoolService
+  ) { }
   ngOnInit(): void {
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport', 'Import'];
+    this.toolbar = ['Add', 'Edit', 'Delete', 'Search', 'ExcelExport', 'Import'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
+    this.filter = {
+      type: 'CheckBox'
+    };
+    this.selectionOptions = { type: 'Single' };
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
+      allowDeleting: true,
       mode: 'Dialog'
     };
-    this.excelExportProperties  = {
+    this.excelExportProperties = {
       fileName: 'Users.xlsx'
-   };
+    };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-    this.authService.getuRole().subscribe(res => this.urole = res);
+    this.authService.getuRole()
+      .subscribe(res => this.urole = res);
     this.maxDate = this.utilService.getLastThreeYearsDate();
+    this.schoolService.getSchools()
+      .subscribe(res => {
+      this.schoolData = res;
+    });
     this.reload();
   }
   rowDataBound(args: RowDataBoundEventArgs): void {
     if (args.data['deleted']) {
       args.row.classList.add('deleted');
     }
+  }
+  onChangeSchool(e): void {
+    this.schoolId = e.itemData.id;
+    this.reload();
   }
   onToolbarClick(args: ClickEventArgs): void {
     if (args.item['properties'].text === 'Excel Export') {
@@ -110,7 +132,12 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: SaveEventArgs): any {
+    if (this.enterPress) {
+      this.enterPress = false;
+      args.cancel = true;
+      return false;
+    }
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.userData = { ...args.rowData };
@@ -162,6 +189,9 @@ export class UsersComponent implements OnInit {
       this.formData.append('file', file, file.name);
     }
   }
+  preventDefault(): void {
+    this.enterPress = true;
+  }
   cancel(): void {
     this.grid.closeEdit();
   }
@@ -169,26 +199,30 @@ export class UsersComponent implements OnInit {
     this.grid.endEdit();
   }
   uploadSubmit(): void {
-    this.userService.uploadStudents(this.formData).subscribe(res => {
+    this.userService.uploadStudents(this.formData)
+      .subscribe(res => {
       this.Dialog.hide();
       this.reload();
       this.toast.success(res.message);
     });
   }
   editStudent(formData): void {
-    this.userService.updateStudent(formData).subscribe(res => {
+    this.userService.updateStudent(formData)
+      .subscribe(res => {
       this.toast.success(res.message);
       this.reload();
     });
   }
   addStudent(formData): void {
-    this.userService.addStudent(formData).subscribe(res => {
+    this.userService.addStudent(formData)
+      .subscribe(res => {
       this.toast.success(res.message);
       this.reload();
     });
   }
   deleteStudent(id): void {
-    this.userService.deleteStudent(id).subscribe(res => {
+    this.userService.deleteStudent(id)
+      .subscribe(res => {
       this.toast.success(res.message);
       this.reload();
     });
@@ -201,17 +235,11 @@ export class UsersComponent implements OnInit {
     target.parentElement.classList.remove('e-input-focus');
   }
   reload(): void {
-    this.userService.getAllStudents().subscribe(res => {
-      this.users = res;
-      res.filter(data => {
-        if (data.deleted) {
-          data.status = 'Inactive';
-        } else {
-          data.status = 'Active';
-        }
-        return data;
+    this.userService.getAllStudents(this.schoolId)
+      .subscribe(res => {
+        this.users = res;
+        res.filter(data => data.deleted ? data.status = 'Inactive' : data.status = 'Active');
+        this.showLoader = true;
       });
-      this.showLoader = true;
-    });
   }
 }

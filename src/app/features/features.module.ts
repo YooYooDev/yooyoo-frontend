@@ -1,5 +1,4 @@
-import { DialogViewComponent } from './assignment/dialog-view.component';
-import { CommonModule } from '@angular/common';
+import { AttendanceComponent } from './attendance/attendance.component';
 import {
   AutoCompleteModule,
   DropDownListModule,
@@ -19,7 +18,7 @@ import {
   RadioButtonModule,
   SwitchModule
 } from '@syncfusion/ej2-angular-buttons';
-import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { CalendarModule, DatePickerModule, DateRangePickerModule } from '@syncfusion/ej2-angular-calendars';
 import {
   MaskedTextBoxModule,
   NumericTextBoxModule,
@@ -27,17 +26,18 @@ import {
   UploaderModule
 } from '@syncfusion/ej2-angular-inputs';
 import {
+  EditService,
   FilterService,
   GridModule,
   GroupService,
   PageService,
-  SortService
-} from '@syncfusion/ej2-angular-grids';
+  SelectionService,
+  SortService} from '@syncfusion/ej2-angular-grids';
 import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { AssignmentComponent } from './assignment/assignment.component';
-import { AttendanceComponent } from './attendance/attendance.component';
+import { CommonModule } from '@angular/common';
 import { CurriculumComponent } from './curriculum/curriculum.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturesRoutingModule } from './features-routing.module';
@@ -54,7 +54,31 @@ import { SettingsComponent } from './curriculum/settings/settings.component';
 import { AssignmentSchoolComponent } from './assignment-school/assignment-school.component';
 import { QuizComponent } from './curriculum/quiz/quiz.component';
 import { TopicComponent } from './curriculum/topics/topic.component';
-import { AttendanceReportComponent } from './reports/attendance-report/attendance-report.component';
+import { ListViewModule } from '@syncfusion/ej2-angular-lists';
+import {
+  AccumulationAnnotationService,
+  AccumulationChartModule,
+  AccumulationDataLabelService,
+  AccumulationLegendService,
+  AccumulationTooltipService,
+  BarSeriesService,
+  CategoryService,
+  ChartAnnotationService,
+  ChartModule,
+  ColumnSeriesService,
+  DataLabelService,
+  // StackingAreaSeriesService,
+  // StackingBarSeriesService,
+  // StackingColumnSeriesService,
+  // StackingLineSeriesService,
+  LegendService,
+  PieSeriesService,
+  TooltipService
+} from '@syncfusion/ej2-angular-charts';
+import { StudentReportComponent } from './reports/student-report/student-report.component';
+import { SchoolReportComponent } from './reports/school-report/school-report.component';
+import { WorksheetComponent } from './curriculum/worksheet/worksheet.component';
+import { RecaptchaModule } from 'angular-google-recaptcha';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -73,9 +97,10 @@ import { AttendanceReportComponent } from './reports/attendance-report/attendanc
     CredManagerComponent,
     SettingsComponent,
     QuizComponent,
+    WorksheetComponent,
     TopicComponent,
-    DialogViewComponent,
-    AttendanceReportComponent
+    StudentReportComponent,
+    SchoolReportComponent
   ],
   imports: [
     CommonModule,
@@ -103,9 +128,40 @@ import { AttendanceReportComponent } from './reports/attendance-report/attendanc
     NumericTextBoxModule,
     MaskedTextBoxModule,
     AutoCompleteModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ListViewModule,
+    AccumulationChartModule,
+    ChartModule,
+    DateRangePickerModule,
+    CalendarModule,
+    RecaptchaModule.forRoot({
+      siteKey: '6LcxvaEUAAAAAOojJR5vEv5-0FETdKY8LNznIflR'
+    })
   ],
-  exports: [GridModule,DialogViewComponent],
-  providers: [PageService, SortService, FilterService, GroupService]
+  exports: [GridModule],
+  providers: [
+    PageService,
+    SortService,
+    FilterService,
+    EditService,
+    SelectionService,
+    GroupService,
+    BarSeriesService,
+    CategoryService,
+    LegendService,
+    TooltipService,
+    PieSeriesService,
+    DataLabelService,
+    AccumulationLegendService,
+    AccumulationTooltipService,
+    AccumulationDataLabelService,
+    AccumulationAnnotationService,
+  //   StackingColumnSeriesService,
+  // StackingLineSeriesService,
+  // StackingAreaSeriesService,
+  //   StackingBarSeriesService,
+    ColumnSeriesService,
+    ChartAnnotationService
+  ]
 })
-export class FeaturesModule {}
+export class FeaturesModule { }

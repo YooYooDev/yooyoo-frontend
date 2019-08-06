@@ -1,5 +1,3 @@
-import { schools } from './school.data';
-import { ISchool } from './school';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { apiUrl } from '../../core/api';
@@ -8,11 +6,11 @@ import { Observable, of as observableOf } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SchoolService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   getSchools(): Observable<any> {
-    // return observableOf(schools);
-    return this.httpClient.get(`${apiUrl}/schools/load`).pipe(map(res => res));
+    return this.httpClient.get(`${apiUrl}/schools/load`)
+      .pipe(map(res => res));
   }
   updateSchool(schoolData): Observable<any> {
     return this.httpClient
@@ -25,9 +23,9 @@ export class SchoolService {
       .pipe(map(res => res));
   }
   deleteSchool(id): Observable<any> {
-      return this.httpClient
-        .delete(`${apiUrl}/schools/delete/${id}`)
-        .pipe(map(res => res));
+    return this.httpClient
+      .delete(`${apiUrl}/schools/delete/${id}?delete=true`)
+      .pipe(map(res => res));
   }
 
   // returns all school for notification form
