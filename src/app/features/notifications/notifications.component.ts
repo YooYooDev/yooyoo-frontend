@@ -67,7 +67,7 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   ) { }
 
   ngOnInit() {
-    this.toolbar = ['Delete', 'Search'];
+    this.toolbar = ['Delete'];
     this.editSettings = {
       allowEditing: false,
       allowAdding: false,

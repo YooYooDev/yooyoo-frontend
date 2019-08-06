@@ -87,10 +87,10 @@
         <li class="has-submenu" routerLinkActive="active">
           <a [routerLink]="['/reports']" (click)="onMenuClick()"><i class="mdi mdi-comment-text"></i>Reports</a>
         </li>
-        <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER' || urole === 'TEACHER'">
+        <li class="has-submenu" routerLinkActive="active" *ngIf="(urole === 'SCHOOLOWNER' || urole === 'TEACHER') && enableAttendance">
           <a [routerLink]="['/attendance']" (click)="onMenuClick()"><i class="mdi mdi-book-multiple"></i>Attendance</a>
         </li>
-        <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER' || urole === 'SUPERADMIN'">
+        <li class="has-submenu" routerLinkActive="active" *ngIf="(urole === 'SCHOOLOWNER' || urole === 'SUPERADMIN') && enableFees">
           <a [routerLink]="['/fees']" (click)="onMenuClick()"><i class="fas fa-money-bill"></i>Fees</a>
         </li>
         <li class="has-submenu" routerLinkActive="active">

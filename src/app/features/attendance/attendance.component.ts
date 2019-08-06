@@ -47,6 +47,7 @@ export class AttendanceComponent implements OnInit {
     this._attendanceService.getAttendence(option.value.name)
     .subscribe(res => {
       this.students = res['studentList'];
+      this.attendedSIds = res['studentList'];
       console.log(this.students);
     });
   }

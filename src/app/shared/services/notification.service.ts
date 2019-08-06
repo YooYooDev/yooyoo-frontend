@@ -22,7 +22,7 @@ export class NotificationService {
   }
   deleteNotification(id): any {
     return this._http
-      .delete(`${apiUrl}/notifications/delete/${id}`)
+      .delete(`${apiUrl}/notifications/delete/${id}?delete=true`)
       .pipe(map(res => res));
   }
 }

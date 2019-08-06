@@ -16,6 +16,9 @@ export class HeaderComponent implements OnInit {
   notifications: [];
   notificationCount: number;
   urole = '';
+  enableAttendance = 0;
+  enableFees = 0;
+  enablePrintedWorksheet = 0;
   constructor(
     private _router: Router,
     private _toast: ToastService,
@@ -28,6 +31,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     if (this._authService.isLoggedIn()) {
       this.fullName = this._utilService.getUserInfo().fullName;
+      this.enableAttendance = this._utilService.getUserInfo().schoolInfo.enableAttendance;
+      this.enableFees = this._utilService.getUserInfo().schoolInfo.enableFees;
+      this.enablePrintedWorksheet = this._utilService.getUserInfo().schoolInfo.enablePrintedWorksheet;
     }
     this._authService.getuRole()
       .subscribe(
