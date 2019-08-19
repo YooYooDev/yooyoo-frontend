@@ -3,9 +3,7 @@ import { Router } from '@angular/router';
 import { ToastService } from '../services/toast.service';
 import { UtilService } from '../services/util.service';
 import { AuthService } from '../../core/auth/auth.service';
-import { NotificationService } from '../services/notification.service';
-import { HttpErrorResponse } from '@angular/common/http';
-
+import { RaiseTicketService } from 'src/app/features/raise-a-ticket/raise-a-ticket.service';
 @Component({
   selector: 'yoo-header',
   templateUrl: './header.component.html',
@@ -14,17 +12,18 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class HeaderComponent implements OnInit {
   fullName: string;
   notifications: [];
-  notificationCount: number;
+  ticketCount: number;
   urole = '';
   enableAttendance = 0;
   enableFees = 0;
   enablePrintedWorksheet = 0;
+  tickets = [];
   constructor(
     private _router: Router,
     private _toast: ToastService,
     private _utilService: UtilService,
     private _authService: AuthService,
-    private _notificationService: NotificationService,
+    private ticketService: RaiseTicketService,
     private el: ElementRef, private renderer: Renderer
   ) { }
 
@@ -39,17 +38,12 @@ export class HeaderComponent implements OnInit {
       .subscribe(
         res => this.urole = res
       );
-    this._notificationService.getSchoolNotification()
-    .subscribe(
-      (data: any) => {
-        this.notifications = data;
-        this.notificationCount = this.notifications.length;
-        console.log(this.notifications.length);
-      },
-      (err: HttpErrorResponse) => {
-        this._toast.error('Something went wrong');
-      }
-    );
+    this.ticketService.getTickets()
+      .subscribe(res => {
+      this.tickets = res;
+      console.log(this.tickets);
+      this.ticketCount = res.length;
+    });
 
   }
   onMenuClick(): void {

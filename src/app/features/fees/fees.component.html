@@ -20,19 +20,19 @@
       </e-column>
       <e-column field="gradeName" headerText="CLASS" textAlign="left" width="120" [allowEditing]="false"></e-column>
       <e-column field="tutionFee" headerText="TUTION FEE" textAlign="left" width="170" editType="numericedit"
-        [edit]="numericParams" format="C2">
+        [edit]="numericParams">
       </e-column>
       <e-column field="paidTutionFee" headerText="TUTION FEE PAID" textAlign="left" width="170" editType="numericedit"
-        [edit]="numericParams" format="C2">
+        [edit]="numericParams">
       </e-column>
       <e-column headerText="TUTION FEE PENDING" textAlign="left" width="170" [allowEditing]="false">
         <ng-template #template let-data> {{data.tutionFee - data.paidTutionFee}} </ng-template>
       </e-column>
       <e-column field="transportationFee" headerText="TRANSPORT FEE" textAlign="left" width="170" editType="numericedit"
-        [edit]="numericParams" format="C2">
+        [edit]="numericParams">
       </e-column>
       <e-column field="paidTransportFee" headerText="TRANSPORT FEE PAID" textAlign="left" width="170" editType="numericedit"
-        [edit]="numericParams" format="C2">
+        [edit]="numericParams">
       </e-column>
       <e-column headerText="TRANSPORT FEE PENDING" textAlign="left" width="170" [allowEditing]="false">
         <ng-template #template let-data> {{data.transportationFee - data.paidTransportFee}} </ng-template>

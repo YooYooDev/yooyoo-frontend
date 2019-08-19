@@ -61,11 +61,11 @@
           <!-- <span (click)="onChangeDate(assignment.topic)">
             <i class="far fa-edit m-l-5"></i>
           </span> -->
-        <ejs-datepicker [enabled]="false" [showClearButton]="false" [allowEdit]="false" [value]="assignment.date | date:'MM/dd/yyyy'" strictMode="true" 
+        <ejs-datepicker [enabled]="false" [showClearButton]="false" [allowEdit]="false" [value]="assignment.date | date:'MM/dd/yyyy'" format='dd-MMM-yyyy' strictMode="true" 
           name="date"></ejs-datepicker>
          <span class="m-l-10 m-t-5 m-r-10">To</span>
-        <ejs-datepicker [value]="assignment.toDate | date:'MM/dd/yyyy'" placeholder='Enter date' strictMode="true" #date
-          name="date" [showClearButton]="false" [allowEdit]="false" (change)="onSelectDate($event, assignment)"></ejs-datepicker>
+        <ejs-datepicker [value]="assignment.toDate | date:'MM/dd/yyyy'" [min]="assignment.date | date:'MM/dd/yyyy'" placeholder='Enter date' strictMode="true" #date
+          name="date" format='dd-MMM-yyyy'  [showClearButton]="false" [allowEdit]="false" (change)="onSelectDate($event, assignment)"></ejs-datepicker>
         </span>
       </div>
     </div>

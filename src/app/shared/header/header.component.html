@@ -11,24 +11,23 @@
           <li class="dropdown navbar-c-items">
             <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
               <i class="mdi mdi-bell"></i>
-              <span class="badge up bg-danger">{{ notificationCount }}</span>
+              <span class="badge up bg-danger">{{ ticketCount }}</span>
             </a>
             <ul
               class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right dropdown-lg user-list notify-list custom-height">
               <li *ngFor="
-                  let notification of (notifications | slice: 0:5);
+                  let ticket of (tickets | slice: 0:5);
                   let i = index
                 ">
                 <div class="user-list-item">
                   <div class="user-desc">
-                    <span class="name">{{ notification.header }}</span>
-                    <span class="time">{{ notification.message }}</span>
+                    <span class="time">{{ (ticket.message.length>40)? (ticket.message | slice:0:40)+'..':(ticket.message) }}</span>
                   </div>
                 </div>
               </li>
               <li class="all-msgs text-center">
                 <p class="m-0">
-                  <a [routerLink]="['/notification']" routerLinkActive="router-link-active">See all Notification</a>
+                  <a [routerLink]="['/raise-a-ticket']" routerLinkActive="router-link-active">See all Tickets</a>
                 </p>
               </li>
             </ul>
@@ -94,7 +93,7 @@
           <a [routerLink]="['/fees']" (click)="onMenuClick()"><i class="fas fa-money-bill"></i>Fees</a>
         </li>
         <li class="has-submenu" routerLinkActive="active">
-          <a [routerLink]="['/notifications']" (click)="onMenuClick()"><i class="fas fa-bell"></i>Notifications</a>
+          <a [routerLink]="['/notifications']" (click)="onMenuClick()"><i class="fas fa-bell"></i>Notice Board</a>
         </li>
         <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER'">
           <a [routerLink]="['/raise-a-ticket']" (click)="onMenuClick()"><i class="fas fa-ticket-alt"></i>Raise a Ticket</a>

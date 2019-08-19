@@ -9,7 +9,7 @@
     <ng-template mat-tab-label>Create / Modify Assignment</ng-template>
     <div class="control-section yooyoo">
       <ejs-grid #grid *ngIf="showLoader" [showColumnMenu]="false" height=300 [allowReordering]="false"
-        [gridLines]="line" [allowPaging]="false" [allowSorting]="true" [allowFiltering]="true" [allowExcelExport]="true"
+        [gridLines]="line" [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [allowExcelExport]="true"
         [allowGrouping]="false" [searchSettings]="searchSettings" [editSettings]="editSettings"
         [filterSettings]="filterOptions" [pageSettings]="pageSettings" [toolbar]="toolbar" [dataSource]="assignments"
         (toolbarClick)="onToolbarClick($event)" (actionBegin)="actionBegin($event)"

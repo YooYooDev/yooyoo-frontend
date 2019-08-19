@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ToastService } from './../../shared/services/toast.service';
 import { UtilService } from './../../shared/services/util.service';
 import { SchoolService } from './../school/school.service';
 import { AttendanceService } from './attendence.service';
-import { valueAccessor } from '@syncfusion/ej2-grids';
 
 @Component({
   selector: 'yoo-attendence',
@@ -12,7 +11,7 @@ import { valueAccessor } from '@syncfusion/ej2-grids';
   styleUrls: ['./attendance.component.css']
 })
 export class AttendanceComponent implements OnInit {
- selectedClass = '';
+  selectedClass = '';
   classes = [];
   students = [];
   data = [];
@@ -45,11 +44,11 @@ export class AttendanceComponent implements OnInit {
     this.selectedClass = option.value.id;
     this.isChanged = true;
     this._attendanceService.getAttendence(option.value.name)
-    .subscribe(res => {
-      this.students = res['studentList'];
-      this.attendedSIds = res['studentList'];
-      console.log(this.students);
-    });
+      .subscribe(res => {
+        this.students = res['studentList'];
+        this.attendedSIds = res['studentList'];
+        console.log(this.students);
+      });
   }
 
   onFormSubmit(f): void {
@@ -62,13 +61,13 @@ export class AttendanceComponent implements OnInit {
 
     Object.keys(students)
       .map(key => {
-      if (students[key] !== '') {
-        studentList.push({
-          studentId: Number(key),
-          attendanceStatus: students[key]
-        });
-      }
-    });
+        if (students[key] !== '') {
+          studentList.push({
+            studentId: Number(key),
+            attendanceStatus: students[key]
+          });
+        }
+      });
     const attendanceData = {
       schoolId,
       grade,
@@ -78,11 +77,11 @@ export class AttendanceComponent implements OnInit {
 
     this._attendanceService.submitAttendance(attendanceData)
       .subscribe(res => {
-      if (res) {
-        this._toast.success('Attendance submitted successfully!');
-      } else {
-        this._toast.error('There was an error, please try again!');
-      }
-    });
+        if (res) {
+          this._toast.success('Attendance submitted successfully!');
+        } else {
+          this._toast.error('There was an error, please try again!');
+        }
+      });
   }
 }

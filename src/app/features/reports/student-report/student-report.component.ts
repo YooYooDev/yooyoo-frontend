@@ -45,7 +45,6 @@ export class StudentReportComponent implements OnInit {
   fromDate: any;
   toDate: any;
   schoolValue: any;
-  filterType: any;
   attendanceUKG = [];
   attendanceLKG = [];
   attendanceNursery = [];
@@ -55,6 +54,9 @@ export class StudentReportComponent implements OnInit {
   feesReport = [];
   attendanceReport: any;
   assignmentReport: any;
+  studentAssignmentData = [];
+  studentFeesData = [];
+  studentAttedanceData = [];
   tempUsers: any;
   constructor(
     private userService: UserService,
@@ -81,7 +83,9 @@ export class StudentReportComponent implements OnInit {
   FilterData = ['Attendance', 'Fees', 'Assignment'];
   gradeData = ['NURSERY', 'L.K.G', 'U.K.G'];
   filterValue = 'Assignment';
-  @ViewChild('pie') pie: AccumulationChartComponent | AccumulationChart;
+  @ViewChild('pie1') pie1: AccumulationChartComponent | AccumulationChart;
+  @ViewChild('pie2') pie2: AccumulationChartComponent | AccumulationChart;
+  @ViewChild('pie3') pie3: AccumulationChartComponent | AccumulationChart;
   @ViewChild('chart') chart: ChartComponent;
   // custom code end
   public startAngle = 0;
@@ -173,7 +177,7 @@ export class StudentReportComponent implements OnInit {
   }
 
   onFilterType(e): void {
-    this.filterType = e.itemData.value;
+    this.filterValue = e.itemData.value;
     this.generateData();
   }
 
@@ -214,26 +218,28 @@ export class StudentReportComponent implements OnInit {
             this.feesReport = res.feesReport;
             console.log(this.feesReport);
             const feesData = res.feesReport;
-            this.feesdata.push([
-              { x: 'LKG', y: feesData[0].totalTransportFee },
-              { x: 'UKG', y: feesData[1].totalTransportFee },
-              { x: 'NURSERY', y: feesData[2].totalTransportFee }
-            ]);
-            this.feesdata.push([
-              { x: 'LKG', y: feesData[0].totalTransportFeePaid },
-              { x: 'UKG', y: feesData[1].totalTransportFeePaid },
-              { x: 'NURSERY', y: feesData[2].totalTransportFeePaid }
-            ]);
-            this.feesdata.push([
-              { x: 'LKG', y: feesData[0].totalTutionFee },
-              { x: 'UKG', y: feesData[1].totalTutionFee },
-              { x: 'NURSERY', y: feesData[2].totalTutionFee }
-            ]);
-            this.feesdata.push([
-              { x: 'LKG', y: feesData[0].totalTutionFeepaid },
-              { x: 'UKG', y: feesData[1].totalTutionFeepaid },
-              { x: 'NURSERY', y: feesData[2].totalTutionFeepaid }
-            ]);
+            if (feesData) {
+              this.feesdata.push([
+                { x: 'LKG', y: feesData[0].totalTransportFee },
+                { x: 'UKG', y: feesData[1].totalTransportFee },
+                { x: 'NURSERY', y: feesData[2].totalTransportFee }
+              ]);
+              this.feesdata.push([
+                { x: 'LKG', y: feesData[0].totalTransportFeePaid },
+                { x: 'UKG', y: feesData[1].totalTransportFeePaid },
+                { x: 'NURSERY', y: feesData[2].totalTransportFeePaid }
+              ]);
+              this.feesdata.push([
+                { x: 'LKG', y: feesData[0].totalTutionFee },
+                { x: 'UKG', y: feesData[1].totalTutionFee },
+                { x: 'NURSERY', y: feesData[2].totalTutionFee }
+              ]);
+              this.feesdata.push([
+                { x: 'LKG', y: feesData[0].totalTutionFeepaid },
+                { x: 'UKG', y: feesData[1].totalTutionFeepaid },
+                { x: 'NURSERY', y: feesData[2].totalTutionFeepaid }
+              ]);
+            }
           });
         break;
       case 'Attendance':
@@ -248,13 +254,13 @@ export class StudentReportComponent implements OnInit {
   }
   createAttendanceChart(data): void {
     this.attendanceData = data;
-    this.attendanceUKG = [{ x: 'totalAttendance', y: data[0].totalAttendance, r: data[0].totalAttendance },
-    { x: 'totalPresentDays', y: data[0].totalPresentDays, r: data[0].totalPresentDays }];
-    this.attendanceLKG = [{ x: 'totalAttendance', y: data[1].totalAttendance, r: data[1].totalAttendance },
-    { x: 'totalPresentDays', y: data[1].totalPresentDays, r: data[1].totalPresentDays }];
-    this.attendanceNursery = [{ x: 'totalAttendance', y: data[2].totalAttendance, r: data[2].totalAttendance },
-    { x: 'totalPresentDays', y: data[2].totalPresentDays, r: data[2].totalPresentDays }];
-    this.pie.refresh();
+    this.attendanceUKG = [{ x: 'Total No of Days', y: data[0].totalAttendance, r: data[0].totalAttendance },
+    { x: 'Total No of Present Days', y: data[0].totalPresentDays, r: data[0].totalPresentDays }];
+    this.attendanceLKG = [{ x: 'Total No of Days', y: data[1].totalAttendance, r: data[1].totalAttendance },
+    { x: 'Total No of Present Days', y: data[1].totalPresentDays, r: data[1].totalPresentDays }];
+    this.attendanceNursery = [{ x: 'Total No of Days', y: data[2].totalAttendance, r: data[2].totalAttendance },
+    { x: 'Total No of Present Days', y: data[2].totalPresentDays, r: data[2].totalPresentDays }];
+
   }
 
   onActionComplete(args: SelectEventArgs): void {
@@ -263,6 +269,15 @@ export class StudentReportComponent implements OnInit {
     this.userService.getReportByStudent(args.data['id'])
       .subscribe(res => {
         this.student.push(res);
+        this.studentAssignmentData = [{ x: 'Quizzes Attented', y: res.noOfQuestionsFaced, r: res.noOfQuestionsFaced },
+          { x: 'Topics Learnt', y: res.noOfVideoWatched, r: res.noOfVideoWatched },
+          { x: 'WorkSheets Practiced', y: res.noOfWorkSheetAppeared, r: res.noOfWorkSheetAppeared }];
+        this.studentAttedanceData = [{ x: 'Total No of Days', y: res.attendanceTakenDays, r: res.attendanceTakenDays },
+          { x: 'Total No of Present Days', y: res.presentDays, r: res.presentDays }];
+        this.studentFeesData = [{ x: 'Tution Fee', y: res.tutionFee, r: res.tutionFee },
+          { x: 'Tution Fee Paid', y: res.totalTutionFeePaid, r: res.totalTutionFeePaid },
+          { x: 'Transportation Fee', y: res.transportationFee, r: res.transportationFee },
+          { x: 'Transport Fee Paid', y: res.totalTransportFeePaid, r: res.totalTransportFeePaid }];
       });
   }
 

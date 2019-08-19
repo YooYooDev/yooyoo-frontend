@@ -53,7 +53,7 @@ export class AssignmentSchoolComponent implements OnInit {
     this.reload();
   }
   reload(): void {
-     if (this.urole !== 'SUPERADMIN' && this.urole !== 'YOOYOOADMIN') {
+    //  if (this.urole !== 'SUPERADMIN' && this.urole !== 'YOOYOOADMIN') {
       this.assignmentService
         .getAllSchoolAssignments(this.schoolId)
         .subscribe(res => {
@@ -62,7 +62,7 @@ export class AssignmentSchoolComponent implements OnInit {
           this.filterByDate();
           this.showLoader = true;
         });
-    }
+    // }
   }
   onChangeSchool(e): void {
     this.assignmentService
@@ -116,7 +116,7 @@ export class AssignmentSchoolComponent implements OnInit {
     this.filterByDate();
     return `${this.utilService.getFormattedDate1(this.currentDate)}`;
   }
-  
+
   onClickToday(): void {
     this.DateRange.value = [];
     this.currentDate = new Date();
@@ -136,18 +136,22 @@ export class AssignmentSchoolComponent implements OnInit {
     });
   }
     deposit(): void {
-    const start = new Date(this.utilService.getFormattedDate1(this.DateRange.startDate));
-    const end = new Date(this.utilService.getFormattedDate1(this.DateRange.endDate));
-    if (this.DateRange.startDate != null) {
+      const start = new Date(this.utilService.getFormattedDate1(this.DateRange.startDate));
+      const end = new Date(this.utilService.getFormattedDate1(this.DateRange.endDate));
+      if (this.DateRange.startDate !== undefined) {
       // tslint:disable-next-line:max-line-length
-      this.displayDate = `${this.utilService.getFormattedDate1(this.DateRange.startDate)} to ${this.utilService.getFormattedDate1(this.DateRange.endDate)}`;
-      this.assignments = this.tempassignments.filter(data => {
+        this.displayDate = `${this.utilService.getFormattedDate1(this.DateRange.startDate)} to ${this.utilService.getFormattedDate1(this.DateRange.endDate)}`;
+        this.assignments = this.tempassignments.filter(data => {
         const from = new Date(this.utilService.getFormattedDate1(data.date));
         const to = new Date(this.utilService.getFormattedDate1(data.toDate));
         // console.log(from, start, to, end);
         // tslint:disable-next-line:max-line-length
         // console.log(start >= from, start >= to, end >= from, end >= to, start <= from, start <= to, end <= from, end <= to);
-        if (end >= from && start <= from && start <= to) {
+        // if (end >= from && start <= from && start <= to) {
+        //   return data;
+        // }
+        // console.log(end >= from , start <= from , start <= to , end >= to);
+        if ((end >= from && start <= to)) {
           return data;
         }
       });

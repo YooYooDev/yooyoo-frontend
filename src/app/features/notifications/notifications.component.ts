@@ -1,15 +1,26 @@
-import { SchoolService } from '../school/school.service';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ToastService } from '../../shared/services/toast.service';
-import { AuthService } from '../../core/auth/auth.service';
-import { NotificationService } from '../../shared/services/notification.service';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
 import {
   MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger
 } from '@angular/material';
+import {
+  EditService,
+  EditSettingsModel,
+  ExcelExportService,
+  FilterService,
+  FilterSettingsModel,
+  GridComponent,
+  PageService,
+  PageSettingsModel,
+  SaveEventArgs,
+  SearchSettingsModel,
+  SortService,
+  TextWrapSettingsModel,
+  ToolbarService
+} from '@syncfusion/ej2-angular-grids';
+import { Observable, Subscription } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -17,8 +28,10 @@ import {
   startWith,
   switchMap
 } from 'rxjs/operators';
-// tslint:disable-next-line:max-line-length
-import { EditService, EditSettingsModel, FilterService, FilterSettingsModel, GridComponent, PageService, SaveEventArgs, SearchSettingsModel, ToolbarService } from '@syncfusion/ej2-angular-grids';
+import { AuthService } from '../../core/auth/auth.service';
+import { NotificationService } from '../../shared/services/notification.service';
+import { ToastService } from '../../shared/services/toast.service';
+import { SchoolService } from '../school/school.service';
 
 @Component({
   selector: 'yoo-notifications',
@@ -26,6 +39,8 @@ import { EditService, EditSettingsModel, FilterService, FilterSettingsModel, Gri
   styleUrls: ['./notifications.component.css'],
   providers: [
     ToolbarService,
+    ExcelExportService,
+    SortService,
     PageService,
     FilterService,
     EditService
@@ -46,9 +61,11 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   filteredStudents: Observable<any>;
   toolbar: Array<string>;
 
-  classes = [];
+  classes = [{ name: 'ALL', id: 0 }, { name: 'NURSERY', id: 1 }, { name: 'L.K.G', id: 2 }, { name: 'U.K.G', id: 3 }];
   students = [];
   data = [];
+  public wrapSettings: TextWrapSettingsModel;
+  pageSettings: PageSettingsModel;
   public editSettings: EditSettingsModel;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
@@ -67,13 +84,17 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   ) { }
 
   ngOnInit() {
-    this.toolbar = ['Delete'];
+    this.pageSettings = { pageSize: 15 };
+    this.toolbar = ['Search', 'Delete'];
     this.editSettings = {
       allowEditing: false,
       allowAdding: false,
       allowDeleting: true,
       mode: 'Normal'
     };
+    this.searchSettings = {};
+    this.wrapSettings = { wrapMode: 'Both' };
+    this.filterOptions = { type: 'CheckBox' };
     this._authService.getuRole()
       .subscribe(res => (this.urole = res));
     this.reload();
@@ -124,15 +145,15 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
       e => {
         if (!e || !e.source) {
           this.notificationForm.get('schoolId')
-          .setValue(undefined);
+            .setValue(undefined);
           this.notificationForm.get('schoolName')
-          .setValue(undefined);
+            .setValue(undefined);
           this.notificationForm.get('gradeId')
-          .setValue(undefined);
+            .setValue(undefined);
           this.notificationForm.get('studentId')
-          .setValue(undefined);
+            .setValue(undefined);
           this.notificationForm.get('studentName')
-          .setValue(undefined);
+            .setValue(undefined);
           if (this.urole === 'SUPERADMIN') {
             this.disableClass();
           }
@@ -144,73 +165,82 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     );
   }
   actionBegin(args: SaveEventArgs): any {
-      if (args.requestType === 'delete') {
-        this.deleteNotification(args.data[0].id);
+    if (args.requestType === 'delete') {
+      this.deleteNotification(args.data[0].id);
     }
   }
-  // get selected school value and load classes based on school id
   onChangeSchool(event: MatAutocompleteSelectedEvent): void {
     this.notificationForm.get('gradeId')
-    .setValue(undefined);
-    this.classes = [];
+      .setValue(undefined);
     this.notificationForm.get('studentId')
-    .setValue(undefined);
+      .setValue(undefined);
     this.notificationForm.get('studentName')
-    .setValue(undefined);
+      .setValue(undefined);
     this.students = [];
     this.notificationForm.get('schoolName')
-    .setValue(event.option.value);
+      .setValue(event.option.value);
     const schoolId = event.option.id;
-    // const schoolId = 1 ;
     this.schoolChange(schoolId);
   }
   schoolChange(schoolId): any {
-    // tslint:disable-next-line:newline-per-chained-call
-    this.notificationForm.get('schoolId').setValue(schoolId);
+    this.notificationForm.get('schoolId')
+      .setValue(schoolId);
     this._schoolService
       .getStudentsByClass(schoolId)
       .pipe(map(res => res))
       .subscribe(res => {
-        this.classes = [];
+        // this.classes = [];
         this.data = res;
-        res.map(r => {
-          this.classes.push({ name: r.name, id: r.id });
-        });
         if (this.classes.length === 0) {
           this._toastService.warning('No class record found');
           this.disableClass();
           this.disableStudent();
         } else {
-          this.notificationForm.get('gradeId').enable();
-        }
-      });
+          this.notificationForm.get('gradeId')
+            .enable();
+          }
+        });
+    this.notificationForm.get('gradeId')
+      .enable();
   }
   onChangeClass(value): void {
-    this.notificationForm.get('studentId').setValue(undefined);
-    this.students = [];
-    this.students = this.data.filter(val => val.id === value)[0].students;
-    if (this.students.length === 0) {
-      this._toastService.warning('No student record found');
-      this.notificationForm.get('studentName').disable();
+    if (value) {
+      this.notificationForm.get('studentId')
+        .setValue(undefined);
+      this.students = [];
+      this.students = this.data.filter(val => val.id === value)[0].students;
+      if (this.students.length === 0) {
+        this._toastService.warning('No student record found');
+        this.notificationForm.get('studentName')
+          .disable();
+      } else {
+        this.notificationForm.get('studentName')
+          .enable();
+      }
     } else {
-      this.notificationForm.get('studentName').enable();
+      this.notificationForm.get('studentName')
+        .disable();
     }
   }
 
   onChangeStudent(event: MatAutocompleteSelectedEvent): void {
     console.log(event);
-    this.notificationForm.get('studentId').setValue(event.option.id);
-    this.notificationForm.get('studentName').setValue(event.option.value);
+    this.notificationForm.get('studentId')
+      .setValue(event.option.id);
+    this.notificationForm.get('studentName')
+      .setValue(event.option.value);
   }
 
   // school filter
   filterSchool(val: string): Observable<any> {
-    return this._schoolService.getAllSchools().pipe(
+    return this._schoolService.getAllSchools()
+      .pipe(
       map(response =>
         response.filter(option => {
           return (
-            option.name.toLowerCase().indexOf(val.toString().toLowerCase()) ===
-            0
+            option.name.toLowerCase()
+              .indexOf(val.toString()
+              .toLowerCase()) === 0
           );
         })
       )
@@ -223,7 +253,7 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
         this.reload();
       });
   }
-  reload() {
+  reload(): void {
     this._notificationService.getAllNotification()
       .subscribe(res => (this.notification = res));
   }
@@ -233,24 +263,38 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     return val
       ? this.students.filter(
         option =>
-          option.firstName.toLowerCase().indexOf(val.toLowerCase()) > -1
+          option.firstName.toLowerCase()
+            .indexOf(val.toLowerCase()) > -1
       )
       : this.students;
   }
 
   onFormSubmit(): any {
+
+    const data = {
+      schoolId: this.notificationForm.value.schoolId,
+      schoolName: this.notificationForm.value.schoolName,
+      gradeId: this.notificationForm.value.gradeId,
+      studentId: this.notificationForm.value.studentId ? this.notificationForm.value.studentId : '',
+      studentName: this.notificationForm.value.studentName ? this.notificationForm.value.studentName : '',
+      header: this.notificationForm.value.header,
+      message: this.notificationForm.value.message
+    };
+    console.log(data);
     this._notificationService
-      .saveNotification(this.notificationForm.value)
+      .saveNotification(data)
       .subscribe(
         (res: any) => {
           this.notificationFormValues.resetForm();
+          this.reload();
           this._toastService.success(
             'We have sent a notification successfully!'
           );
           if (this.urole === 'SUPERADMIN') {
             this.disableClass();
           } else {
-            this.notificationForm.get('schoolId').setValue(this.schoolId);
+            this.notificationForm.get('schoolId')
+              .setValue(this.schoolId);
           }
           this.disableStudent();
 
@@ -262,11 +306,13 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   }
 
   disableClass(): any {
-    this.classes = [];
-    this.notificationForm.get('gradeId').disable();
+    // this.classes = [];
+    this.notificationForm.get('gradeId')
+      .disable();
   }
   disableStudent(): any {
     this.students = [];
-    this.notificationForm.get('studentName').disable();
+    this.notificationForm.get('studentName')
+      .disable();
   }
 }

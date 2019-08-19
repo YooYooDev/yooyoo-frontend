@@ -17,14 +17,14 @@
   <li class="has-submenu" routerLinkActive="active">
     <a [routerLink]="['/reports']"><i class="mdi mdi-comment-text"></i>Reports</a>
   </li>
-  <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER' || urole === 'TEACHER'">
+  <li class="has-submenu" routerLinkActive="active" *ngIf="(urole === 'SCHOOLOWNER' || urole === 'TEACHER') && enableAttendance">
     <a [routerLink]="['/attendance']"><i class="mdi mdi-book-multiple"></i>Attendance</a>
   </li>
-  <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER' || urole === 'SUPERADMIN'">
+  <li class="has-submenu" routerLinkActive="active" *ngIf="(urole === 'SCHOOLOWNER' || urole === 'SUPERADMIN') && enableFees">
     <a [routerLink]="['/fees']"><i class="fas fa-money-bill"></i>Fees</a>
   </li>
   <li class="has-submenu" routerLinkActive="active">
-    <a [routerLink]="['/notifications']"><i class="fas fa-bell"></i>Notifications</a>
+    <a [routerLink]="['/notifications']"><i class="fas fa-bell"></i>Notice Board</a>
   </li>
   <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER'">
     <a [routerLink]="['/raise-a-ticket']"><i class="fas fa-ticket-alt"></i>Raise a Ticket</a>

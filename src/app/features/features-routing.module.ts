@@ -1,18 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { AuthGuard } from '../core/auth/auth.guard';
 import { AssignmentComponent } from './assignment/assignment.component';
+import { AttendanceComponent } from './attendance/attendance.component';
 import { CurriculumComponent } from './curriculum/curriculum.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeesComponent } from './fees/fees.component';
+import { LogoutComponent } from './logout/logout.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { RaiseATicketComponent } from './raise-a-ticket/raise-a-ticket.component';
 import { ReportsComponent } from './reports/reports.component';
 import { SchoolComponent } from './school/school.component';
 import { UsersComponent } from './users/users.component';
-import { AuthGuard } from '../core/auth/auth.guard';
-import { LogoutComponent } from './logout/logout.component';
-import { AttendanceComponent } from './attendance/attendance.component';
 
 const featuresRoutes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
@@ -56,7 +55,7 @@ const featuresRoutes: Routes = [
     path: 'notifications',
     component: NotificationsComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Notifications' }
+    data: { title: 'Notice Board' }
   },
   {
     path: 'fees',

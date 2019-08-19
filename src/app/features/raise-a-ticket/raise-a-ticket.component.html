@@ -55,7 +55,7 @@
               <div class="e-float-input e-control-wrapper">
                 <input
                   class="e-input e-field"
-                  [(ngModel)]="ticketData.subject"
+                  [(ngModel)]="ticketData['subject']"
                   #subject
                   required
                   name="subject"
@@ -76,7 +76,7 @@
               <div class="e-float-input e-control-wrapper">
                 <input
                   class="e-input e-field"
-                  [(ngModel)]="ticketData.message"
+                  [(ngModel)]="ticketData['message']"
                   #message
                   required
                   name="message"
@@ -98,7 +98,7 @@
               <ejs-dropdownlist
                 #resolution
                 [dataSource]="statusData"
-                [(ngModel)]="ticketData.status"
+                [(ngModel)]="ticketData['status']"
                 [fields]="statusFields"
                 placeholder="Status"
                 floatLabelType="Always"
@@ -126,7 +126,6 @@
               </button>
             </div>
           </div>
-          <!-- {{ ticketForm.value | json }} -->
         </div>
       </ng-template>
     </ejs-grid>

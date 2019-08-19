@@ -13,15 +13,12 @@ import {
   GridComponent,
   PageService,
   PageSettingsModel,
-  RowDataBoundEventArgs,
   SaveEventArgs,
   SearchSettingsModel,
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { FormGroup } from '@angular/forms';
 
 @Component({
