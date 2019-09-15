@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/core/auth/auth.service';
   styleUrls: ['./reports.component.css']
 })
 export class ReportsComponent implements OnInit {
+  tabIndex = 0;
   urole: any;
 
   constructor(private authService: AuthService) { }
@@ -16,4 +17,7 @@ export class ReportsComponent implements OnInit {
     this.authService.getuRole().subscribe(res => this.urole = res);
   }
 
+  changeTab(event): any {
+    this.tabIndex = event.index;
+  }
 }

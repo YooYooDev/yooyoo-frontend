@@ -1,17 +1,17 @@
-import { apiUrl } from '../../core/api';
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { Observable, of as observableOf } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { apiUrl } from '../../core/api';
 
 @Injectable({ providedIn: 'root' })
 export class ReportService {
   constructor(private httpClient: HttpClient) {}
 
-    getReportBySchool(schoolId: any): Observable<any> {
+  getReportBySchool(schoolId, from, to): Observable<any> {
     // const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
     return this.httpClient
-      .get(`${apiUrl}/report/getReportBySchool/${schoolId}`)
+      .get(`${apiUrl}/report/getReportBySchool/${schoolId}?fromDate=${from}&toDate=${to}`)
       .pipe(map(res => res));
   }
   getReportByStudent(studentId: any): Observable<any> {

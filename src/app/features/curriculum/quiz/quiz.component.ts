@@ -68,11 +68,12 @@ export class QuizComponent implements OnInit {
     this.grid.allowKeyboard = false;
     this.apiUrl = apiUrl;
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search'];
+    this.toolbar = ['Add', 'Edit', 'Delete', 'Search'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
+      allowDeleting: true,
       allowAdding: true,
       mode: 'Dialog'
     };
@@ -178,6 +179,10 @@ export class QuizComponent implements OnInit {
           }
         ];
       }
+    } else if (args.requestType === 'delete') {
+      if (confirm('Are you sure you want to delete ?')) {
+        this.deleteQuiz(args.data[0].id);
+      }
     }
     if (args.requestType === 'save') {
       this.questions.filter((item, index) => {
@@ -237,6 +242,13 @@ export class QuizComponent implements OnInit {
         this.toast.success(res.message);
         this.reload();
         this.grid.refresh();
+      });
+  }
+  deleteQuiz(id): void {
+    this.curriculumService.deleteQuiz(id)
+      .subscribe(res => {
+        this.toast.success(res.message);
+        this.reload();
       });
   }
   reload(): void {

@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
+import { AccumulationChart, AccumulationChartComponent, ChartComponent } from '@syncfusion/ej2-angular-charts';
 import {
   EditService,
   EditSettingsModel,
@@ -12,15 +14,13 @@ import {
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
-import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { UserService } from '../../users/user.service';
 import { SelectEventArgs } from '@syncfusion/ej2-angular-lists';
+import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
+import { AuthService } from '../../../core/auth/auth.service';
+import { UtilService } from '../../../shared/services/util.service';
 import { SchoolService } from '../../school/school.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { UserService } from '../../users/user.service';
 import { ReportService } from '../report.service';
-import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
-import { UtilService } from 'src/app/shared/services/util.service';
-import { AccumulationChart, AccumulationChartComponent, ChartComponent } from '@syncfusion/ej2-angular-charts';
 
 @Component({
   selector: 'yoo-student-report',
@@ -220,24 +220,24 @@ export class StudentReportComponent implements OnInit {
             const feesData = res.feesReport;
             if (feesData) {
               this.feesdata.push([
-                { x: 'LKG', y: feesData[0].totalTransportFee },
-                { x: 'UKG', y: feesData[1].totalTransportFee },
-                { x: 'NURSERY', y: feesData[2].totalTransportFee }
+                { x: 'NURSERY', y: feesData[0].totalTransportFee },
+                { x: 'LKG', y: feesData[1].totalTransportFee },
+                { x: 'UKG', y: feesData[2].totalTransportFee }
               ]);
               this.feesdata.push([
-                { x: 'LKG', y: feesData[0].totalTransportFeePaid },
-                { x: 'UKG', y: feesData[1].totalTransportFeePaid },
-                { x: 'NURSERY', y: feesData[2].totalTransportFeePaid }
+                { x: 'NURSERY', y: feesData[0].totalTransportFeePaid },
+                { x: 'LKG', y: feesData[1].totalTransportFeePaid },
+                { x: 'UKG', y: feesData[2].totalTransportFeePaid }
               ]);
               this.feesdata.push([
-                { x: 'LKG', y: feesData[0].totalTutionFee },
-                { x: 'UKG', y: feesData[1].totalTutionFee },
-                { x: 'NURSERY', y: feesData[2].totalTutionFee }
+                { x: 'NURSERY', y: feesData[0].totalTutionFee },
+                { x: 'LKG', y: feesData[1].totalTutionFee },
+                { x: 'UKG', y: feesData[2].totalTutionFee }
               ]);
               this.feesdata.push([
-                { x: 'LKG', y: feesData[0].totalTutionFeepaid },
-                { x: 'UKG', y: feesData[1].totalTutionFeepaid },
-                { x: 'NURSERY', y: feesData[2].totalTutionFeepaid }
+                { x: 'NURSERY', y: feesData[0].totalTutionFeepaid },
+                { x: 'LKG', y: feesData[1].totalTutionFeepaid },
+                { x: 'UKG', y: feesData[2].totalTutionFeepaid }
               ]);
             }
           });
@@ -270,14 +270,14 @@ export class StudentReportComponent implements OnInit {
       .subscribe(res => {
         this.student.push(res);
         this.studentAssignmentData = [{ x: 'Quizzes Attented', y: res.noOfQuestionsFaced, r: res.noOfQuestionsFaced },
-          { x: 'Topics Learnt', y: res.noOfVideoWatched, r: res.noOfVideoWatched },
-          { x: 'WorkSheets Practiced', y: res.noOfWorkSheetAppeared, r: res.noOfWorkSheetAppeared }];
+        { x: 'Topics Learnt', y: res.noOfVideoWatched, r: res.noOfVideoWatched },
+        { x: 'WorkSheets Practiced', y: res.noOfWorkSheetAppeared, r: res.noOfWorkSheetAppeared }];
         this.studentAttedanceData = [{ x: 'Total No of Days', y: res.attendanceTakenDays, r: res.attendanceTakenDays },
-          { x: 'Total No of Present Days', y: res.presentDays, r: res.presentDays }];
+        { x: 'Total No of Present Days', y: res.presentDays, r: res.presentDays }];
         this.studentFeesData = [{ x: 'Tution Fee', y: res.tutionFee, r: res.tutionFee },
-          { x: 'Tution Fee Paid', y: res.totalTutionFeePaid, r: res.totalTutionFeePaid },
-          { x: 'Transportation Fee', y: res.transportationFee, r: res.transportationFee },
-          { x: 'Transport Fee Paid', y: res.totalTransportFeePaid, r: res.totalTransportFeePaid }];
+        { x: 'Tution Fee Paid', y: res.totalTutionFeePaid, r: res.totalTutionFeePaid },
+        { x: 'Transportation Fee', y: res.transportationFee, r: res.transportationFee },
+        { x: 'Transport Fee Paid', y: res.totalTransportFeePaid, r: res.totalTransportFeePaid }];
       });
   }
 

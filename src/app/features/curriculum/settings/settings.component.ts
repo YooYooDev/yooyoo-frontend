@@ -146,8 +146,9 @@ export class SettingsComponent implements OnInit {
           .subscribe(res => {
             this.toast.success('Image Uploaded successfully!');
             this.subjectFormData = new FormData();
-            this.grid.endEdit();
-            this.reload();
+            // this.grid.endEdit();
+            this.grid.closeEdit();
+            // this.reload();
 
           });
       }

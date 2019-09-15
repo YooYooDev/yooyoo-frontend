@@ -26,7 +26,7 @@
   <li class="has-submenu" routerLinkActive="active">
     <a [routerLink]="['/notifications']"><i class="fas fa-bell"></i>Notice Board</a>
   </li>
-  <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER'">
+  <li class="has-submenu" routerLinkActive="active" *ngIf="urole === 'SCHOOLOWNER' || urole === 'SUPERADMIN'">
     <a [routerLink]="['/raise-a-ticket']"><i class="fas fa-ticket-alt"></i>Raise a Ticket</a>
   </li>
 </ul>

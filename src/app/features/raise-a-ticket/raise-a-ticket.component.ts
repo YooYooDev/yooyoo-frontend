@@ -16,10 +16,12 @@ import {
   SaveEventArgs,
   SearchSettingsModel,
   SortService,
-  ToolbarService
+  ToolbarService,
+  TextWrapSettingsModel
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { FormGroup } from '@angular/forms';
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
   selector: 'yoo-raise-a-ticket',
@@ -43,6 +45,7 @@ export class RaiseATicketComponent implements OnInit {
   initialSort: Object;
   searchSettings: SearchSettingsModel;
   filterOptions: FilterSettingsModel;
+  wrapSettings: TextWrapSettingsModel;
   line = 'Both';
   showLoader = false;
   ticketData = {};
@@ -56,32 +59,44 @@ export class RaiseATicketComponent implements OnInit {
     { statusName: 'Closed', id: '3' }
   ];
   public statusFields: Object = { text: 'statusName', value: 'id' };
+  urole: string;
   constructor(
     private _ticketService: RaiseTicketService,
     private _util: UtilService,
-    private toast: ToastService
-  ) {}
+    private toast: ToastService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
+    this.wrapSettings = { wrapMode: 'Both' };
     this.pageSettings = { pageSize: 15 };
-    this.toolbar = ['Add', 'Edit', 'Search', 'ExcelExport'];
+    this.authService.getuRole()
+      .subscribe(res => (this.urole = res));
+    if (this.urole !== 'SUPERADMIN' && this.urole !== 'YOOYOOADMIN') {
+      this.toolbar = ['Add', 'Search', 'ExcelExport'];
+      this.editSettings = {
+        allowEditing: false,
+        allowAdding: true,
+        mode: 'Dialog'
+      };
+    } else {
+      this.toolbar = ['Add', 'Edit' , 'Search', 'ExcelExport'];
+      this.editSettings = {
+          allowEditing: true,
+          allowAdding: true,
+          mode: 'Dialog'
+        };
+    }
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
-    this.editSettings = {
-      allowEditing: true,
-      allowAdding: true,
-      // allowDeleting: true,
-      mode: 'Dialog'
-    };
-    this.excelExportProperties  = {
+    this.excelExportProperties = {
       fileName: 'Raise_a_Ticket.xlsx'
-   };
+    };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
     this.reload();
 
   }
   onToolbarClick(args: ClickEventArgs): void {
-    console.log(args.item['properties'].text);
     if (args.item['properties'].text === 'PDF Export') {
       this.grid.pdfExport();
     } else if (args.item['properties'].text === 'Excel Export') {
@@ -96,10 +111,15 @@ export class RaiseATicketComponent implements OnInit {
     if (args.requestType === 'save') {
       if (this.ticketForm.valid) {
         const schoolId = this._util.getSchoolId();
-        args.data['schoolId'] = schoolId;
         if (this.requestType === 'beginEdit') {
+          console.log(args.data);
+          console.log(this.ticketData);
           this.editTicket(args.data);
         } else if (this.requestType === 'add') {
+          args.data['resolution'] = '1';
+          args.data['status'] = 'Open';
+          args.data['schoolId'] = schoolId;
+
           this.addTicket(args.data);
         }
       } else {
@@ -173,8 +193,6 @@ export class RaiseATicketComponent implements OnInit {
         return data;
       });
       this.showLoader = true;
-
-      console.log(this.tickets);
     });
   }
 }

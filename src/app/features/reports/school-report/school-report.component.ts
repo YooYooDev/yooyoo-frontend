@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
+import { AccumulationChart, AccumulationChartComponent } from '@syncfusion/ej2-angular-charts';
 import {
   EditService,
   EditSettingsModel,
@@ -13,9 +15,9 @@ import {
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { SchoolService } from '../../school/school.service';
 import { AuthService } from '../../../core/auth/auth.service';
-import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
+import { UtilService } from '../../../shared/services/util.service';
+import { SchoolService } from '../../school/school.service';
 import { ReportService } from '../report.service';
 
 @Component({
@@ -50,19 +52,8 @@ export class SchoolReportComponent implements OnInit {
   line = 'Both';
   questions = [];
   toolbar: Array<string>;
-  quizs = [];
-  topics = [];
-  public feesData: Array<Object> = [
-    { x: 'L.K.G', y: 300000 },
-    { x: 'U.K.G', y: 250000 },
-    { x: 'NURSERY', y: 600000 }
-  ];
-  public attendanceData: Array<Object> = [
-    { x: 'L.K.G', y: 120, r: '115' },
-    { x: 'U.K.G', y: 130, r: '118.7' },
-    { x: 'NURSERY', y: 140, r: '124.6' }
-  ];
-  // @ViewChild('pie') pie: AccumulationChartComponent | AccumulationChart;
+
+  @ViewChild('pie1') pie1: AccumulationChartComponent | AccumulationChart;
   // custom code end
   public startAngle = 0;
   public endAngle = 360;
@@ -72,11 +63,15 @@ export class SchoolReportComponent implements OnInit {
   public tooltip: Object = {
     enable: true
   };
-  public title = 'Attendance Details';
   // Initializing Legend
   public legendSettings: Object = {
-    visible: false,
+    visible: true,
     position: 'Bottom'
+  };
+  public chartArea: Object = {
+    border: {
+      width: 0
+    }
   };
   // Initializing DataLabel
   public dataLabel: Object = {
@@ -88,20 +83,6 @@ export class SchoolReportComponent implements OnInit {
       color: '#ffffff'
     }
   };
-  public chartArea: Object = {
-    border: {
-      width: 0
-    }
-  };
-  public data: Array<Object> = [
-    { x: 'Topics Assigned', y: 25 },
-    { x: 'Topic Viewed', y: 20 },
-    { x: 'Question Faced', y: 30 },
-    { x: 'Correct Answers', y: 25 },
-    { x: 'Videos Watched', y: 18 },
-    { x: 'Worksheet Appeared', y: 15 }
-  ];
-
   public marker: Object = {
     dataLabel: {
       visible: true,
@@ -126,25 +107,42 @@ export class SchoolReportComponent implements OnInit {
       color: 'transparent'
     }
   };
-  formDate: any;
+  // custom code start
+  public width: String = '100%';
+  fromDate: any;
   toDate: any;
-  constructor(private reportServices: ReportService, private schoolService: SchoolService, private authService: AuthService) { }
+  schoolAssignmentData = [];
+  schoolAttedanceData = [];
+  schoolFeesData = [];
+  chartData = [];
+  schoolValue: any;
+  rangeValue: any;
+  constructor(
+    private utilService: UtilService,
+    private reportServices: ReportService,
+    private schoolService: SchoolService,
+    private authService: AuthService
+  ) { }
   ngOnInit(): void {
-
+    const startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.fromDate = this.utilService.getFormattedDate1(startDate);
+    this.toDate = this.utilService.getFormattedDate();
+    this.rangeValue = [new Date(startDate), new Date()];
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['ExcelExport'];
     this.authService.getuRole()
-    .subscribe(res => (this.urole = res));
+      .subscribe(res => (this.urole = res));
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
     this.schoolService.getSchools()
-    .subscribe(res => {
-      this.schoolData = res;
-    });
+      .subscribe(res => {
+        this.schoolData = res;
+        this.schoolValue = res.filter(data => data.id === this.schoolId)[0]['name'];
+      });
     this.value = [new Date('1/1/2019'), new Date('2/1/2020')];
   }
 
   onToolbarClick(args: ClickEventArgs): void {
-    console.log(args.item['properties'].text)
+    console.log(args.item['properties'].text);
     if (args.item['properties'].text === 'Excel Export') {
       console.log('done');
       this.grid1.excelExport();
@@ -152,13 +150,52 @@ export class SchoolReportComponent implements OnInit {
   }
   onChangeSchool(e): void {
     this.schoolId = e.itemData.id;
-    this.school = [];
-    this.reportServices.getReportBySchool(e.itemData.id)
+    this.generateData();
+  }
+  onChangeDate(e): void {
+    this.rangeValue = this.DateRange.value;
+    this.fromDate = this.utilService.getFormattedDate1(this.rangeValue[0]);
+    this.toDate = this.utilService.getFormattedDate1(this.rangeValue[1]);
+    console.log(this.fromDate, this.toDate);
+    this.generateData();
+  }
+  generateData(): void {
+  this.school = [];
+  this.reportServices.getReportBySchool(this.schoolId, this.fromDate, this.toDate)
     .subscribe(res => {
       this.school.push(res);
-      this.grid1.refresh();
       console.log(this.school);
-    });
+      const noOfQuestionFaced = res.noOfQuestionFaced ? res.noOfQuestionFaced : 0;
+      const noOfCorrectAnswers = res.noOfCorrectAnswers ? res.noOfCorrectAnswers : 0;
+      const noOfTopicsAssigned = res.noOfTopicsAssigned ? res.noOfTopicsAssigned : 0;
+      const noOfVideosWatched = res.noOfVideosWatched ? res.noOfVideosWatched : 0;
+      const noOfWorksheetAppeared = res.noOfWorksheetAppeared ? res.noOfWorksheetAppeared : 0;
+      const attendanceTakenDays = res.attendanceTakenDays ? res.attendanceTakenDays : 0;
+      const presentDays = res.presentDays ? res.presentDays : 0;
+      const totalTutionFee = res.totalTutionFee ? res.totalTutionFee : 0;
+      const totalTutionFeepaid = res.totalTutionFeepaid ? res.totalTutionFeepaid : 0;
+      const totalTransportFee = res.totalTransportFee ? res.totalTransportFee : 0;
+      const totalTransportFeePaid = res.totalTransportFeePaid ? res.totalTransportFeePaid : 0;
+      this.schoolAssignmentData = [{ x: 'Quizzes Attented', y: noOfQuestionFaced, r: noOfQuestionFaced },
+                                   { x: 'Topics Learnt', y: noOfVideosWatched, r: noOfVideosWatched },
+                                   { x: 'WorkSheets Practiced', y: noOfWorksheetAppeared, r: noOfWorksheetAppeared }];
+      this.schoolAttedanceData = [{ x: 'Total No of Days', y: attendanceTakenDays, r: attendanceTakenDays },
+                                  { x: 'Total No of Present Days', y: presentDays, r: presentDays }];
+      this.schoolFeesData = [{ x: 'Tution Fee', y: totalTutionFee, r: totalTutionFee },
+                             { x: 'Tution Fee Paid', y: totalTutionFeepaid, r: totalTutionFeepaid },
+                             { x: 'Transportation Fee', y: totalTransportFee, r: totalTransportFee },
+                             { x: 'Transport Fee Paid', y: totalTransportFeePaid, r: totalTransportFeePaid }];
 
-  }
+      this.chartData = [
+        { x: 'Topics Assigned', y: noOfTopicsAssigned },
+        { x: 'Topics Learnt', y: noOfVideosWatched },
+        { x: 'Quizzes Attented', y: noOfQuestionFaced },
+        { x: 'Correct Answers', y: noOfCorrectAnswers },
+        { x: 'WorkSheets Practiced', y: noOfWorksheetAppeared }];
+      // console.log(this.schoolAssignmentData);
+      // console.log(this.schoolAttedanceData);
+      // console.log(this.schoolFeesData);
+      this.grid1.refresh();
+    });
+    }
 }

@@ -29,6 +29,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { UtilService } from '../../../shared/services/util.service';
 import { AuthService } from '../../../core/auth/auth.service';
 import { CurriculumService } from '../curriculum.service';
+import { apiUrl } from '../../../core/api';
 
 @Component({
   selector: 'yoo-topic',
@@ -68,6 +69,7 @@ export class TopicComponent implements OnInit {
   filterOptions: FilterSettingsModel;
   filter: IFilter;
   line = 'Both';
+  public subjectFormData: FormData = new FormData();
   public formData: FormData = new FormData();
   public header: String = 'Upload Student';
   public showCloseIcon: Boolean = true;
@@ -85,6 +87,9 @@ export class TopicComponent implements OnInit {
   successMsg: String = '';
   isValid: Boolean = true;
   dialogContent: string;
+  imagePath: FileList;
+  imgURL: string | ArrayBuffer;
+  apiUrl: string;
   constructor(
     private curriculumService: CurriculumService,
     private toast: ToastService,
@@ -92,8 +97,10 @@ export class TopicComponent implements OnInit {
     private authService: AuthService
   ) { }
   ngOnInit(): void {
+    this.apiUrl = apiUrl;
+
     this.pageSettings = { pageSize: 10 };
-    this.toolbar = ['Add', 'Edit', 'Search'];
+    this.toolbar = ['Add', 'Edit', 'Delete', 'Search'];
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
     this.filter = {
@@ -101,6 +108,7 @@ export class TopicComponent implements OnInit {
     };
     this.editSettings = {
       allowEditing: true,
+      allowDeleting: true,
       allowAdding: true,
       mode: 'Dialog'
     };
@@ -144,41 +152,63 @@ export class TopicComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
-  // onFileChange(event, id): any {
-  //   this.errorMsg = '';
-  //   this.successMsg = '';
-  //   this.isValid = true;
-  //   const fileList: FileList = event.target.files;
-  //   if (fileList.length > 0) {
-  //     const file: File = fileList[0];
-  //     console.log(file);
-  //     if (
-  //       file.type === 'image/gif' ||
-  //       file.type === 'image/png' ||
-  //       file.type === 'image/jpeg'
-  //     ) {
-  //       if (file.size > 500000) {
-  //         this.isValid = false;
-  //         this.errorMsg = 'Media file size should be >500kb.';
-  //       } else {
-  //         this.isValid = true;
-  //       }
-  //     }
-  //     if (this.isValid) {
-  //       this.mediaFormData.append('media', file, file.name);
-  //       this.curriculumService
-  //         .uploadWorksheet(id, this.mediaFormData)
-  //         .subscribe(res => {
-  //           this.successMsg = 'Uploaded successfully!';
-  //         });
-  //     }
-  //   }
-  // }
+  onFileChange(event, id): any {
+    this.errorMsg = '';
+    this.isValid = true;
+    const fileList: FileList = event.target.files;
+    if (fileList.length === 0) {
+      return;
+    }
+
+    const mimeType = fileList[0].type;
+    if (mimeType.match(/image\/*/) === undefined) {
+      return;
+    }
+
+    if (fileList.length > 0) {
+      const file: File = fileList[0];
+      if (
+        file.type === 'image/gif' ||
+        file.type === 'image/png' ||
+        file.type === 'image/jpeg'
+      ) {
+        if (file.size > 500000) {
+          this.isValid = false;
+          this.errorMsg = 'Media file size should be >500kb.';
+        } else {
+          this.isValid = true;
+        }
+      }
+      const reader = new FileReader();
+      this.imagePath = fileList;
+      reader.readAsDataURL(fileList[0]);
+      reader.onload = _event => {
+        this.imgURL = reader.result;
+      };
+      if (this.isValid) {
+        this.subjectFormData.append('media', file, file.name);
+        this.curriculumService
+          .uploadVideoMedia(id, this.subjectFormData)
+          .subscribe(res => {
+            this.toast.success('Image Uploaded successfully!');
+            this.subjectFormData = new FormData();
+            this.grid.closeEdit();
+          });
+      }
+    }
+  }
 
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.curriculumData = { ...args.rowData };
+    } else if (args.requestType === 'delete') {
+      if (confirm('Are you sure you want to delete ?')) {
+        this.deleteTopic(args.data[0].id);
+      }
+    }
+    if (args.requestType === 'beginEdit') {
+      this.imgURL = `${apiUrl}/media/getthumbnaillink/${this.curriculumData['id']}`;
     }
     if (args.requestType === 'save') {
       if (this.curriculumForm.valid) {
@@ -254,10 +284,16 @@ export class TopicComponent implements OnInit {
       .subscribe(res => {
         this.users = res;
         res.filter(data => {
-          data.categoryName = Array.prototype.map.call(
-            data.categories,
-            s => s.name
-          )[0];
+          // data.categoryName.push(Array.prototype.map.call(
+          //   data.categories,
+          //   s => s.name
+          // )[0]);
+          const categoryName = [];
+          data.categories.filter(category => {
+            categoryName.push(category.name);
+          });
+          data.categoryName = categoryName;
+
           if (data.subjects !== null) {
             data.subjectName = data.subjects.name;
           } else {
@@ -265,7 +301,6 @@ export class TopicComponent implements OnInit {
           }
           return data;
         });
-        console.log(this.users);
         this.showLoader = true;
       });
   }

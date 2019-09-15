@@ -1,11 +1,11 @@
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { AuthService } from './../../core/auth/auth.service';
-import { SchoolService } from '../school/school.service';
-import { AssignmentService } from '../assignment/assignment.service';
-import { UtilService } from './../../shared/services/util.service';
 import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { ToastService } from 'src/app/shared/services/toast.service';
+import { AssignmentService } from '../assignment/assignment.service';
+import { SchoolService } from '../school/school.service';
+import { AuthService } from './../../core/auth/auth.service';
+import { UtilService } from './../../shared/services/util.service';
 
 @Component({
   selector: 'yoo-assignment-school',
@@ -32,6 +32,7 @@ export class AssignmentSchoolComponent implements OnInit {
   @ViewChild('Dialog') Dialog: DialogComponent;
   @ViewChild('range') DateRange: DateRangePickerComponent;
   dialogContent: string;
+  gradeName = '';
   constructor(
     private assignmentService: AssignmentService,
     private authService: AuthService,
@@ -54,15 +55,20 @@ export class AssignmentSchoolComponent implements OnInit {
   }
   reload(): void {
     //  if (this.urole !== 'SUPERADMIN' && this.urole !== 'YOOYOOADMIN') {
-      this.assignmentService
-        .getAllSchoolAssignments(this.schoolId)
-        .subscribe(res => {
-          this.assignments = res;
-          this.tempassignments = res;
-          this.filterByDate();
-          this.showLoader = true;
-        });
+    this.assignmentService
+      .getAllSchoolAssignments(this.schoolId)
+      .subscribe(res => {
+        this.assignments = res;
+        this.tempassignments = res;
+        this.filterByDate();
+        this.showLoader = true;
+      });
     // }
+  }
+  onSearch(e): void {
+    this.gradeName = e;
+    this.filterByDate();
+
   }
   onChangeSchool(e): void {
     this.assignmentService
@@ -80,12 +86,12 @@ export class AssignmentSchoolComponent implements OnInit {
     const data = {
       toDate,
       id: formData.id
-   };
+    };
     this.assignmentService.editAssignment(data)
       .subscribe(res => {
         this.toast.success(res.message);
         this.reload();
-    });
+      });
   }
   dialogClose(): void {
     this.dialogContent = '';
@@ -129,19 +135,25 @@ export class AssignmentSchoolComponent implements OnInit {
       const start = new Date(this.utilService.getFormattedDate1(data.date));
       const end = new Date(this.utilService.getFormattedDate1(data.toDate));
       if (
-       current >= start && current <= end
+        current >= start && current <= end
       ) {
-        return data;
+        if (this.gradeName === '') {
+          return data;
+        } else {
+          if (data.grade.name === this.gradeName) {
+            return data;
+          }
+        }
       }
     });
   }
-    deposit(): void {
-      const start = new Date(this.utilService.getFormattedDate1(this.DateRange.startDate));
-      const end = new Date(this.utilService.getFormattedDate1(this.DateRange.endDate));
-      if (this.DateRange.startDate !== undefined) {
+  deposit(): void {
+    const start = new Date(this.utilService.getFormattedDate1(this.DateRange.startDate));
+    const end = new Date(this.utilService.getFormattedDate1(this.DateRange.endDate));
+    if (this.DateRange.startDate !== undefined) {
       // tslint:disable-next-line:max-line-length
-        this.displayDate = `${this.utilService.getFormattedDate1(this.DateRange.startDate)} to ${this.utilService.getFormattedDate1(this.DateRange.endDate)}`;
-        this.assignments = this.tempassignments.filter(data => {
+      this.displayDate = `${this.utilService.getFormattedDate1(this.DateRange.startDate)} to ${this.utilService.getFormattedDate1(this.DateRange.endDate)}`;
+      this.assignments = this.tempassignments.filter(data => {
         const from = new Date(this.utilService.getFormattedDate1(data.date));
         const to = new Date(this.utilService.getFormattedDate1(data.toDate));
         // console.log(from, start, to, end);

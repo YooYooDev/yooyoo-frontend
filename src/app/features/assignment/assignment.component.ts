@@ -99,7 +99,7 @@ export class AssignmentComponent implements OnInit {
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
       allowEditing: true,
-      allowDeleting: false,
+      allowDeleting: true,
       allowAdding: true,
       mode: 'Dialog'
     };

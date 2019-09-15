@@ -38,7 +38,7 @@
           </div>
           <div class="form-group col-md-12">
             <ejs-multiselect #categoryName [dataSource]="categories" [(ngModel)]="curriculumData.categoryName"
-              [fields]="{ text: 'name', value: 'id' }" placeholder="Categorie" floatLabelType="Always"
+              [fields]="{ text: 'name', value: 'name' }" placeholder="Categorie" floatLabelType="Always"
               name="categoryName" required></ejs-multiselect>
           </div>
           <div class="form-group col-md-12">
@@ -56,16 +56,17 @@
               <span class="e-float-line"></span>
               <label class="e-float-text e-label-top" for="worksheetLink">Worksheet Link</label>
             </div>
-          </div>
-          <div class="form-group col-md-12" *ngIf="!data.isAdd">
-            <label class="" for="">Worksheet Media File</label>
-            <input type="file" id="fileupload" name="fileupload" (change)="onFileChange($event, curriculumData.id)"
-              placeholder="Upload file" accept=".mp3,.png,.jpg, .gif, .wav" multiple />
-            <span class="e-error" *ngIf="errorMsg != ''">{{ errorMsg }}</span>
-            <span class="e-success" *ngIf="successMsg != ''">{{
-              successMsg
-            }}</span>
           </div> -->
+          <div class="form-group col-md-4" *ngIf="!data.isAdd">
+            <label class="" for="fileupload">Image File</label>
+            <input type="file" id="fileupload" name="fileupload" (change)="onFileChange($event, curriculumData['id'])"
+              placeholder="Upload file" accept=".png, .jpg, .gif" required />
+            <span class="e-error" *ngIf="errorMsg != ''">{{errorMsg}}</span>
+            <span class="e-success" *ngIf="successMsg != ''">{{successMsg}}</span>
+          </div>
+          <div class="form-group col-md-4" *ngIf="!data.isAdd">
+            <img class="subjectImage" [src]="imgURL" />
+          </div>
         </div>
         <div class="col-md-12">
           <div class="e-control-wrapper pull-right">

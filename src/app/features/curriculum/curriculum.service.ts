@@ -68,6 +68,11 @@ export class CurriculumService {
       .post(`${apiUrl}/media/subject/upload/${subjectId}`, formData)
       .pipe(map(res => res));
   }
+  uploadVideoMedia(topicId, formData): Observable<any> {
+    return this.httpClient
+      .post(`${apiUrl}/curriculum/updatevideo/${topicId}`, formData)
+      .pipe(map(res => res));
+  }
   updateworksheet(topicId, formData): Observable<any> {
     return this.httpClient
       .post(`${apiUrl}/curriculum/updateworksheet/${topicId}`, formData)
@@ -78,9 +83,14 @@ export class CurriculumService {
       .post(`${apiUrl}/quiz/save`, formData)
       .pipe(map(res => res));
   }
+  deleteQuiz(id): Observable<any> {
+    return this.httpClient
+      .delete(`${apiUrl}/quiz/delete/${id}`)
+      .pipe(map(res => res));
+  }
   deleteTopic(id): Observable<any> {
     return this.httpClient
-      .delete(`${apiUrl}/curriculum/delete-topic/${id}`)
+      .delete(`${apiUrl}/curriculum/delete/${id}`)
       .pipe(map(res => res));
   }
 

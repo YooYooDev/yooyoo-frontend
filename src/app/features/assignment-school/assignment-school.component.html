@@ -1,11 +1,8 @@
 <div class="container">
-  <div class="row" style="margin-top:5px;" [ngClass]="
-      urole !== 'SUPERADMIN' && urole !== 'YOOYOOADMIN' ? 'hidden' : ''
-    ">
+  <div class="row" style="margin-top:5px;" >
     <div class="col-md-12 col-xs-12">
       <div class="col-md-2">
-        <ejs-dropdownlist #schoolId [dataSource]="schoolData" [fields]="{ value: 'id', text: 'name' }"
-          placeholder="School" name="schoolId" (select)="onChangeSchool($event)"></ejs-dropdownlist>
+        
       </div>
     
     </div>
@@ -27,7 +24,13 @@
           (click)="onClickToday()"> today </button>
       </div>
       <div class="fc-right">
-        <ejs-daterangepicker #range class="ml-10" (change)="deposit()"></ejs-daterangepicker>
+        <ejs-dropdownlist #schoolId [dataSource]="schoolData" [fields]="{ value: 'id', text: 'name' }" placeholder="School"
+          name="schoolId" (select)="onChangeSchool($event)" [ngClass]="
+              urole !== 'SUPERADMIN' && urole !== 'YOOYOOADMIN' ? 'hidden' : ''
+            "></ejs-dropdownlist>
+        <ejs-dropdownlist #grade [dataSource]="gradeData" placeholder="Class"
+          (select)="onSearch($event.itemData.value)" class="e-input y-date"></ejs-dropdownlist>
+        <ejs-daterangepicker #range class="y-date" (change)="deposit()"></ejs-daterangepicker>
       </div>
       <div class="fc-center">
         <h2>{{ this.displayDate }}</h2>
@@ -61,6 +64,7 @@
           <!-- <span (click)="onChangeDate(assignment.topic)">
             <i class="far fa-edit m-l-5"></i>
           </span> -->
+          
         <ejs-datepicker [enabled]="false" [showClearButton]="false" [allowEdit]="false" [value]="assignment.date | date:'MM/dd/yyyy'" format='dd-MMM-yyyy' strictMode="true" 
           name="date"></ejs-datepicker>
          <span class="m-l-10 m-t-5 m-r-10">To</span>

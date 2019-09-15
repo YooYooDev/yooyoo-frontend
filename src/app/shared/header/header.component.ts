@@ -40,9 +40,8 @@ export class HeaderComponent implements OnInit {
       );
     this.ticketService.getTickets()
       .subscribe(res => {
-      this.tickets = res;
-      console.log(this.tickets);
-      this.ticketCount = res.length;
+      this.tickets = res.filter(data => data.resolution !== 3);
+      this.ticketCount = this.tickets.length;
     });
 
   }

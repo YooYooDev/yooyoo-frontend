@@ -89,7 +89,6 @@ export class FeesComponent implements OnInit {
     this.selectionOptions = { mode: 'Both' };
     this.editparams = { params: { popupHeight: '800px' } };
     this.initialSort = { columns: [{ field: '', direction: 'Ascending' }] };
-   
     this.schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
     this.authService.getuRole()
       .subscribe(res => (this.urole = res));
