@@ -179,7 +179,6 @@ export class UsersComponent implements OnInit {
   }
   onUploadSuccess(args: any): void {
     if (args.operation === 'upload') {
-      console.log('File uploaded successfully');
     }
   }
   onFileChange(event): void {

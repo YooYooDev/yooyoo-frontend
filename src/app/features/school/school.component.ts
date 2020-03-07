@@ -89,7 +89,6 @@ export class SchoolComponent implements OnInit {
     }
   }
   onToolbarClick(args: ClickEventArgs): void {
-    console.log(args.item['properties'].text);
     if (args.item['properties'].text === 'PDF Export') {
       this.grid.pdfExport();
     } else if (args.item['properties'].text === 'Excel Export') {

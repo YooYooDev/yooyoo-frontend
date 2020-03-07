@@ -35,11 +35,9 @@ export class AttendanceComponent implements OnInit {
         res.map(r => {
           this.classes.push({ name: r.name, id: r.id });
         });
-        console.log(this.classes);
       });
   }
   onChangeClass(option): void {
-    console.log(option);
     this.attendedSIds = [];
     this.selectedClass = option.value.id;
     this.isChanged = true;
@@ -47,14 +45,12 @@ export class AttendanceComponent implements OnInit {
       .subscribe(res => {
         this.students = res['studentList'];
         this.attendedSIds = res['studentList'];
-        console.log(this.students);
       });
   }
 
   onFormSubmit(f): void {
     const students = f.value;
     const schoolId = this._util.getSchoolId();
-    console.log(this.selectedClass);
     const grade = this.selectedClass;
     const date = this._util.getFormattedDate();
     const studentList = [];

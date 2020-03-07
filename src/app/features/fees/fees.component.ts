@@ -113,7 +113,6 @@ export class FeesComponent implements OnInit {
   }
 
   actionBegin(args: any): void {
-    console.log(args.requestType);
   }
 
   actionComplete(args: any): void {
@@ -121,7 +120,6 @@ export class FeesComponent implements OnInit {
       this.requestType = args.requestType;
     }
     if (args.requestType === 'save') {
-      console.log(args.rowData);
       this.feesObj = {
         id: args.rowData['id'],
         studentName: args.rowData['studentName'],
@@ -138,7 +136,6 @@ export class FeesComponent implements OnInit {
   }
 
   addFees(): void {
-    console.log(this.feesObj);
     this.feesService.addFees(this.feesObj)
       .subscribe(res => {
       this.toast.success(res.message);

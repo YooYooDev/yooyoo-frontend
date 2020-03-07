@@ -130,22 +130,29 @@ export class AssignmentSchoolComponent implements OnInit {
   }
 
   filterByDate(): void {
+    console.log(this.tempassignments);
+    
     this.assignments = this.tempassignments.filter(data => {
       const current = new Date(this.utilService.getFormattedDate1(this.currentDate));
       const start = new Date(this.utilService.getFormattedDate1(data.date));
       const end = new Date(this.utilService.getFormattedDate1(data.toDate));
+      console.log(current, start, end);
       if (
         current >= start && current <= end
-      ) {
-        if (this.gradeName === '') {
-          return data;
-        } else {
-          if (data.grade.name === this.gradeName) {
+        ) {
+          if (this.gradeName === '') {
+            console.log('yes');
+            return data;
+          } else {
+            console.log('no1');
+            if (data.grade.name === this.gradeName) {
             return data;
           }
         }
       }
     });
+
+    
   }
   deposit(): void {
     const start = new Date(this.utilService.getFormattedDate1(this.DateRange.startDate));

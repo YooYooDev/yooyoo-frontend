@@ -224,7 +224,6 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   }
 
   onChangeStudent(event: MatAutocompleteSelectedEvent): void {
-    console.log(event);
     this.notificationForm.get('studentId')
       .setValue(event.option.id);
     this.notificationForm.get('studentName')
@@ -259,7 +258,6 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   }
   // student filter
   filterStudent(val: string): any {
-    // console.log(val);
     return val
       ? this.students.filter(
         option =>
@@ -280,7 +278,6 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
       header: this.notificationForm.value.header,
       message: this.notificationForm.value.message
     };
-    console.log(data);
     this._notificationService
       .saveNotification(data)
       .subscribe(

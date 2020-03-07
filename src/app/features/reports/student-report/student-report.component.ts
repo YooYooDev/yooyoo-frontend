@@ -151,13 +151,11 @@ export class StudentReportComponent implements OnInit {
     }
   }
   onSearch(type, e): void {
-    console.log(e);
     this.users = this.tempUsers;
     const filterUsers = this.users.filter(
       item => item[`${type}`].toLowerCase()
         .indexOf(e.toLowerCase()) > -1);
     this.users = filterUsers;
-    console.log(filterUsers);
   }
   onChangeSchool(e): void {
     this.schoolId = e.itemData.id;
@@ -172,7 +170,6 @@ export class StudentReportComponent implements OnInit {
     this.rangeValue = this.DateRange.value;
     this.fromDate = this.utilService.getFormattedDate1(this.rangeValue[0]);
     this.toDate = this.utilService.getFormattedDate1(this.rangeValue[1]);
-    console.log(this.fromDate, this.toDate);
     this.generateData();
   }
 
@@ -182,13 +179,11 @@ export class StudentReportComponent implements OnInit {
   }
 
   generateData(): void {
-    console.log(this.filterValue);
     switch (this.filterValue) {
       case 'Assignment':
         this.reportService.getassignmentreportbyschool(this.schoolId, this.fromDate, this.toDate)
           .subscribe(res => {
             this.assignmentReport = res.assignmentReport;
-            console.log(this.assignmentReport);
             const assignmentData = res.assignmentReport;
             this.assignmentData.push([
               { x: 'LKG', y: assignmentData[0].noOfCorrectAnswers },
@@ -216,7 +211,6 @@ export class StudentReportComponent implements OnInit {
         this.reportService.getfeereportbyschool(this.schoolId, this.fromDate, this.toDate)
           .subscribe(res => {
             this.feesReport = res.feesReport;
-            console.log(this.feesReport);
             const feesData = res.feesReport;
             if (feesData) {
               this.feesdata.push([
@@ -264,7 +258,6 @@ export class StudentReportComponent implements OnInit {
   }
 
   onActionComplete(args: SelectEventArgs): void {
-    console.log(args);
     this.student = [];
     this.userService.getReportByStudent(args.data['id'])
       .subscribe(res => {

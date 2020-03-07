@@ -218,7 +218,6 @@ export class TopicComponent implements OnInit {
         }));
         this.curriculumData['categories'] = categories;
         this.curriculumData['subjects'] = this.subjectName['itemData'];
-        console.log(this.curriculumData);
         if (this.requestType === 'beginEdit') {
           this.updateTopic(this.curriculumData);
         } else if (this.requestType === 'add') {

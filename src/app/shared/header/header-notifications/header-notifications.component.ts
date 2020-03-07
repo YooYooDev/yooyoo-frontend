@@ -22,7 +22,6 @@ export class HeaderNotificationsComponent implements OnInit {
       (data: any) => {
         this.notifications = data;
         this.notificationCount = this.notifications.length;
-        console.log(this.notifications);
       },
       (err: HttpErrorResponse) => {
         this._toast.error('Something went wrong');

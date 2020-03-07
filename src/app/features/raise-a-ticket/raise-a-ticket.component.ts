@@ -112,8 +112,6 @@ export class RaiseATicketComponent implements OnInit {
       if (this.ticketForm.valid) {
         const schoolId = this._util.getSchoolId();
         if (this.requestType === 'beginEdit') {
-          console.log(args.data);
-          console.log(this.ticketData);
           this.editTicket(args.data);
         } else if (this.requestType === 'add') {
           args.data['resolution'] = '1';

@@ -62,6 +62,7 @@ import { QuizComponent } from './curriculum/quiz/quiz.component';
 import { SettingsComponent } from './curriculum/settings/settings.component';
 import { TopicComponent } from './curriculum/topics/topic.component';
 import { WorksheetComponent } from './curriculum/worksheet/worksheet.component';
+import { YooYooPlusComponent } from './curriculum/yooyoo/yooyoo.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturesRoutingModule } from './features-routing.module';
 import { FeesComponent } from './fees/fees.component';
@@ -93,6 +94,7 @@ import { UsersComponent } from './users/users.component';
     CredManagerComponent,
     SettingsComponent,
     QuizComponent,
+    YooYooPlusComponent,
     WorksheetComponent,
     TopicComponent,
     StudentReportComponent,

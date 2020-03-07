@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { AutoCompleteComponent } from '@syncfusion/ej2-angular-dropdowns';
 import {
   DialogEditEventArgs,
@@ -16,12 +17,11 @@ import {
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
-import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
+import { SchoolService } from '../../school/school.service';
 import { UserService } from '../user.service';
 import { ToastService } from './../../../shared/services/toast.service';
-import { SchoolService } from '../../school/school.service';
 
 @Component({
   selector: 'yoo-cred-manager',
@@ -103,20 +103,18 @@ export class CredManagerComponent implements OnInit {
     if (this.enterPress) {
       this.enterPress = false;
       args.cancel = true;
+
       return false;
     }
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
       this.credManagerData = { ...args.rowData };
-      console.log(this.credManagerData);
     }
     if (args.requestType === 'save') {
-      console.log(this.requestType);
       if (this.credManagerForm.valid) {
         args.data = this.credManagerData;
-        console.log(args.data['role']);
         args.data['roleId'] = this.roleData.indexOf(args.data['role']) + 1;
-        if (args.data['roleId'] !== '1' && args.data['roleId'] !== '2') {
+        if(args.data['roleId'] !== '1' && args.data['roleId'] !== '2') {
           args.data['schoolId'] = this.schoolObj['itemData']['id'];
         } else {
           args.data['schoolId'] = '1';
@@ -157,7 +155,6 @@ export class CredManagerComponent implements OnInit {
   }
 
   addCredManager(formData): void {
-    console.log(formData);
     this.userService.createCredManager(formData)
       .subscribe(res => {
         this.toast.success(res.message);
@@ -167,7 +164,6 @@ export class CredManagerComponent implements OnInit {
       });
   }
   updateCredManager(formData): void {
-    console.log(formData);
     this.userService.updateCredManager(formData)
       .subscribe(res => {
         this.toast.success(res.message);

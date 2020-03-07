@@ -142,9 +142,7 @@ export class SchoolReportComponent implements OnInit {
   }
 
   onToolbarClick(args: ClickEventArgs): void {
-    console.log(args.item['properties'].text);
     if (args.item['properties'].text === 'Excel Export') {
-      console.log('done');
       this.grid1.excelExport();
     }
   }
@@ -156,7 +154,6 @@ export class SchoolReportComponent implements OnInit {
     this.rangeValue = this.DateRange.value;
     this.fromDate = this.utilService.getFormattedDate1(this.rangeValue[0]);
     this.toDate = this.utilService.getFormattedDate1(this.rangeValue[1]);
-    console.log(this.fromDate, this.toDate);
     this.generateData();
   }
   generateData(): void {
@@ -164,7 +161,6 @@ export class SchoolReportComponent implements OnInit {
   this.reportServices.getReportBySchool(this.schoolId, this.fromDate, this.toDate)
     .subscribe(res => {
       this.school.push(res);
-      console.log(this.school);
       const noOfQuestionFaced = res.noOfQuestionFaced ? res.noOfQuestionFaced : 0;
       const noOfCorrectAnswers = res.noOfCorrectAnswers ? res.noOfCorrectAnswers : 0;
       const noOfTopicsAssigned = res.noOfTopicsAssigned ? res.noOfTopicsAssigned : 0;
@@ -192,9 +188,6 @@ export class SchoolReportComponent implements OnInit {
         { x: 'Quizzes Attented', y: noOfQuestionFaced },
         { x: 'Correct Answers', y: noOfCorrectAnswers },
         { x: 'WorkSheets Practiced', y: noOfWorksheetAppeared }];
-      // console.log(this.schoolAssignmentData);
-      // console.log(this.schoolAttedanceData);
-      // console.log(this.schoolFeesData);
       this.grid1.refresh();
     });
     }

@@ -1,8 +1,8 @@
-import { apiUrl } from '../../core/api';
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { Observable, of as observableOf } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { apiUrl } from '../../core/api';
 
 @Injectable({ providedIn: 'root' })
 export class FeesService {
@@ -14,7 +14,6 @@ export class FeesService {
       .pipe(map(res => res));
   }
   addFees(formData): Observable<any> {
-    console.log(formData);
     return this.httpClient
       .post(`${apiUrl}/fees/save`, formData)
       .pipe(map(res => res));

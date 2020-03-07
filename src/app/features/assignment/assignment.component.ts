@@ -1,5 +1,6 @@
-import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import {
   DialogEditEventArgs,
   EditService,
@@ -17,18 +18,17 @@ import {
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
-import { FormGroup } from '@angular/forms';
-import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { UploaderComponent } from '@syncfusion/ej2-angular-inputs';
-import { AssignmentService } from './assignment.service';
-import { ToastService } from './../../shared/services/toast.service';
-import { UtilService } from './../../shared/services/util.service';
-import { AuthService } from './../../core/auth/auth.service';
-import { CurriculumService } from '../curriculum/curriculum.service';
-import { SchoolService } from '../school/school.service';
+import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 // tslint:disable-next-line:no-implicit-dependencies
 import { apiUrl } from 'src/app/core/api';
+import { CurriculumService } from '../curriculum/curriculum.service';
+import { SchoolService } from '../school/school.service';
+import { AuthService } from './../../core/auth/auth.service';
+import { ToastService } from './../../shared/services/toast.service';
+import { UtilService } from './../../shared/services/util.service';
+import { AssignmentService } from './assignment.service';
 
 @Component({
   selector: 'yoo-assignment',

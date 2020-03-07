@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { AuthService } from './auth.service';
 import { ToastService } from '../../shared/services/toast.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,6 @@ export class AuthGuard implements CanActivate {
     private _toast: ToastService
   ) {}
   canActivate(): boolean {
-    console.log(this._authService.isLoggedIn());
     if (this._authService.isLoggedIn()) {
       return true;
     } else {

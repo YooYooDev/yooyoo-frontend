@@ -1,6 +1,4 @@
-/* .quiz .form-group.col-md-4 {
-  width: 500px;
-} */
+
 .quizmedia {
   max-height: 60px;
     position: absolute;
@@ -52,4 +50,9 @@
 .action {
   z-index: 1000;
   position: relative;
+}
+
+.e-card-box{
+  padding-top: 10px;
+  padding-bottom:10px;
 }

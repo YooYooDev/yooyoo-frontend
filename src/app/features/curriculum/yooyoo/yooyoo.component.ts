@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import {
   DialogEditEventArgs,
   EditService,
@@ -14,16 +15,15 @@ import {
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
-import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { ToastService } from './../../../shared/services/toast.service';
-import { CurriculumService } from '../curriculum.service';
 import { apiUrl } from '../../../core/api';
+import { ToastService } from '../../../shared/services/toast.service';
+import { CurriculumService } from '../curriculum.service';
 
 @Component({
-  selector: 'yoo-quiz',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.css'],
+  selector: 'yoo-yoo',
+  templateUrl: './yooyoo.component.html',
+  styleUrls: ['./yooyoo.component.css'],
   providers: [
     ToolbarService,
     ExcelExportService,
@@ -34,8 +34,8 @@ import { apiUrl } from '../../../core/api';
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class QuizComponent implements OnInit {
-  @ViewChild('quizForm') public quizForm: FormGroup;
+export class YooYooPlusComponent implements OnInit {
+  @ViewChild('packageForm') public packageForm: FormGroup;
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('element') element;
   public mediaFormData: FormData = new FormData();
@@ -52,7 +52,15 @@ export class QuizComponent implements OnInit {
   toolbar: Array<string>;
   quizs = [];
   topics = [];
-  quizData = {};
+  packageUrl = [
+  {
+    link: '',
+    option: '',
+    mediaFile: ''
+  }
+];
+  packageTypes = [];
+  packageData = {};
   isValid: Boolean = true;
   errorMsg: String = '';
   successMsg: String = '';
@@ -69,6 +77,8 @@ export class QuizComponent implements OnInit {
     this.apiUrl = apiUrl;
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Add', 'Edit', 'Delete', 'Search'];
+    this.packageTypes = ['Video', 'Audio', 'Worksheets'];
+
     this.searchSettings = {};
     this.filterOptions = { type: 'CheckBox' };
     this.editSettings = {
@@ -92,15 +102,14 @@ export class QuizComponent implements OnInit {
     }
   }
   onClickAddQuestion(): any {
-    this.questions.push({
-      question: '',
-      answer: '',
-      option1: '',
-      option2: ''
+    this.packageUrl.push({
+      link: '',
+      option: '',
+      mediaFile: ''
     });
   }
   removeQuestion(index): any {
-    this.questions.splice(index, 1);
+    this.packageUrl.splice(index, 1);
   }
   onFileChange(event, id, i): any {
     this.errorMsg = '';
@@ -132,7 +141,7 @@ export class QuizComponent implements OnInit {
         const reader = new FileReader();
         reader.readAsDataURL(fileList[0]);
         reader.onload = _event => {
-          this.quizData[`imageUrl${i}`] = reader.result;
+          this.packageData[`imageUrl${i}`] = reader.result;
         };
         this.mediaFormData.append('media', file, file.name);
         this.curriculumService
@@ -153,55 +162,25 @@ export class QuizComponent implements OnInit {
     }
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
       this.requestType = args.requestType;
-      this.quizData = { ...args.rowData };
-      this.questions = this.quizData['questions'];
-      if (
-        this.quizData['questions'] !== undefined &&
-        this.quizData['questions'].length
-      ) {
-        this.quizData['questions'].filter((item, index) => {
-          this.quizData[`imageUrl${index}`] = `${apiUrl}/media/getMedia/${item.id}`;
-          this.quizData[`questionId${index}`] = item.id;
-          this.quizData[`question${index}`] = item.question;
-          this.quizData[`option0_${index}`] = item.option1;
-          this.quizData[`option1_${index}`] = item.option2;
-          this.quizData[`answer${index}`] =
-            item.answer === item.option1 ? '1' : '2';
-        });
-      } else {
-        this.questions = [
-          {
-            question: '',
-            answer: '',
-            option1: '',
-            option2: ''
-          }
-        ];
-      }
+      this.packageData = { ...args.rowData };
+      this.questions = this.packageData['questions'];
     } else if (args.requestType === 'delete') {
       if (confirm('Are you sure you want to delete ?')) {
-        this.deleteQuiz(args.data[0].id);
+       // this.deleteQuiz(args.data[0].id);
       }
     }
     if (args.requestType === 'save') {
-      this.questions.filter((item, index) => {
-       
-        item.question = this.quizData[`question${index}`];
-        item.option1 = this.quizData[`option0_${index}`];
-        item.option2 = this.quizData[`option1_${index}`];
-        const answer = this.quizData[`answer${index}`];
-        item.answer = item[`option${answer}`];
-      });
+      
       const data = {
-        topicId: this.quizData['topicId'],
-        quizName: this.quizData['quizName'],
+        topicId: this.packageData['topicId'],
+        quizName: this.packageData['quizName'],
         questions: this.questions
       };
       if (this.requestType === 'add') {
-        this.createQuizs(data);
+       // this.createQuizs(data);
       } else if (this.requestType === 'beginEdit') {
         data['id'] = args.data['id'];
-        this.createQuizs(data);
+       // this.createQuizs(data);
       }
       this.errorMsg = '';
       this.successMsg = '';
@@ -232,7 +211,7 @@ export class QuizComponent implements OnInit {
     this.grid.closeEdit();
   }
   onSubmit(): void {
-   this.grid.endEdit();
+    this.grid.endEdit();
   }
 
   createQuizs(formData): void {
@@ -251,9 +230,9 @@ export class QuizComponent implements OnInit {
       });
   }
   reload(): void {
-    this.curriculumService.getAllQuizs()
-      .subscribe(res => {
-        this.quizs = res;
-      });
+    // this.curriculumService.getAllQuizs()
+    //   .subscribe(res => {
+    //     this.quizs = res;
+    //   });
   }
 }
