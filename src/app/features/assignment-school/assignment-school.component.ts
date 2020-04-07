@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DateRangePickerComponent } from '@syncfusion/ej2-angular-calendars';
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import * as moment from 'moment';
+import { ToastService } from '../../shared/services/toast.service';
 import { AssignmentService } from '../assignment/assignment.service';
 import { SchoolService } from '../school/school.service';
 import { AuthService } from './../../core/auth/auth.service';
@@ -30,6 +31,7 @@ export class AssignmentSchoolComponent implements OnInit {
   assignments = [];
   gradeData = ['NURSERY', 'L.K.G', 'U.K.G'];
   @ViewChild('Dialog') Dialog: DialogComponent;
+  @ViewChild('Dialog1') Dialog1: DialogComponent;
   @ViewChild('range') DateRange: DateRangePickerComponent;
   dialogContent: string;
   gradeName = '';
@@ -102,11 +104,18 @@ export class AssignmentSchoolComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
   }
+
   openWorksheet(link): void {
     this.Dialog.show(true);
     this.dialogContent =
       // tslint:disable-next-line:max-line-length
       `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+  }
+  openQuizView(link): void {
+    this.Dialog1.show(true);
+    // this.dialogContent =
+    //   // tslint:disable-next-line:max-line-length
+    //   `<yoo-quiz-view></yoo-quiz-view>`;
   }
   onClickPrevious(): void {
     this.currentDate = new Date(this.currentDate.valueOf() - 86400000);
@@ -130,18 +139,17 @@ export class AssignmentSchoolComponent implements OnInit {
   }
 
   filterByDate(): void {
-    console.log(this.tempassignments);
-    
+    // console.log(this.tempassignments);
     this.assignments = this.tempassignments.filter(data => {
-      const current = new Date(this.utilService.getFormattedDate1(this.currentDate));
-      const start = new Date(this.utilService.getFormattedDate1(data.date));
-      const end = new Date(this.utilService.getFormattedDate1(data.toDate));
-      console.log(current, start, end);
+      // console.log(this.utilService.getFormattedDate1(this.currentDate));
+      const current = moment(this.currentDate);
+      const start = moment(data.date);
+      const end = moment(data.toDate);
+      // console.log(current, start, end);
       if (
         current >= start && current <= end
         ) {
           if (this.gradeName === '') {
-            console.log('yes');
             return data;
           } else {
             console.log('no1');
@@ -151,18 +159,16 @@ export class AssignmentSchoolComponent implements OnInit {
         }
       }
     });
-
-    
   }
   deposit(): void {
-    const start = new Date(this.utilService.getFormattedDate1(this.DateRange.startDate));
-    const end = new Date(this.utilService.getFormattedDate1(this.DateRange.endDate));
+    const start = moment(this.DateRange.startDate);
+    const end = moment(this.DateRange.endDate);
     if (this.DateRange.startDate !== undefined) {
       // tslint:disable-next-line:max-line-length
       this.displayDate = `${this.utilService.getFormattedDate1(this.DateRange.startDate)} to ${this.utilService.getFormattedDate1(this.DateRange.endDate)}`;
       this.assignments = this.tempassignments.filter(data => {
-        const from = new Date(this.utilService.getFormattedDate1(data.date));
-        const to = new Date(this.utilService.getFormattedDate1(data.toDate));
+        const from = moment(data.date);
+        const to = moment(data.toDate);
         // console.log(from, start, to, end);
         // tslint:disable-next-line:max-line-length
         // console.log(start >= from, start >= to, end >= from, end >= to, start <= from, start <= to, end <= from, end <= to);

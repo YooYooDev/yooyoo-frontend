@@ -58,6 +58,7 @@ import { AssignmentSchoolComponent } from './assignment-school/assignment-school
 import { AssignmentComponent } from './assignment/assignment.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { CurriculumComponent } from './curriculum/curriculum.component';
+import { QuizViewComponent } from './curriculum/quiz-view/quiz-view.component';
 import { QuizComponent } from './curriculum/quiz/quiz.component';
 import { SettingsComponent } from './curriculum/settings/settings.component';
 import { TopicComponent } from './curriculum/topics/topic.component';
@@ -94,6 +95,7 @@ import { UsersComponent } from './users/users.component';
     CredManagerComponent,
     SettingsComponent,
     QuizComponent,
+    QuizViewComponent,
     YooYooPlusComponent,
     WorksheetComponent,
     TopicComponent,

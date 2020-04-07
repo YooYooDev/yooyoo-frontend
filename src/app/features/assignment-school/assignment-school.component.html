@@ -1,12 +1,10 @@
 <div class="container">
-  <div class="row" style="margin-top:5px;" >
+  <!-- <div class="row" style="margin-top:5px;" >
     <div class="col-md-12 col-xs-12">
       <div class="col-md-2">
-        
       </div>
-    
     </div>
-  </div>
+  </div> -->
   <div id="calendar" class="fc fc-unthemed fc-ltr">
     <div class="fc-toolbar">
       <div class="fc-left">
@@ -56,15 +54,10 @@
           <i class="far fa-file-pdf m-r-5"></i>
         </button>
         <button type="button" class="btn btn-googleplus waves-effect waves-light"
-          (click)="onOpenDialog(assignment.topic.quizLink)">
+          (click)="openQuizView(assignment.topic.quizLink)">
           <i class="far fa-question-circle m-r-5"></i>
         </button>
-        <span class="pull-right" style="display: inline-flex">
-          <!-- <label for="checkbox6a"> {{ assignment.date | date: "dd MMM yyyy" }} - {{ assignment.toDate | date: "dd MMM yyyy" }} </label> -->
-          <!-- <span (click)="onChangeDate(assignment.topic)">
-            <i class="far fa-edit m-l-5"></i>
-          </span> -->
-          
+        <span class="pull-right" style="display: inline-flex">          
         <ejs-datepicker [enabled]="false" [showClearButton]="false" [allowEdit]="false" [value]="assignment.date | date:'MM/dd/yyyy'" format='dd-MMM-yyyy' strictMode="true" 
           name="date"></ejs-datepicker>
          <span class="m-l-10 m-t-5 m-r-10">To</span>
@@ -76,5 +69,11 @@
   </div>
   <ejs-dialog id="dialog" isModal="true" #Dialog (close)="dialogClose()" [visible]="false" showOnInit="false"
     showCloseIcon="false" [content]="dialogContent">
+  </ejs-dialog>
+  <ejs-dialog #Dialog1 [visible]="false"  [showCloseIcon]="true">
+    <ng-template #content>
+      Work InProgress...
+      <!-- <yoo-quiz-view></yoo-quiz-view> -->
+    </ng-template>
   </ejs-dialog>
 </div>
