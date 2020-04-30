@@ -43,7 +43,7 @@
     "core-js": "^2.6.9",
     "fullcalendar": "^3.10.1",
     "hammerjs": "^2.0.8",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "rxjs": "~6.3.3",
     "save": "^2.4.0",
