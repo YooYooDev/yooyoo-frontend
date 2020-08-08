@@ -105,11 +105,15 @@ td.e-rowcell .statustxt.e-inactivecolor {
   background-color: #000 !important;
 
 }
-#dialog .e-dlg-header-content {
-
-  background: #000 !important;
+#dialog1 .e-dlg-content {
+  background-color: #000 !important;
 }
-#dialog .e-dlg-closeicon-btn.e-control.e-btn.e-lib.e-flat.e-icon-btn{
+#dialog .e-dlg-header-content, #dialog1 .e-dlg-header-content {
+  background: transparent !important;
+  position: absolute;
+  right: 0;
+}
+#dialog .e-dlg-closeicon-btn.e-control.e-btn.e-lib.e-flat.e-icon-btn, #dialog1 .e-dlg-closeicon-btn.e-control.e-btn.e-lib.e-flat.e-icon-btn{
 background: #ddd !important;
 }
 .e-control.e-grid.e-default.e-bothlines .e-headercell,
@@ -282,4 +286,20 @@ ejs-switch {
   to {
     left: 100%;
   }
+}
+div iframe {
+    width: 100vw!important;
+    height: 100vh!important;
+}
+
+/* .e-lib.e-dialog .e-dlg-content{
+  padding:0 !important;
+} */
+
+.e-lib.e-dialog {
+  max-height: 100% !important
+}
+
+.view-dialog {
+    width: 50%;
 }

@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/auth/auth.guard';
 import { LoginGuard } from './core/auth/login.guard';
 import { LoginComponent } from './features/login/login.component';
-import { ProfileComponent } from './shared/header/profile/profile.component';
 import { HeaderNotificationsComponent } from './shared/header/header-notifications/header-notifications.component';
+import { ProfileComponent } from './shared/header/profile/profile.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },

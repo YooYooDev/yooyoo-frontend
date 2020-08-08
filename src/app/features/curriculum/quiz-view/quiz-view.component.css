@@ -1,6 +1,11 @@
-/* .quiz .form-group.col-md-4 {
+.quiz {
   width: 500px;
-} */
+}
+.view-dialog {
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .quizmedia {
   max-height: 60px;
     position: absolute;
@@ -40,7 +45,6 @@
 }
 .questions {
   display: inline-flex;
-  width: 280px !important;
 }
 
 .answers {

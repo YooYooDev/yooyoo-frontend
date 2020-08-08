@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { apiUrl } from '../../../core/api';
+import { FormGroup } from '@angular/forms';
 import {
   DialogEditEventArgs,
   EditService,
@@ -15,11 +15,11 @@ import {
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
-import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { ToastService } from './../../../shared/services/toast.service';
-import { CurriculumService } from '../curriculum.service';
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
+import { apiUrl, thumbnailUrl } from '../../../core/api';
+import { CurriculumService } from '../curriculum.service';
+import { ToastService } from './../../../shared/services/toast.service';
 
 @Component({
   selector: 'yoo-worksheet',
@@ -44,6 +44,7 @@ export class WorksheetComponent implements OnInit {
   requestType: string;
   editparams: { params: { popupHeight: string } };
   users: any;
+  thumbnailUrl = thumbnailUrl;
   editSettings: EditSettingsModel;
   pageSettings: PageSettingsModel;
   initialSort: Object;
@@ -62,6 +63,7 @@ export class WorksheetComponent implements OnInit {
   apiUrl: string;
   imagePath: any;
   imgURL: string | ArrayBuffer;
+  enterPress: boolean;
   constructor(
     private curriculumService: CurriculumService,
     private toast: ToastService
@@ -96,54 +98,54 @@ export class WorksheetComponent implements OnInit {
     this.Dialog.show(true);
     this.dialogContent =
       // tslint:disable-next-line:max-line-length
-      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+      `<iframe  src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
-  onFileChange(event, id): any {
-    this.errorMsg = '';
-    this.successMsg = '';
-    this.isValid = true;
-    const fileList: FileList = event.target.files;
-    if (fileList.length === 0) {
-      return;
-    }
+  // onFileChange(event, id): any {
+  //   this.errorMsg = '';
+  //   this.successMsg = '';
+  //   this.isValid = true;
+  //   const fileList: FileList = event.target.files;
+  //   if (fileList.length === 0) {
+  //     return;
+  //   }
 
-    const mimeType = fileList[0].type;
-    if (mimeType.match(/image\/*/) === undefined) {
-      // this.message = 'Only images are supported.';
-      return;
-    }
+  //   const mimeType = fileList[0].type;
+  //   if (mimeType.match(/image\/*/) === undefined) {
+  //     // this.message = 'Only images are supported.';
+  //     return;
+  //   }
 
-    if (fileList.length > 0) {
-      const file: File = fileList[0];
-      if (
-        file.type === 'image/gif' ||
-        file.type === 'image/png' ||
-        file.type === 'image/jpeg'
-      ) {
-        if (file.size > 500000) {
-          this.isValid = false;
-          this.errorMsg = 'Media file size should be >500kb.';
-        } else {
-          this.isValid = true;
-        }
-      }
-      const reader = new FileReader();
-      this.imagePath = fileList;
-      reader.readAsDataURL(fileList[0]);
-      reader.onload = _event => {
-        this.imgURL = reader.result;
-      };
-      this.worksheetFormData.append('media', file, file.name);
-      // if (this.isValid) {
-      //   this.worksheetFormData.append('media', file, file.name);
-      //   this.curriculumService
-      //     .uploadWorksheet(id, this.worksheetFormData)
-      //     .subscribe(res => {
-      //       this.successMsg = 'Uploaded successfully!';
-      //     });
-      // }
-    }
-  }
+  //   if (fileList.length > 0) {
+  //     const file: File = fileList[0];
+  //     if (
+  //       file.type === 'image/gif' ||
+  //       file.type === 'image/png' ||
+  //       file.type === 'image/jpeg'
+  //     ) {
+  //       if (file.size > 500000) {
+  //         this.isValid = false;
+  //         this.errorMsg = 'Media file size should be >500kb.';
+  //       } else {
+  //         this.isValid = true;
+  //       }
+  //     }
+  //     const reader = new FileReader();
+  //     this.imagePath = fileList;
+  //     reader.readAsDataURL(fileList[0]);
+  //     reader.onload = _event => {
+  //       this.imgURL = reader.result;
+  //     };
+  //     this.worksheetFormData.append('media', file, file.name);
+  //     // if (this.isValid) {
+  //     //   this.worksheetFormData.append('media', file, file.name);
+  //     //   this.curriculumService
+  //     //     .uploadWorksheet(id, this.worksheetFormData)
+  //     //     .subscribe(res => {
+  //     //       this.successMsg = 'Uploaded successfully!';
+  //     //     });
+  //     // }
+  //   }
+  // }
 
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
@@ -151,12 +153,9 @@ export class WorksheetComponent implements OnInit {
       this.worksheetData = { ...args.rowData };
     }
     if (args.requestType === 'beginEdit') {
-      this.imgURL = `${apiUrl}/media/getworksheetlink/${this.worksheetData['id']}`;
     }
     if (args.requestType === 'save') {
-      this.worksheetFormData.append('worksheetlink', this.worksheetData['worksheetLink']);
-      this.updateworksheet(this.worksheetData['id'], this.worksheetFormData);
-      this.worksheetFormData = new FormData();
+      this.updateworksheet(this.worksheetData);
       args.cancel = false;
     }
   }
@@ -173,7 +172,9 @@ export class WorksheetComponent implements OnInit {
       );
     }
   }
-
+  preventDefault(): void {
+    this.enterPress = true;
+  }
   cancel(): void {
     this.grid.closeEdit();
   }
@@ -181,8 +182,8 @@ export class WorksheetComponent implements OnInit {
     this.grid.endEdit();
   }
 
-  updateworksheet(id, formData): void {
-    this.curriculumService.updateworksheet(id, formData)
+  updateworksheet(formData): void {
+    this.curriculumService.updateTopic(formData)
       .subscribe(res => {
         this.toast.success(res.message);
         this.reload();

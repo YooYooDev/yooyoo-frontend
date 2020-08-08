@@ -188,14 +188,14 @@ export class AssignmentComponent implements OnInit {
     this.Dialog.show(true);
     this.dialogContent =
       // tslint:disable-next-line:max-line-length
-      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+      `<iframe style=\'width:100vw!important;100vh!important; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
   }
 
   openWorksheet(link): void {
     this.Dialog.show(true);
     this.dialogContent =
       // tslint:disable-next-line:max-line-length
-      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+      `<iframe style=\'width:100vw!important;100vh!important; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
   openQuiz(data): void {
     this.QuizDialog.show(true);

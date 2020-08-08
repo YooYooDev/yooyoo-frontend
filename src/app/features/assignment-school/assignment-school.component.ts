@@ -35,6 +35,7 @@ export class AssignmentSchoolComponent implements OnInit {
   @ViewChild('range') DateRange: DateRangePickerComponent;
   dialogContent: string;
   gradeName = '';
+  selectedTopic = [];
   constructor(
     private assignmentService: AssignmentService,
     private authService: AuthService,
@@ -97,25 +98,26 @@ export class AssignmentSchoolComponent implements OnInit {
   }
   dialogClose(): void {
     this.dialogContent = '';
+    this.selectedTopic = [];
+
   }
   onOpenDialog(link): void {
     this.Dialog.show(true);
     this.dialogContent =
       // tslint:disable-next-line:max-line-length
-      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+    `<iframe  src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
   }
 
   openWorksheet(link): void {
     this.Dialog.show(true);
     this.dialogContent =
       // tslint:disable-next-line:max-line-length
-      `<iframe style=\'width:100%;height:100%; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+    `<iframe  src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
-  openQuizView(link): void {
+  openQuizView(topic): void {
+    this.selectedTopic = [];
+    this.selectedTopic.push(topic.id);
     this.Dialog1.show(true);
-    // this.dialogContent =
-    //   // tslint:disable-next-line:max-line-length
-    //   `<yoo-quiz-view></yoo-quiz-view>`;
   }
   onClickPrevious(): void {
     this.currentDate = new Date(this.currentDate.valueOf() - 86400000);
@@ -152,7 +154,6 @@ export class AssignmentSchoolComponent implements OnInit {
           if (this.gradeName === '') {
             return data;
           } else {
-            console.log('no1');
             if (data.grade.name === this.gradeName) {
             return data;
           }

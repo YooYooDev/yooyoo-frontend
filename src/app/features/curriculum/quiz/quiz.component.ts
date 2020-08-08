@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import {
   DialogEditEventArgs,
   EditService,
@@ -14,11 +15,10 @@ import {
   SortService,
   ToolbarService
 } from '@syncfusion/ej2-angular-grids';
-import { FormGroup } from '@angular/forms';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { ToastService } from './../../../shared/services/toast.service';
+import { apiUrl, thumbnailUrl } from '../../../core/api';
 import { CurriculumService } from '../curriculum.service';
-import { apiUrl } from '../../../core/api';
+import { ToastService } from './../../../shared/services/toast.service';
 
 @Component({
   selector: 'yoo-quiz',
@@ -40,6 +40,7 @@ export class QuizComponent implements OnInit {
   @ViewChild('element') element;
   public mediaFormData: FormData = new FormData();
   requestType: string;
+  thumbnailUrl = thumbnailUrl;
   editparams: { params: { popupHeight: string } };
   users: any;
   editSettings: EditSettingsModel;
@@ -65,6 +66,7 @@ export class QuizComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.grid.allowKeyboard = false;
     this.apiUrl = apiUrl;
     this.pageSettings = { pageSize: 15 };
@@ -94,57 +96,62 @@ export class QuizComponent implements OnInit {
   onClickAddQuestion(): any {
     this.questions.push({
       question: '',
+      audio: '',
       answer: '',
       option1: '',
-      option2: ''
+      option2: '',
+      option3: '',
+      thumbnail1: '',
+      thumbnail2: '',
+      thumbnail3: ''
     });
   }
   removeQuestion(index): any {
     this.questions.splice(index, 1);
   }
-  onFileChange(event, id, i): any {
-    this.errorMsg = '';
-    this.successMsg = '';
-    this.isValid = true;
-    const fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      const file: File = fileList[0];
-      if (
-        file.type === 'image/gif' ||
-        file.type === 'image/png' ||
-        file.type === 'image/jpeg'
-      ) {
-        if (file.size > 500000) {
-          this.isValid = false;
-          this.errorMsg = 'Media file size should be >500kb.';
-        } else {
-          this.isValid = true;
-        }
-      } else if (file.type === 'audio/mp3' || file.type === 'audio/wav') {
-        if (file.size > 2000000) {
-          this.isValid = false;
-          this.errorMsg = 'Media file size should be >2mb.';
-        } else {
-          this.isValid = true;
-        }
-      }
-      if (this.isValid) {
-        const reader = new FileReader();
-        reader.readAsDataURL(fileList[0]);
-        reader.onload = _event => {
-          this.quizData[`imageUrl${i}`] = reader.result;
-        };
-        this.mediaFormData.append('media', file, file.name);
-        this.curriculumService
-          .uploadMedia(id, this.mediaFormData)
-          .subscribe(res => {
-            this.successMsg = 'Uploaded successfully!';
-            this.mediaFormData = new FormData();
+  // onFileChange(event, id, i): any {
+  //   this.errorMsg = '';
+  //   this.successMsg = '';
+  //   this.isValid = true;
+  //   const fileList: FileList = event.target.files;
+  //   if (fileList.length > 0) {
+  //     const file: File = fileList[0];
+  //     if (
+  //       file.type === 'image/gif' ||
+  //       file.type === 'image/png' ||
+  //       file.type === 'image/jpeg'
+  //     ) {
+  //       if (file.size > 500000) {
+  //         this.isValid = false;
+  //         this.errorMsg = 'Media file size should be >500kb.';
+  //       } else {
+  //         this.isValid = true;
+  //       }
+  //     } else if (file.type === 'audio/mp3' || file.type === 'audio/wav') {
+  //       if (file.size > 2000000) {
+  //         this.isValid = false;
+  //         this.errorMsg = 'Media file size should be >2mb.';
+  //       } else {
+  //         this.isValid = true;
+  //       }
+  //     }
+  //     if (this.isValid) {
+  //       const reader = new FileReader();
+  //       reader.readAsDataURL(fileList[0]);
+  //       reader.onload = _event => {
+  //         this.quizData[`imageUrl${i}`] = reader.result;
+  //       };
+  //       this.mediaFormData.append('media', file, file.name);
+  //       this.curriculumService
+  //         .uploadMedia(id, this.mediaFormData)
+  //         .subscribe(res => {
+  //           this.successMsg = 'Uploaded successfully!';
+  //           this.mediaFormData = new FormData();
 
-          });
-      }
-    }
-  }
+  //         });
+  //     }
+  //   }
+  // }
   actionBegin(args: SaveEventArgs): any {
     if (this.enterPress) {
       this.enterPress = false;
@@ -163,18 +170,27 @@ export class QuizComponent implements OnInit {
           this.quizData[`imageUrl${index}`] = `${apiUrl}/media/getMedia/${item.id}`;
           this.quizData[`questionId${index}`] = item.id;
           this.quizData[`question${index}`] = item.question;
+          this.quizData[`audio${index}`] = item.audio;
           this.quizData[`option0_${index}`] = item.option1;
           this.quizData[`option1_${index}`] = item.option2;
-          this.quizData[`answer${index}`] =
-            item.answer === item.option1 ? '1' : '2';
+          this.quizData[`option2_${index}`] = item.option3;
+          this.quizData[`option1ImageLink${index}`] = item.option1ImageLink;
+          this.quizData[`option2ImageLink${index}`] = item.option2ImageLink;
+          this.quizData[`option3ImageLink${index}`] = item.option3ImageLink;
+          this.quizData[`answer${index}`] = item.answer === item.option1 ? '1' : (item.answer === item.option2 ? '2' : '3');
         });
       } else {
         this.questions = [
           {
             question: '',
+            audio: '',
             answer: '',
             option1: '',
-            option2: ''
+            option2: '',
+            option3: '',
+            thumbnail1: '',
+            thumbnail2: '',
+            thumbnail3: ''
           }
         ];
       }
@@ -185,10 +201,14 @@ export class QuizComponent implements OnInit {
     }
     if (args.requestType === 'save') {
       this.questions.filter((item, index) => {
-       
         item.question = this.quizData[`question${index}`];
+        item.audio = this.quizData[`audio${index}`];
         item.option1 = this.quizData[`option0_${index}`];
         item.option2 = this.quizData[`option1_${index}`];
+        item.option3 = this.quizData[`option2_${index}`];
+        item.option1ImageLink = this.quizData[`option1ImageLink${index}`];
+        item.option2ImageLink = this.quizData[`option2ImageLink${index}`];
+        item.option3ImageLink = this.quizData[`option3ImageLink${index}`];
         const answer = this.quizData[`answer${index}`];
         item.answer = item[`option${answer}`];
       });
@@ -214,7 +234,7 @@ export class QuizComponent implements OnInit {
     this.successMsg = '';
     this.isValid = true;
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-      args.dialog.width = '600px';
+      args.dialog.width = '700px';
       args.dialog.buttons[0]['controlParent'].btnObj[0].element.setAttribute(
         'class',
         'hidden'

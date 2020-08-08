@@ -54,7 +54,7 @@
           <i class="far fa-file-pdf m-r-5"></i>
         </button>
         <button type="button" class="btn btn-googleplus waves-effect waves-light"
-          (click)="openQuizView(assignment.topic.quizLink)">
+          (click)="openQuizView(assignment.topic)">
           <i class="far fa-question-circle m-r-5"></i>
         </button>
         <span class="pull-right" style="display: inline-flex">          
@@ -70,10 +70,10 @@
   <ejs-dialog id="dialog" isModal="true" #Dialog (close)="dialogClose()" [visible]="false" showOnInit="false"
     showCloseIcon="false" [content]="dialogContent">
   </ejs-dialog>
-  <ejs-dialog #Dialog1 [visible]="false"  [showCloseIcon]="true">
+  <ejs-dialog id="dialog1" isModal="true" #Dialog1 [visible]="false"  showOnInit="false"
+    showCloseIcon="false" (close)="dialogClose()" [showCloseIcon]="true">
     <ng-template #content>
-      Work InProgress...
-      <!-- <yoo-quiz-view></yoo-quiz-view> -->
+      <yoo-quiz-view [selectedTopic]="selectedTopic" *ngIf="selectedTopic.length"></yoo-quiz-view>
     </ng-template>
   </ejs-dialog>
 </div>

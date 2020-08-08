@@ -1,4 +1,4 @@
-<mat-tab-group selectedIndex="0" (selectedTabChange)="changeTab($event)">
+<mat-tab-group [selectedIndex]="tabIndex" (selectedTabChange)="changeTab($event)">
   <mat-tab >
     <ng-template mat-tab-label>Subjects & Categories</ng-template>
     <yoo-settings *ngIf="tabIndex === 0"></yoo-settings>
@@ -14,9 +14,5 @@
   <mat-tab>
     <ng-template mat-tab-label>Quiz</ng-template>
     <yoo-quiz *ngIf="tabIndex === 3"></yoo-quiz>
-  </mat-tab>
-  <mat-tab>
-    <ng-template mat-tab-label>YOOYOO+</ng-template>
-    <yoo-yoo *ngIf="tabIndex === 4"></yoo-yoo>
   </mat-tab>
 </mat-tab-group>

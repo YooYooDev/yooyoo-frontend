@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../../services/notification.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -18,14 +17,14 @@ export class HeaderNotificationsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._notificationService.getSchoolNotification().subscribe(
-      (data: any) => {
-        this.notifications = data;
-        this.notificationCount = this.notifications.length;
-      },
-      (err: HttpErrorResponse) => {
-        this._toast.error('Something went wrong');
-      }
-    );
+    // this._notificationService.getSchoolNotification().subscribe(
+    //   (data: any) => {
+    //     this.notifications = data;
+    //     this.notificationCount = this.notifications.length;
+    //   },
+    //   (err: HttpErrorResponse) => {
+    //     this._toast.error('Something went wrong');
+    //   }
+    // );
   }
 }

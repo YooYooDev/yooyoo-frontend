@@ -63,12 +63,12 @@ const featuresRoutes: Routes = [
     canActivate: [AuthGuard],
     data: { title: 'Fees' }
   },
-  {
-    path: 'raise-a-ticket',
-    component: RaiseATicketComponent,
-    canActivate: [AuthGuard],
-    data: { title: 'Raise-A-Ticket' }
-  },
+  // {
+  //   path: 'raise-a-ticket',
+  //   component: RaiseATicketComponent,
+  //   canActivate: [AuthGuard],
+  //   data: { title: 'Raise-A-Ticket' }
+  // },
   {
     path: 'attendance',
     component: AttendanceComponent,
