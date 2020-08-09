@@ -53,6 +53,7 @@ export class AssignmentComponent implements OnInit {
   @ViewChild('class') class: DropDownListComponent;
   @ViewChild('QuizDialog') QuizDialog: DialogComponent;
   @ViewChild('Dialog') Dialog: DialogComponent;
+  @ViewChild('Dialog1') Dialog1: DialogComponent;
   @ViewChild('formUpload') public uploadObj: UploaderComponent;
   schoolId = '';
   requestType: string;
@@ -84,6 +85,7 @@ export class AssignmentComponent implements OnInit {
   quizData = {};
   apiUrl: string;
   questions = [];
+  selectedTopic = [];
   constructor(
     private assignmentService: AssignmentService,
     private toast: ToastService,
@@ -183,46 +185,31 @@ export class AssignmentComponent implements OnInit {
   }
   dialogClose(): void {
     this.dialogContent = '';
+    this.selectedTopic = [];
+
   }
   onOpenDialog(link): void {
-    this.Dialog.show(true);
-    this.dialogContent =
+    if (link) {
       // tslint:disable-next-line:max-line-length
-      `<iframe style=\'width:100vw!important;100vh!important; overflow: hidden;\' src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+      this.dialogContent = `<iframe  src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+    } else {
+      this.dialogContent = `<h2>Video Not Available!</h2>`;
+    }
+    this.Dialog.show(true);
   }
 
   openWorksheet(link): void {
     this.Dialog.show(true);
-    this.dialogContent =
-      // tslint:disable-next-line:max-line-length
-      `<iframe style=\'width:100vw!important;100vh!important; overflow: hidden;\' src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
-  }
-  openQuiz(data): void {
-    this.QuizDialog.show(true);
-    this.questions = this.quizData['questions'];
-    if (
-      this.quizData['questions'] !== undefined &&
-      this.quizData['questions'].length
-    ) {
-      this.quizData['questions'].filter((item, index) => {
-        this.quizData[`imageUrl${index}`] = `${apiUrl}/media/getMedia/${item.id}`;
-        this.quizData[`questionId${index}`] = item.id;
-        this.quizData[`question${index}`] = item.question;
-        this.quizData[`option0_${index}`] = item.option1;
-        this.quizData[`option1_${index}`] = item.option2;
-        this.quizData[`answer${index}`] =
-          item.answer === item.option1 ? '1' : '2';
-      });
+    if (link) {
+      this.dialogContent = `<iframe  src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
     } else {
-      this.questions = [
-        {
-          question: '',
-          answer: '',
-          option1: '',
-          option2: ''
-        }
-      ];
+      this.dialogContent = `<h2>WorkSheet Not Available!</h2>`;
     }
+  }
+  openQuizView(topic): void {
+    this.selectedTopic = [];
+    this.selectedTopic.push(topic.id);
+    this.Dialog1.show(true);
   }
   cancel(): void {
     this.grid.closeEdit();

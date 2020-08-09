@@ -38,6 +38,11 @@ export class CurriculumService {
       .get(`${apiUrl}/quiz/getAllQuizs`)
       .pipe(map(res => res));
   }
+  getOneQuizs(id): Observable<any> {
+    return this.httpClient
+      .get(`${apiUrl}/quiz/getAllQuizs?topicId=${id}`)
+      .pipe(map(res => res));
+  }
   updateSubjects(formData): Observable<any> {
     return this.httpClient
       .put(`${apiUrl}/curriculum/update-subject`, formData)

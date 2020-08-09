@@ -143,63 +143,14 @@ export class TopicComponent implements OnInit {
     this.dialogContent = '';
   }
   onOpenDialog(link): void {
-    this.Dialog.show(true);
-    this.dialogContent =
+    if (link) {
       // tslint:disable-next-line:max-line-length
-    `<iframe  src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
-
-  }
-  openWorksheet(link): void {
+      this.dialogContent = `<iframe  src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+    } else {
+      this.dialogContent = `<h2>Video Not Available!</h2>`;
+    }
     this.Dialog.show(true);
-    this.dialogContent =
-      // tslint:disable-next-line:max-line-length
-    `<iframe  src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
-  // onFileChange(event, id): any {
-  //   this.errorMsg = '';
-  //   this.isValid = true;
-  //   const fileList: FileList = event.target.files;
-  //   if (fileList.length === 0) {
-  //     return;
-  //   }
-
-  //   const mimeType = fileList[0].type;
-  //   if (mimeType.match(/image\/*/) === undefined) {
-  //     return;
-  //   }
-
-  //   if (fileList.length > 0) {
-  //     const file: File = fileList[0];
-  //     if (
-  //       file.type === 'image/gif' ||
-  //       file.type === 'image/png' ||
-  //       file.type === 'image/jpeg'
-  //     ) {
-  //       if (file.size > 500000) {
-  //         this.isValid = false;
-  //         this.errorMsg = 'Media file size should be >500kb.';
-  //       } else {
-  //         this.isValid = true;
-  //       }
-  //     }
-  //     const reader = new FileReader();
-  //     this.imagePath = fileList;
-  //     reader.readAsDataURL(fileList[0]);
-  //     reader.onload = _event => {
-  //       this.imgURL = reader.result;
-  //     };
-  //     if (this.isValid) {
-  //       this.subjectFormData.append('media', file, file.name);
-  //       this.curriculumService
-  //         .uploadVideoMedia(id, this.subjectFormData)
-  //         .subscribe(res => {
-  //           this.toast.success('Image Uploaded successfully!');
-  //           this.subjectFormData = new FormData();
-  //           this.grid.closeEdit();
-  //         });
-  //     }
-  //   }
-  // }
 
   actionBegin(args: SaveEventArgs): void {
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {

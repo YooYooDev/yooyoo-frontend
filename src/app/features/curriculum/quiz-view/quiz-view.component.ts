@@ -28,10 +28,10 @@ export class QuizViewComponent implements OnInit {
     this.reload();
   }
   reload(): void {
-    this.curriculumService.getAllQuizs()
+    this.curriculumService.getOneQuizs(this.selectedTopic[0])
       .subscribe(res => {
         this.load = true;
-        this.quizData = res.filter(data => data.topicId === this.selectedTopic[0])[0];
+        this.quizData = res[0];
         if (
           this.quizData !== undefined &&
           this.quizData['questions'].length

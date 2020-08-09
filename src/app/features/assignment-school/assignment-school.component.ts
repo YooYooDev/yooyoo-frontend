@@ -102,17 +102,22 @@ export class AssignmentSchoolComponent implements OnInit {
 
   }
   onOpenDialog(link): void {
-    this.Dialog.show(true);
-    this.dialogContent =
+    if (link) {
       // tslint:disable-next-line:max-line-length
-    `<iframe  src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+      this.dialogContent = `<iframe  src=\'https://player.vimeo.com/video/${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' webkitallowfullscreen=\'true\' mozallowfullscreen=\'true\' allowfullscreen=\'true\'></iframe>`;
+    } else {
+      this.dialogContent = `<h2>Video Not Available!</h2>`;
+    }
+    this.Dialog.show(true);
   }
 
   openWorksheet(link): void {
+    if (link) {
+      this.dialogContent = `<iframe  src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+    } else {
+      this.dialogContent = `<h2>WorkSheet Not Available!</h2>`;
+    }
     this.Dialog.show(true);
-    this.dialogContent =
-      // tslint:disable-next-line:max-line-length
-    `<iframe  src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
   openQuizView(topic): void {
     this.selectedTopic = [];

@@ -94,11 +94,14 @@ export class WorksheetComponent implements OnInit {
   dialogClose(): void {
     this.dialogContent = '';
   }
+
   openWorksheet(link): void {
+    if (link) {
+      this.dialogContent = `<iframe  src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
+    } else {
+      this.dialogContent = `<h2>WorkSheet Not Available!</h2>`;
+    }
     this.Dialog.show(true);
-    this.dialogContent =
-      // tslint:disable-next-line:max-line-length
-      `<iframe  src=\'${link}\' frameborder=\'0\' allow=\'autoplay; encrypted-media\' allowfullscreen=\'\'></iframe>`;
   }
   // onFileChange(event, id): any {
   //   this.errorMsg = '';

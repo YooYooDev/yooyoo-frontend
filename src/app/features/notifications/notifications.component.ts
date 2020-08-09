@@ -31,6 +31,7 @@ import {
 import { AuthService } from '../../core/auth/auth.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { ToastService } from '../../shared/services/toast.service';
+import { UtilService } from '../../shared/services/util.service';
 import { SchoolService } from '../school/school.service';
 
 @Component({
@@ -48,6 +49,7 @@ import { SchoolService } from '../school/school.service';
 })
 export class NotificationsComponent implements AfterViewInit, OnInit {
   urole: string;
+  initialSort: Object;
   notificationForm = new FormGroup({
     schoolId: new FormControl(''),
     schoolName: new FormControl(''),
@@ -80,12 +82,14 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
     private _notificationService: NotificationService,
     private _toastService: ToastService,
     private _authService: AuthService,
-    private _schoolService: SchoolService
+    private _schoolService: SchoolService,
+    private utilService: UtilService
   ) { }
 
   ngOnInit() {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Search', 'Delete'];
+    this.initialSort = { columns: [{ field: 'date', direction: 'Ascending' }] };
     this.editSettings = {
       allowEditing: false,
       allowAdding: false,
@@ -254,7 +258,12 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   }
   reload(): void {
     this._notificationService.getAllNotification()
-      .subscribe(res => (this.notification = res));
+      .subscribe(res => {
+        this.notification = res.filter(data => {
+          data.date = this.utilService.getFormattedDate1(data.created_at);
+          return data;
+        });
+      });
   }
   // student filter
   filterStudent(val: string): any {
