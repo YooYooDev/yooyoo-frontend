@@ -89,7 +89,7 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.pageSettings = { pageSize: 15 };
     this.toolbar = ['Search', 'Delete'];
-    this.initialSort = { columns: [{ field: 'date', direction: 'Ascending' }] };
+    this.initialSort = { columns: [{ field: 'date', direction: 'Descending' }] };
     this.editSettings = {
       allowEditing: false,
       allowAdding: false,
@@ -257,7 +257,7 @@ export class NotificationsComponent implements AfterViewInit, OnInit {
       });
   }
   reload(): void {
-    this._notificationService.getAllNotification()
+    this._notificationService.getSchoolNotification()
       .subscribe(res => {
         this.notification = res.filter(data => {
           data.date = this.utilService.getFormattedDate1(data.created_at);

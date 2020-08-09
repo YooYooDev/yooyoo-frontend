@@ -16,10 +16,10 @@ export class NotificationService {
   getAllNotification(): any {
     return this._http.get(`${apiUrl}/notifications/getAllNotifications`);
   }
-  // getSchoolNotification(): any {
-  //   const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
-  //   return this._http.get(`${apiUrl}/notifications/getNotificationsBySchool/${schoolId}`);
-  // }
+  getSchoolNotification(): any {
+    const schoolId = JSON.parse(localStorage.getItem('userInfo')).schoolInfo.id;
+    return this._http.get(`${apiUrl}/notifications/getNotificationsBySchool/${schoolId}`);
+  }
   deleteNotification(id): any {
     return this._http
       .delete(`${apiUrl}/notifications/delete/${id}?delete=true`)
